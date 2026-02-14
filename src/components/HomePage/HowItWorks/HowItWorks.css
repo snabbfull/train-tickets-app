@@ -1,0 +1,124 @@
+.how-it-works {
+  background: url("../../../assets/howitworks.png");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: var(--section-padding) 0;
+  height: 575px;
+}
+
+.how-it-works__container {
+  margin: 0 auto;
+  max-width: var(--content-max);
+  padding: 0 var(--content-padding);
+}
+
+.how-it-works__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.how-it-works__title {
+  font-size: 36px;
+  color: white;
+  font-weight: 500;
+  margin: 0;
+}
+
+.how-it-works__learn-more {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  height: 60px;
+  width: 325px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.3s;
+}
+
+.how-it-works__learn-more:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.features {
+  display: flex;
+  gap: 160px;
+  padding-left: 200px;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 200px;
+}
+
+.feature-card__icon-wrapper {
+  width: 162px;
+  height: 162px;
+  border-radius: 50%;
+  background: none;
+  border: 2px solid var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.feature-card__icon {
+  object-fit: contain;
+}
+
+.feature-card__text-container {
+  width: 100%;
+  max-width: 226px;
+  min-height: 60px;
+}
+
+.feature-card__text {
+  font-size: 24px;
+  font-weight: 200;
+  line-height: 1.6;
+  color: white;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .how-it-works {
+    height: auto;
+    min-height: 575px;
+  }
+
+  .how-it-works__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .how-it-works__title {
+    font-size: 28px;
+  }
+
+  .how-it-works__learn-more {
+    width: 100%;
+    max-width: 325px;
+  }
+
+  .feature-card__text {
+    font-size: 18px;
+  }
+}

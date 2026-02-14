@@ -1,0 +1,78 @@
+.hero {
+  background: url("../../../assets/train.png");
+  background-size: cover;
+  background-position: center;
+  height: 985px;
+  position: relative;
+  color: white;
+  margin-top: 0;
+}
+
+.hero__overlay {
+  background: rgba(0, 0, 0, 0.3);
+  height: 100%;
+}
+
+.hero__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-right: var(--content-padding);
+}
+
+.hero__text {
+  max-height: 506px;
+  padding-left: var(--content-padding);
+}
+
+.hero__title {
+  font-size: 72px;
+  font-weight: 500;
+  line-height: 100%;
+  margin: 0;
+  padding-top: 300px;
+  color: white;
+}
+
+.hero__highlight {
+  font-weight: 700;
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    height: 700px;
+  }
+
+  .hero__content {
+    padding: 0 var(--content-padding);
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero__text {
+    margin-bottom: 2rem;
+    padding-left: 0;
+  }
+
+  .hero__title {
+    font-size: 48px;
+    padding-top: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 600px;
+  }
+
+  .hero__content {
+    padding: 0 var(--content-padding);
+  }
+
+  .hero__title {
+    font-size: 36px;
+    padding-top: 80px;
+  }
+}
