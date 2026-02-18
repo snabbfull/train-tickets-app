@@ -3,7 +3,7 @@ import About from "../components/HomePage/About/About";
 import HowItWorks from "../components/HomePage/HowItWorks/HowItWorks";
 import Reviews from "../components/HomePage/Reviews/Reviews";
 
-export const HomePage = () => {
+const HomePage = () => {
   return (
     <div className="home-page">
       <HeroSection />
@@ -13,3 +13,5 @@ export const HomePage = () => {
     </div>
   );
 };
+
+export default HomePage;

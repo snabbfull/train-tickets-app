@@ -4,7 +4,7 @@ import user1 from '../../../assets/user1.png'
 import user2 from "../../../assets/user2.png";
 
 const Reviews = () => (
-  <section className="reviews-section">
+  <section className="reviews-section" id='reviews'>
     <div className="reviews-container">
       <h2>ОТЗЫВЫ</h2>
 

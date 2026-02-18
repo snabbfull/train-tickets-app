@@ -12,6 +12,12 @@
   gap: 2rem;
 }
 
+.footer__section--contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .footer__section {
   flex: 1;
   min-width: 200px;
@@ -118,7 +124,7 @@
 }
 
 .footer__subscribe-button {
-  background: #555555;
+  background: #333;
   color: white;
   border: 1px solid white;
   padding: 0.75rem;
@@ -155,6 +161,9 @@
   font-size: 36px;
   font-weight: 700;
   color: white;
+}
+.footer__logo-link {
+  text-decoration: none;
 }
 
 .footer__copyright {
@@ -211,4 +220,9 @@
   .footer__bottom-container {
     padding: 0 20px;
   }
+}
+
+.footer__contact-link {
+  color: white;
+  text-decoration: none;
 }

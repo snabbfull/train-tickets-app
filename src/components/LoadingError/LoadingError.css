@@ -1,0 +1,16 @@
+.error {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%; /* или другая высота, в зависимости от вашего дизайна */
+  background-color: rgb(62, 60, 65);
+}
+
+.error-text {
+  margin-top: 150px;
+  color: rgb(146, 143, 148);
+  font-size: 24px;
+}

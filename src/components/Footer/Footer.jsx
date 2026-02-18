@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import "./Footer.css";
-import call from "../../../assets/call.png"
-import mail from "../../../assets/mail.png"
-import skype from "../../../assets/skype.png"
-import geolocation from "../../../assets/geolocation.png"
-import youtube from "../../../assets/youtube.png"
-import linkedin from "../../../assets/in.png";
-import gplus from "../../../assets/gplus.png";
-import facebook from "../../../assets/facebook.png";
-import twitter from "../../../assets/twitter.png";
-import scrolltop from "../../../assets/scroll-top.png";
+import call from "../../assets/call.png"
+import mail from "../../assets/mail.png"
+import skype from "../../assets/skype.png"
+import geolocation from "../../assets/geolocation.png"
+import youtube from "../../assets/youtube.png"
+import linkedin from "../../assets/in.png";
+import gplus from "../../assets/gplus.png";
+import facebook from "../../assets/facebook.png";
+import twitter from "../../assets/twitter.png";
+import scrolltop from "../../assets/scroll-top.png";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -31,20 +32,26 @@ const Footer = () => {
         <div className="footer__section footer__section--contacts">
           <h3 className="footer__title">Свяжитесь с нами</h3>
 
-          <div className="footer__contact-item">
-            <img className="footer__contact-icon" src={call} alt="" />
-            <span>8 (800) 000 00 00</span>
-          </div>
+          <a href="tel:88000000000" className="footer__contact-link">
+            <div className="footer__contact-item">
+              <img className="footer__contact-icon" src={call} alt="" />8 (800)
+              000 00 00
+            </div>
+          </a>
 
-          <div className="footer__contact-item">
-            <img className="footer__contact-icon" src={mail} alt="" />
-            <span>inbox@mail.ru</span>
-          </div>
+          <a href="mailto:inbox@mail.ru" className="footer__contact-link">
+            <div className="footer__contact-item">
+              <img className="footer__contact-icon" src={mail} alt="" />
+              inbox@mail.ru
+            </div>
+          </a>
 
-          <div className="footer__contact-item">
-            <img className="footer__contact-icon" src={skype} alt="" />
-            <span>tu.train.tickets</span>
-          </div>
+          <a href="skype:tu.train.tickets" className="footer__contact-link">
+            <div className="footer__contact-item">
+              <img className="footer__contact-icon" src={skype} alt="" />
+              tu.train.tickets
+            </div>
+          </a>
 
           <div className="footer__contact-item">
             <img
@@ -103,7 +110,9 @@ const Footer = () => {
       </div>
       <div className="footer__bottom">
         <div className="footer__bottom-container container">
-          <div className="footer__logo">Лого</div>
+          <Link to="/train-tickets-app" className="footer__logo-link">
+            <div className="footer__logo">Лого</div>
+          </Link>
           <div className="footer__scroll-top-container">
             <button
               type="button"

@@ -1,0 +1,98 @@
+.last-tickets {
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.last-tickets h3 {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.last-ticket-card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ← Тень только снизу */
+}
+
+.last-ticket-card:last-child {
+  margin-bottom: 0;
+}
+
+.last-ticket-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Верхняя часть: города и вокзалы */
+.ticket-route-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ticket-departure,
+.ticket-arrival {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ticket-city {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.ticket-station {
+  font-size: 12px;
+  color: #999;
+}
+
+.ticket-arrow {
+  font-size: 20px;
+  color: rgb(255, 168, 0);
+  font-weight: 700;
+  padding: 0 10px;
+}
+
+/* Нижняя часть: иконки и цена */
+.ticket-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+}
+
+.amenities {
+  display: flex;
+  gap: 8px;
+}
+
+.amenity-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.amenity-icon.wifi {
+  /* Дополнительные стили при необходимости */
+}
+
+.amenity-icon.express {
+  /* Дополнительные стили при необходимости */
+}
+
+.amenity-icon.eat {
+  /* Дополнительные стили при необходимости */
+}
+
+.ticket-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(255, 168, 0);
+  white-space: nowrap;
+}

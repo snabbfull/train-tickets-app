@@ -1,0 +1,17 @@
+.trains-page {
+  display: flex;
+  gap: 40px;
+  padding: 40px 120px;
+  background: rgb(247, 245, 249);
+}
+
+.trains-left {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.trains-right {
+  flex: 1;
+}

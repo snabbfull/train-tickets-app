@@ -3,6 +3,7 @@ import "./HeroSection.css";
 import SearchForm from "../SearchForm/SearchForm";
 
 const Hero = () => {
+
   return (
     <section className="hero">
       <div className="hero__overlay">

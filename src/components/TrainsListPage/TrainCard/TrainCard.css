@@ -1,0 +1,274 @@
+.train-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  background: #fff;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  gap: 30px;
+}
+
+/* =================================== */
+/* 🟦 ЛЕВЫЙ БЛОК */
+/* =================================== */
+.train-left-block {
+  width: 197px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  padding: 20px 20px;
+  border-right: 1px solid #eee;
+  background-color: #E4E0E9;
+}
+
+.train-image {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  border-radius: 50%
+}
+
+.train-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.train-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.train-cities {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: black;
+  text-align: center;
+}
+
+.city-arrow {
+  color: black;
+  font-weight: 700;
+}
+
+/* =================================== */
+/* 🟨 ЦЕНТРАЛЬНЫЙ БЛОК */
+/* =================================== */
+.train-center-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.route-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.route-point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 120px;
+}
+
+.route-time {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.route-date {
+  font-size: 13px;
+  color: #999;
+  margin: 2px 0 4px;
+}
+
+.route-city {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.route-station {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.route-arrow-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.route-duration {
+  font-size: 13px;
+  color: #666;
+  background: #f5f5f5;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.route-arrow {
+  color: #ff6b00;
+  font-size: 18px;
+  letter-spacing: -2px;
+}
+
+/* Обратный рейс */
+.return-route {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed #ddd;
+}
+
+.return-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.return-row .route-point {
+  min-width: 100px;
+}
+
+.return-row .route-time {
+  font-size: 18px;
+}
+
+.return-row .route-date {
+  font-size: 11px;
+}
+
+/* =================================== */
+/* 🟩 ПРАВЫЙ БЛОК */
+/* =================================== */
+.train-right-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 200px;
+  padding-left: 20px;
+  border-left: 1px solid #eee;
+}
+.trains-right-block-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.seats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.seat-class {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.seat-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.seat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.seat-seats {
+  font-size: 12px;
+  color: #666;
+}
+
+.seat-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ff6b00;
+}
+
+/* Иконки опций */
+.amenities {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 1px;
+}
+
+.amenity-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.wifi {
+  width: 25px;
+  height: 25px;
+}
+
+/* Кнопка */
+.train-button {
+  display: flex;
+  justify-content: center; /* Центр по горизонтали */
+  align-items: center;
+  height: 39px;
+  padding: 12px 24px;
+  background: rgb(255, 168, 0);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  border: 1px solid transparent; /* ← Добавили прозрачную границу */
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.train-button:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.train-button:active {
+  background: inherit;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}

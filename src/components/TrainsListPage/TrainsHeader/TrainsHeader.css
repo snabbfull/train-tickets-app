@@ -1,0 +1,23 @@
+.trains-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.trains-count {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.trains-controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.trains-controls select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}

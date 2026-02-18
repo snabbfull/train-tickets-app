@@ -1,13 +1,16 @@
 import React from "react";
 import "./Header.css";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <header className="header">
       <div className="header__container">
-        <div className="header__logo">
-          <span>Лого</span>
-        </div>
+        <Link to="/train-tickets-app" className="header__logo-link">
+          <div className="header__logo">
+            <span>Лого</span>
+          </div>
+        </Link>
         <nav className="header__nav">
           <ul className="header__nav-list">
             <li className="header__nav-item">

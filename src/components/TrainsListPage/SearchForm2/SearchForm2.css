@@ -1,0 +1,293 @@
+.search-form-2 {
+  background: rgba(47, 47, 47, 0.6);
+  padding: 58px 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Главный ряд: делит экран на 2 равные части (Направление и Дата) */
+.search-form__main-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 40px; /* Расстояние между блоком городов и блоком дат */
+  align-items: flex-start;
+}
+
+/* Секции (колонки) */
+.search-form__section-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1; /* Каждая секция занимает 50% ширины */
+  min-width: 0; /* Важно для работы flex с инпутами */
+}
+
+/* Надписи */
+.search-form__section-label-2 {
+  font-size: 30px;
+  color: white;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+/* Ряд внутри секции (сами инпуты) */
+.search-form__inputs-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: flex-end;
+  width: 100%;
+}
+
+/* Обертка инпута */
+.search-form__input-wrapper-2 {
+  position: relative;
+  flex: 1; /* Все инпуты внутри строки равной ширины */
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Сами поля ввода */
+.search-form__input-2 {
+  width: 100%;
+  height: 56px;
+  padding: 0 40px 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 18px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-form__input-2:focus {
+  border-color: var(--color-accent, #ffcc00);
+}
+
+.search-form__input-2::placeholder {
+  color: #999;
+}
+
+/* Стили для даты */
+.search-form__input--date-2 {
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #999;
+  font-family: inherit;
+}
+
+.search-form__input--date-2::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+  z-index: 2;
+}
+
+/* Иконки внутри инпутов */
+.search-form__icon-2 {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-form__icon-2 img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(100%) brightness(0.9);
+}
+
+/* Кнопка смены мест */
+.search-form__swap-2 {
+  position: absolute;
+  margin-left: 314px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  align-self: center;
+  transition: transform 0.3s;
+}
+
+.search-form__swap-2:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.search-form__swap-2 img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1); /* Делаем иконку белой */
+  opacity: 0.7;
+}
+.clear-input-btn {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  z-index: 3;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 1;
+}
+
+.clear-input-btn:hover {
+  color: #ff6b00;
+  background: rgba(255, 107, 0, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+/* Выпадающий список */
+.search-form__suggestions-2 {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 5px;
+  padding: 8px 0;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  max-height: 220px;
+  overflow-y: auto;
+  list-style: none;
+  z-index: 1000;
+}
+
+.search-form__suggestion-2 {
+  color: black;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.search-form__suggestion-2:hover {
+  background: #f5f5f5;
+}
+
+/* Кнопка действия */
+.search-form__actions-2 {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.search-form__button-2 {
+  background: var(--color-accent);
+  color: black;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s;
+  width: 310px;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.search-form__button-2:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.search-form__button-2:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+  background: inherit;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .search-form__main-row {
+    gap: 20px;
+  }
+
+  .search-form__input-2 {
+    height: 50px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-form-2 {
+    padding: 20px;
+  }
+
+  .search-form__main-row {
+    flex-direction: column; /* Колонка на мобильных */
+    gap: 25px;
+  }
+
+  .search-form__inputs-row {
+    /* На мобильных поля направления друг под другом */
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-form__swap-2 {
+    align-self: center;
+    margin: 0;
+    transform: rotate(90deg); /* Поворот стрелки */
+  }
+
+  .search-form__section-label-2 {
+    font-size: 14px;
+  }
+
+  .search-form__actions-2 {
+    justify-content: center;
+  }
+
+  .search-form__button-2 {
+    width: 100%;
+  }
+}

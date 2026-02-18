@@ -1,0 +1,103 @@
+.filters-sidebar {
+  background: #2d2b2f;
+  color: #fff;
+  padding: 30px 25px;
+  border-radius: 10px;
+}
+
+.filter-block {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 20px;
+}
+
+.filter-block:last-child {
+  border-bottom: none;
+}
+
+.filter-block h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+/* TOGGLE STYLES */
+.toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.toggle {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background: #555;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.toggle.active {
+  background: #ff6b00;
+}
+
+.toggle-button {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  left: 2px;
+  transition: left 0.3s;
+}
+
+.toggle.active .toggle-button {
+  left: 26px;
+}
+
+/* INPUT STYLES */
+.filter-block input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #444;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.filter-block input[type="number"]::placeholder {
+  color: #999;
+}
+
+.filter-block input[type="number"]:focus {
+  outline: none;
+  border-color: #ff6b00;
+  background: #333;
+}
+
+/* RESET BUTTON */
+.reset-button {
+  width: 100%;
+  padding: 12px;
+  background: #444;
+  border: 1px solid #ff6b00;
+  color: #ff6b00;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.reset-button:hover {
+  background: #ff6b00;
+  color: #2d2b2f;
+}

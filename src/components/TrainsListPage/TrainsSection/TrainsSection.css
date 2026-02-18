@@ -1,0 +1,41 @@
+.trains-header {
+  font-size: 18px;
+  color: #928F94;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.trains-sort {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.trains-sort-btn {
+  cursor: pointer;
+}
+
+.trains-list-limit {
+  display: flex;
+  gap: 5px;
+}
+
+.trains-list-limit div {
+  display: flex;
+  gap: 3px;
+}
+
+.trains-list-limit-count {
+  cursor: pointer;
+}
+
+.trains-list-limit-count:hover {
+  color: black;
+}
+
+.trains-header-options {
+  display: flex;
+  gap: 10px;
+}
