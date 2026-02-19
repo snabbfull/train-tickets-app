@@ -80,7 +80,7 @@ const TrainCard = ({ train }) => {
 
   const handleSeatsChoice = (e, trainId) => {
     e.preventDefault();
-    navigate(`/routes/${trainId}/seats`);
+    navigate(`/routes/${trainId}/seats`, { state: { train } });
   };
 
   // Данные о местах из available_seats_info

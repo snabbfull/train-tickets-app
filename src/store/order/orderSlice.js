@@ -32,13 +32,13 @@ const orderSlice = createSlice({
   reducers: {
     // Сохранить выбранные места
     setSelectedSeats: (state, action) => {
-      const { seatNumbers, routeId } = action.payload;
+      const { seatNumbers, routeId, coach_id } = action.payload;
       state.selectedSeats = seatNumbers;
       state.selectedSeatNumbers = seatNumbers;
       state.data.departure.route_direction_id = routeId;
-      // Инициализировать пассажиров
+      // Инициализировать пассажиров (один вагон на всех выбранных местах)
       state.data.departure.seats = seatNumbers.map((seatNum) => ({
-        coach_id: "",
+        coach_id: coach_id || "",
         person_info: {
           is_adult: true,
           first_name: "",
