@@ -32,13 +32,21 @@ const orderSlice = createSlice({
   reducers: {
     // Сохранить выбранные места
     setSelectedSeats: (state, action) => {
-      const { seatNumbers, routeId, coach_id } = action.payload;
-      state.selectedSeats = seatNumbers;
-      state.selectedSeatNumbers = seatNumbers;
+      const { seatNumbers, routeId, coach_id, selectedSeats } = action.payload;
+      const normalizedSelectedSeats = Array.isArray(selectedSeats)
+        ? selectedSeats
+        : (seatNumbers || []).map((seatNum) => ({
+            coach_id: coach_id || "",
+            seat_number: parseInt(seatNum, 10),
+          }));
+
+      state.selectedSeats = normalizedSelectedSeats;
+      state.selectedSeatNumbers = normalizedSelectedSeats.map((s) => s.seat_number);
       state.data.departure.route_direction_id = routeId;
-      // Инициализировать пассажиров (один вагон на всех выбранных местах)
-      state.data.departure.seats = seatNumbers.map((seatNum) => ({
-        coach_id: coach_id || "",
+
+      // Инициализировать пассажиров для всех выбранных мест (в т.ч. из разных вагонов)
+      state.data.departure.seats = normalizedSelectedSeats.map((seat) => ({
+        coach_id: seat.coach_id || "",
         person_info: {
           is_adult: true,
           first_name: "",
@@ -49,7 +57,7 @@ const orderSlice = createSlice({
           document_type: "паспорт",
           document_data: "",
         },
-        seat_number: parseInt(seatNum),
+        seat_number: parseInt(seat.seat_number, 10),
         is_child: false,
         include_children_seat: false,
       }));

@@ -34,7 +34,9 @@ const Stepper = () => {
           } ${index === 0 ? "first" : ""} ${index === steps.length - 1 ? "last" : ""}`}
         >
           <div className="chevron-content">
-            <span className="chevron-number">{step.number}</span>
+            <span className="chevron-number">
+              <span className="chevron-number-value">{step.number}</span>
+            </span>
             <span className="chevron-label">{step.label}</span>
           </div>
         </div>

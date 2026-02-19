@@ -1,14 +1,16 @@
 .filters-sidebar {
-  background: #2d2b2f;
+  width: 360px;
+  max-width: 100%;
+  background: #3e3c41;
   color: #fff;
-  padding: 30px 25px;
-  border-radius: 10px;
+  padding: 28px;
+  border-radius: 0;
 }
 
 .filter-block {
   margin-bottom: 30px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 26px;
 }
 
 .filter-block:last-child {
@@ -16,10 +18,89 @@
 }
 
 .filter-block h3 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 15px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-size: 30px;
+  line-height: 35px;
+  font-weight: 400;
+  margin-bottom: 16px;
   color: #fff;
+  white-space: nowrap;
+}
+
+.filter-date-input {
+  width: 100%;
+  height: 43px;
+  padding: 0 64px 0 12px;
+  background: #ffffff;
+  border: none;
+  border-radius: 3px;
+  color: #292929;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.filter-block .react-datepicker-wrapper {
+  width: 100%;
+}
+
+.filter-block .react-datepicker__input-container {
+  width: 100%;
+}
+
+.filter-date-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.filter-date-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.filter-date-icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: grayscale(100%) brightness(0.9);
+}
+
+.filter-date-clear {
+  position: absolute;
+  right: 38px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: #999;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.filter-date-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #ffa800;
+}
+
+.filter-datepicker-popper {
+  z-index: 1200 !important;
+}
+
+.filter-datepicker-calendar.react-datepicker {
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 /* TOGGLE STYLES */
@@ -27,77 +108,267 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  font-size: 14px;
+  margin-bottom: 16px;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.filter-item-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-item-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(89%) sepia(0%) saturate(16%)
+    hue-rotate(228deg) brightness(96%) contrast(92%);
+}
+
+.filter-item-icon-service {
+  filter: none;
+  display: block;
 }
 
 .toggle {
   position: relative;
-  width: 50px;
-  height: 26px;
-  background: #555;
-  border-radius: 13px;
+  width: 72px;
+  height: 19px;
+  background: #ffffff;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
   display: flex;
   align-items: center;
 }
 
 .toggle.active {
-  background: #ff6b00;
+  background: #fcdc9d;
 }
 
 .toggle-button {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  background: #fff;
+  width: 28px;
+  height: 28px;
+  background: #c4c4c4;
   border-radius: 50%;
-  left: 2px;
-  transition: left 0.3s;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: left 0.3s ease, background 0.3s ease;
 }
 
 .toggle.active .toggle-button {
-  left: 26px;
+  left: 44px;
+  background: #ffa800;
 }
 
-/* INPUT STYLES */
-.filter-block input[type="number"] {
+/* RANGE STYLES */
+.range-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dual-range {
+  position: relative;
+  width: 299px;
+  max-width: 100%;
+  height: 24px;
+}
+
+.dual-range-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 10px;
+  transform: translateY(-50%);
+  border-radius: 8px;
+  border: 1px solid #c4c4c4;
+}
+
+.range-input {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #444;
-  border: 1px solid #555;
-  border-radius: 5px;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.range-input-from {
+  z-index: 2;
+}
+
+.range-input-to {
+  z-index: 3;
+}
+
+.range-input::-webkit-slider-runnable-track {
+  height: 10px;
+  background: transparent;
+}
+
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  cursor: pointer;
+  pointer-events: auto;
+  margin-top: -4px;
+}
+
+.range-input::-moz-range-track {
+  height: 10px;
+  background: transparent;
+}
+
+.range-input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.range-caption {
+  display: flex;
+  justify-content: space-between;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 21px;
+  margin-bottom: 2px;
+}
+
+.range-values {
+  display: flex;
+  justify-content: space-between;
+  color: #e5e5e5;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.filter-block input[type="range"] {
+  width: 100%;
+  accent-color: #ffa800;
+}
+
+.filter-expand-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
   color: #fff;
-  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
 }
 
-.filter-block input[type="number"]::placeholder {
-  color: #999;
+.filter-expand-title {
+  font-size: 30px;
+  line-height: 35px;
+  font-weight: 700;
 }
 
-.filter-block input[type="number"]:focus {
-  outline: none;
-  border-color: #ff6b00;
-  background: #333;
+.filter-expand-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.filter-direction-badge {
+  width: 32px;
+  height: 26px;
+  border-radius: 8px;
+  background: #ffa800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.filter-direction-arrow {
+  color: #3e3c41;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.filter-expand-icon {
+  width: 32px;
+  height: 26px;
+  border-radius: 5px;
+  background: #ffa800;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.time-filters-group {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.time-filter-item label {
+  display: block;
+  font-size: 24px;
+  line-height: 28px;
+  color: #e5e5e5;
+  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+.time-filter-item-arrive label {
+  text-align: right;
 }
 
 /* RESET BUTTON */
 .reset-button {
   width: 100%;
-  padding: 12px;
-  background: #444;
-  border: 1px solid #ff6b00;
-  color: #ff6b00;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  background: #ffa800;
+  border: none;
   border-radius: 5px;
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.3s;
+  transition: box-shadow 0.2s, border-color 0.2s, filter 0.2s, background 0.2s;
 }
 
 .reset-button:hover {
-  background: #ff6b00;
-  color: #2d2b2f;
+  background: #ffa800;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.reset-button:active {
+  border: 1px solid #ffa800;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }

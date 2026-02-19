@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TrainCard from "../TrainCard/TrainCard";
 import Pagination from "../Pagination/Pagination";
@@ -17,6 +17,8 @@ const TrainsSection = ({ locationSearch, fetchedRef }) => {
     (state) => state.trainsList,
   );
   const filters = useSelector((state) => state.filters);
+  const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
+  const sortDropdownRef = useRef(null);
 
   const routes = data?.items || [];
 
@@ -26,6 +28,12 @@ const TrainsSection = ({ locationSearch, fetchedRef }) => {
     // Создаём дату в UTC (месяцы в JS с 0!)
     const date = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
     return Math.floor(date.getTime() / 1000); // в секундах
+  };
+
+  const timestampToHourValue = (ts) => {
+    if (!ts) return 0;
+    const d = new Date(ts * 1000);
+    return d.getHours() + d.getMinutes() / 60;
   };
 
   // Apply filters to routes
@@ -75,6 +83,40 @@ const filteredRoutes = routes.filter((train) => {
   if (filters.price_from && train.min_price < filters.price_from) return false;
   if (filters.price_to && train.min_price > filters.price_to) return false;
 
+  // 🕒 Время "Туда"
+  const depDepartureHour = timestampToHourValue(train.departure?.from?.datetime);
+  const depArrivalHour = timestampToHourValue(train.departure?.to?.datetime);
+  if (
+    depDepartureHour < filters.forward_departure_from ||
+    depDepartureHour > filters.forward_departure_to
+  ) {
+    return false;
+  }
+  if (
+    depArrivalHour < filters.forward_arrival_from ||
+    depArrivalHour > filters.forward_arrival_to
+  ) {
+    return false;
+  }
+
+  // 🕒 Время "Обратно" (применяем, только если есть обратный сегмент)
+  if (train.arrival) {
+    const backDepartureHour = timestampToHourValue(train.arrival?.from?.datetime);
+    const backArrivalHour = timestampToHourValue(train.arrival?.to?.datetime);
+    if (
+      backDepartureHour < filters.back_departure_from ||
+      backDepartureHour > filters.back_departure_to
+    ) {
+      return false;
+    }
+    if (
+      backArrivalHour < filters.back_arrival_from ||
+      backArrivalHour > filters.back_arrival_to
+    ) {
+      return false;
+    }
+  }
+
   return true;
 });
 
@@ -110,8 +152,7 @@ const filteredRoutes = routes.filter((train) => {
     }
   }, [filters]);
 
-  const handleSortChange = (e) => {
-    const newSortBy = e.target.value;
+  const handleSortChange = (newSortBy) => {
     if (newSortBy === sortBy) {
       // Toggle direction
       const newDirection = sortDirection === "desc" ? "asc" : "desc";
@@ -120,10 +161,31 @@ const filteredRoutes = routes.filter((train) => {
       // Change sortBy, reset to desc
       dispatch(changeSort(newSortBy));
     }
+    setIsSortDropdownOpen(false);
   };
 
   const handlePageChange = (page) => {
     dispatch(changePage(page));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sortDropdownRef.current &&
+        !sortDropdownRef.current.contains(event.target)
+      ) {
+        setIsSortDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const sortLabelMap = {
+    date: "Времени",
+    price: "Стоимости",
+    duration: "Длительности",
   };
 
   return (
@@ -133,11 +195,46 @@ const filteredRoutes = routes.filter((train) => {
         <div className="trains-header-options">
           <div className="trains-sort">
             <label>Сортировать по:</label>
-            <select value={sortBy} onChange={handleSortChange}>
-              <option value="date">Времени</option>
-              <option value="price">Стоимости</option>
-              <option value="duration">Длительности</option>
-            </select>
+            <div className="trains-sort-select" ref={sortDropdownRef}>
+              <button
+                type="button"
+                className="trains-sort-select-btn"
+                onClick={() => setIsSortDropdownOpen((prev) => !prev)}
+              >
+                {sortLabelMap[sortBy] || "Времени"}
+              </button>
+              {isSortDropdownOpen && (
+                <div className="trains-sort-dropdown">
+                  <button
+                    type="button"
+                    className={`trains-sort-dropdown-item ${
+                      sortBy === "date" ? "active" : ""
+                    }`}
+                    onClick={() => handleSortChange("date")}
+                  >
+                    Времени
+                  </button>
+                  <button
+                    type="button"
+                    className={`trains-sort-dropdown-item ${
+                      sortBy === "price" ? "active" : ""
+                    }`}
+                    onClick={() => handleSortChange("price")}
+                  >
+                    Стоимости
+                  </button>
+                  <button
+                    type="button"
+                    className={`trains-sort-dropdown-item ${
+                      sortBy === "duration" ? "active" : ""
+                    }`}
+                    onClick={() => handleSortChange("duration")}
+                  >
+                    Длительности
+                  </button>
+                </div>
+              )}
+            </div>
             <div
               className="trains-sort-btn"
               onClick={() =>

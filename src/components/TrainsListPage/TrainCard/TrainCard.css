@@ -2,11 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  min-height: 250px;
   background: #fff;
-  padding: 25px;
+  padding: 0;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  gap: 30px;
+  gap: 0;
 }
 
 /* =================================== */
@@ -18,10 +19,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 150px;
+  min-width: 197px;
   padding: 20px 20px;
   border-right: 1px solid #eee;
-  background-color: #E4E0E9;
+  background-color: #e4e0e9;
 }
 
 .train-image {
@@ -82,66 +83,96 @@
 .route-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: center;
+  gap: 12px;
+  width: 440px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .route-point {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 120px;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
-.route-time {
+.route-point-depart {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.route-point-arrive {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.route-middle {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.train-center-block .route-time {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
   font-size: 24px;
   font-weight: 700;
-  color: #333;
+  line-height: 28px;
+  color: #000000;
 }
 
 .route-date {
-  font-size: 13px;
-  color: #999;
-  margin: 2px 0 4px;
+  display: none;
 }
 
-.route-city {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
+.train-center-block .route-city {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #292929;
   text-transform: capitalize;
 }
 
-.route-station {
-  font-size: 12px;
-  color: #999;
-  margin-top: 2px;
+.train-center-block .route-station {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+  color: #928f94;
+  margin-top: 0;
 }
 
 .route-arrow-block {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
+  gap: 8px;
+  width: 110px;
+  padding: 0 10px;
 }
 
 .route-duration {
-  font-size: 13px;
-  color: #666;
-  background: #f5f5f5;
-  padding: 4px 12px;
-  border-radius: 12px;
-  margin-bottom: 6px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #c4c4c4;
   white-space: nowrap;
 }
 
 .route-arrow {
-  color: #ff6b00;
-  font-size: 18px;
-  letter-spacing: -2px;
+  width: 30px;
+  height: 20px;
+  display: block;
+  background: rgba(255, 168, 0, 0.79);
+  clip-path: polygon(0 40%, 65% 40%, 65% 20%, 100% 50%, 65% 80%, 65% 60%, 0 60%);
 }
 
 /* Обратный рейс */
@@ -178,60 +209,95 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-width: 200px;
-  padding-left: 20px;
+  min-width: 305px;
+  padding: 24px 20px;
   border-left: 1px solid #eee;
 }
 .trains-right-block-container {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  align-items: stretch;
+  gap: 25px;
 }
 .seats-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  padding-right: 20px;
 }
 
 .seat-class {
-  display: flex;
-  justify-content: space-between;
+  width: 100%;
+  min-height: 29px;
+  display: grid;
+  grid-template-columns: minmax(68px, 1fr) 32px 24px minmax(74px, auto) 16px;
   align-items: center;
-  padding: 8px 12px;
-  background: #f9f9f9;
-  border-radius: 6px;
+  column-gap: 6px;
 }
 
 .seat-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
-}
-
-.seat-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #3e3c41;
+  white-space: nowrap;
 }
 
 .seat-seats {
-  font-size: 12px;
-  color: #666;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffa800;
+  min-width: 22px;
+  text-align: right;
+}
+
+.seat-from {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #928f94;
 }
 
 .seat-price {
-  font-size: 13px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
   font-weight: 700;
-  color: #ff6b00;
+  font-size: 24px;
+  line-height: 28px;
+  color: #2d2b2f;
+  min-width: 74px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.seat-currency {
+  font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 400;
+  font-style: normal;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #928f94;
+  text-align: right;
 }
 
 /* Иконки опций */
 .amenities {
   display: flex;
   align-items: center;
-  justify-content: end;
-  gap: 1px;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+  padding-right: 15px;
 }
 
 .amenity-icon {
@@ -239,9 +305,25 @@
   height: 20px;
 }
 
-.wifi {
-  width: 25px;
-  height: 25px;
+.amenity-icon-sprite {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: 300% 100%;
+}
+
+.amenity-icon-sprite-wifi {
+  background-position: 0% 50%;
+}
+
+.amenity-icon-sprite-express {
+  background-position: 50% 50%;
+}
+
+.amenity-icon-sprite-food {
+  width: 24px;
+  background-position: 100% 50%;
 }
 
 /* Кнопка */
@@ -249,26 +331,38 @@
   display: flex;
   justify-content: center; /* Центр по горизонтали */
   align-items: center;
+  width: 228px;
   height: 39px;
-  padding: 12px 24px;
-  background: rgb(255, 168, 0);
-  border: none;
-  border-radius: 6px;
-  color: white;
+  padding: 0 8px;
+  box-sizing: border-box;
+  background: #ffa800;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  line-height: 28px;
+  text-align: center;
   font-size: 24px;
   font-weight: 700;
-  border: 1px solid transparent; /* ← Добавили прозрачную границу */
   cursor: pointer;
-  box-sizing: border-box;
+  transition: filter 0.2s, border-color 0.2s, background 0.2s;
+  align-self: center;
 }
 
-.train-button:hover {
-  background: var(--color-accent-hover);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+.train-button:hover:not(:disabled) {
+  background: #ffa800;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.train-button:active {
-  background: inherit;
-  color: var(--color-accent);
-  border: 1px solid var(--color-accent);
+.train-button:active:not(:disabled) {
+  border: 1px solid #ffa800;
+}
+
+.train-button:disabled {
+  background: #918f94;
+  border-color: transparent;
+  color: #ffffff;
+  cursor: not-allowed;
+  filter: none;
 }

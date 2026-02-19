@@ -29,7 +29,7 @@ const AmenitiesIcons = ({ train }) => {
 
   // Показываем иконку питания всегда (или добавьте проверку have_food при необходимости)
   amenities.push(
-    <img key="eat" src={eat} className="amenity-icon eat" alt="Food" />,
+    <img key="eat" src={eat} className="amenity-icon amenity-icon-food" alt="Food" />,
   );
 
   if (amenities.length === 0) return null;
@@ -51,7 +51,7 @@ const LastTickets = () => {
 
   return (
     <div className="last-tickets">
-      <h3>Последние билеты</h3>
+      <h3>ПОСЛЕДНИЕ БИЛЕТЫ</h3>
 
       {lastRoutes.map((route, index) => (
         <div key={index} className="last-ticket-card">
@@ -66,8 +66,6 @@ const LastTickets = () => {
               </div>
             </div>
 
-            <div className="ticket-arrow">→</div>
-
             <div className="ticket-arrival">
               <div className="ticket-city">{route.departure.to.city.name}</div>
               <div className="ticket-station">
@@ -79,7 +77,13 @@ const LastTickets = () => {
           {/* Нижняя часть: иконки и цена */}
           <div className="ticket-footer">
             <AmenitiesIcons train={route} />
-            <div className="ticket-price">от {route.min_price} ₽</div>
+            <div className="ticket-price-block">
+              <span className="ticket-price-from">от</span>
+              <span className="ticket-price-value">
+                {Math.round(route.min_price).toLocaleString("ru-RU")}
+              </span>
+              <span className="ticket-price-currency">₽</span>
+            </div>
           </div>
         </div>
       ))}

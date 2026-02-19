@@ -1,15 +1,21 @@
 .stepper-chevron {
   display: flex;
   width: 100%;
+  height: 98px;
   margin-bottom: 30px;
-  background-color: #f0f2f5;
+  background-color: #ffffff;
+  overflow: hidden;
 }
 
 .chevron-step {
   flex: 1;
   position: relative;
-  padding: 16px 20px 16px 24px;
-  background-color:#3E3C41;
+  z-index: 1;
+  height: 98px;
+  padding: 0;
+  background-color: #3e3c41;
+  display: flex;
+  align-items: center;
   transition: all 0.3s ease;
   
   /* Острая стрелка с шириной 30px */
@@ -23,7 +29,56 @@
   );
   
   /* Отрицательный margin для перекрытия */
-  margin-left: -30px;
+  margin-left: -29px;
+}
+
+.chevron-step:nth-child(1) {
+  z-index: 8;
+}
+
+.chevron-step:nth-child(2) {
+  z-index: 7;
+}
+
+.chevron-step:nth-child(3) {
+  z-index: 6;
+}
+
+.chevron-step:nth-child(4) {
+  z-index: 5;
+}
+
+.chevron-step:not(.last)::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -37px;
+  width: 0;
+  height: 0;
+  border-top: 49px solid transparent;
+  border-bottom: 49px solid transparent;
+  border-left: 37px solid #ffffff;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.chevron-step:not(.last)::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  right: -35px;
+  width: 0;
+  height: 0;
+  border-top: 48px solid transparent;
+  border-bottom: 48px solid transparent;
+  border-left: 35px solid #3e3c41;
+  z-index: 13;
+  pointer-events: none;
+}
+
+.chevron-step.active:not(.last)::before,
+.chevron-step.completed:not(.last)::before {
+  border-left-color: #ffa800;
 }
 
 /* Первый шаг без левого выреза и без отступа */
@@ -36,7 +91,7 @@
     0% 100%
   );
   margin-left: 0;
-  padding-left: 20px;
+  padding-left: 0;
 }
 
 /* Последний шаг без правого острия */
@@ -52,38 +107,53 @@
 
 /* Активный шаг */
 .chevron-step.active {
-  background-color: #FFA800;
-  z-index: 3;
+  background-color: #ffa800;
 }
 
 /* Пройденный шаг */
 .chevron-step.completed {
-  background-color: #FFA800;
+  background-color: #ffa800;
 }
 
 /* Контент шага */
 .chevron-content {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  text-align: center;
   position: relative;
   z-index: 2;
 }
 
 /* Номер шага */
 .chevron-number {
-  width: 32px;
-  height: 32px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  color: white;
+  color: #ffffff;
   border: 2px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
   transition: all 0.3s ease;
+}
+
+.chevron-number-value {
+  width: 34px;
+  height: 33px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 42px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #ffffff;
 }
 
 .chevron-step.active .chevron-number {
@@ -92,20 +162,27 @@
 
 .chevron-step.completed .chevron-number {
   background-color: white;
-  color: #28a745;
+  color: #292929;
 }
 
 /* Название шага */
 .chevron-label {
-  font-size: 16px;
-  font-weight: 500;
-  color: white;
+  width: 231px;
+  height: 43px;
+  display: inline-flex;
+  align-items: center;
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 35px;
   transition: all 0.3s ease;
 }
 
 .chevron-step.active .chevron-label {
-  color: white;
-  font-weight: 600;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .chevron-step.completed .chevron-label {

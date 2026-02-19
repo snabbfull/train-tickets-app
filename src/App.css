@@ -31,4 +31,5 @@ body {
 .container {
   width: var(--content-max);
   margin: 0 auto;
+  background: rgb(247, 245, 249);
 }

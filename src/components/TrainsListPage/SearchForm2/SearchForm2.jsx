@@ -1,19 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "./SearchForm2.css";
 import reverse from "../../../assets/reverse.png";
 import geolocation from "../../../assets/geolocation.png";
 import calendar from "../../../assets/calendar.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchCitiesRequested, clearCities } from "../../../store/actions";
+import {
+  fetchCitiesRequested,
+  clearCities,
+  trainsListRequested,
+} from "../../../store/actions";
+import DatePicker from "react-datepicker";
+import { ru } from "date-fns/locale";
+import "react-datepicker/dist/react-datepicker.css";
 
 const SearchForm2 = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cities = useSelector((state) => state.cities.items);
   const [activeField, setActiveField] = useState(null);
-  const dateFromRef = useRef(null);
-  const dateToRef = useRef(null);
 
   const [formData, setFormData] = useState({
     from: "",
@@ -24,13 +29,23 @@ const SearchForm2 = () => {
     dateEnd: "",
   });
 
-  const handleDateIconClick = (ref) => {
-    if (ref.current?.showPicker) {
-      ref.current.showPicker();
-    } else {
-      ref.current?.focus();
-    }
+  const parseIsoDate = (value) => {
+    if (!value) return null;
+    const [year, month, day] = value.split("-").map(Number);
+    if (!year || !month || !day) return null;
+    return new Date(year, month - 1, day);
   };
+
+  const formatIsoDate = (date) => {
+    if (!date) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const getDayClassName = (date) =>
+    date.getDay() === 0 ? "search-form-day-sunday" : undefined;
 
   const handleCitiesFetch = (query) => {
     if (!query || query.length < 2) {
@@ -42,15 +57,15 @@ const SearchForm2 = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === "from" ? { fromId: null } : {}),
+      ...(name === "to" ? { toId: null } : {}),
+    }));
     if (name === "from" || name === "to") {
       handleCitiesFetch(value);
     }
-  };
-
-  const handleDateChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCitySelect = (field, city) => {
@@ -63,12 +78,29 @@ const SearchForm2 = () => {
     dispatch(clearCities());
   };
 
+  const clearDateField = (field) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: "",
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.fromId || !formData.toId) {
       alert("⚠️ Выберите города из списка подсказок");
       return;
     }
+    const params = {
+      from_city_id: formData.fromId,
+      to_city_id: formData.toId,
+      date_start: formData.dateStart,
+      date_start_arrival: formData.dateEnd,
+    };
+
+    // Гарантируем запрос даже если URL не изменился (повторный поиск).
+    dispatch(trainsListRequested(params));
+
     navigate(
       `/routes?from_city_id=${formData.fromId}&to_city_id=${formData.toId}&date_start=${formData.dateStart}&date_start_arrival=${formData.dateEnd}`,
     );
@@ -192,36 +224,70 @@ const SearchForm2 = () => {
           <label className="search-form__section-label-2">Дата</label>
           <div className="search-form__inputs-row">
             <div className="search-form__input-wrapper-2">
-              <input
-                ref={dateFromRef}
-                type="date"
-                name="dateStart"
+              <DatePicker
+                selected={parseIsoDate(formData.dateStart)}
+                onChange={(date) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    dateStart: formatIsoDate(date),
+                  }))
+                }
                 className="search-form__input-2 search-form__input--date-2"
-                value={formData.dateStart}
-                onChange={handleDateChange}
+                placeholderText="ДД/ММ/ГГ"
+                dateFormat="dd/MM/yy"
+                locale={ru}
+                dayClassName={getDayClassName}
                 required
+                showPopperArrow={false}
+                popperClassName="search-form-datepicker-popper"
+                calendarClassName="search-form-datepicker-calendar"
               />
-              <span
-                className="search-form__icon-2"
-                onClick={() => handleDateIconClick(dateFromRef)}
-              >
+              {formData.dateStart && (
+                <button
+                  type="button"
+                  className="clear-input-btn clear-date-btn"
+                  onClick={() => clearDateField("dateStart")}
+                  aria-label="Очистить дату отправления"
+                  title="Очистить"
+                >
+                  &times;
+                </button>
+              )}
+              <span className="search-form__icon-2">
                 <img src={calendar} alt="" />
               </span>
             </div>
 
             <div className="search-form__input-wrapper-2">
-              <input
-                ref={dateToRef}
-                type="date"
-                name="dateEnd"
+              <DatePicker
+                selected={parseIsoDate(formData.dateEnd)}
+                onChange={(date) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    dateEnd: formatIsoDate(date),
+                  }))
+                }
                 className="search-form__input-2 search-form__input--date-2"
-                value={formData.dateEnd}
-                onChange={handleDateChange}
+                placeholderText="ДД/ММ/ГГ"
+                dateFormat="dd/MM/yy"
+                locale={ru}
+                dayClassName={getDayClassName}
+                showPopperArrow={false}
+                popperClassName="search-form-datepicker-popper"
+                calendarClassName="search-form-datepicker-calendar"
               />
-              <span
-                className="search-form__icon-2"
-                onClick={() => handleDateIconClick(dateToRef)}
-              >
+              {formData.dateEnd && (
+                <button
+                  type="button"
+                  className="clear-input-btn clear-date-btn"
+                  onClick={() => clearDateField("dateEnd")}
+                  aria-label="Очистить дату прибытия"
+                  title="Очистить"
+                >
+                  &times;
+                </button>
+              )}
+              <span className="search-form__icon-2">
                 <img src={calendar} alt="" />
               </span>
             </div>

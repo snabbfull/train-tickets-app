@@ -16,6 +16,18 @@ const initialState = {
   // Цена
   price_from: null,
   price_to: null,
+
+  // Время "Туда"
+  forward_departure_from: 0,
+  forward_departure_to: 24,
+  forward_arrival_from: 0,
+  forward_arrival_to: 24,
+
+  // Время "Обратно"
+  back_departure_from: 0,
+  back_departure_to: 24,
+  back_arrival_from: 0,
+  back_arrival_to: 24,
 };
 
 const filtersSlice = createSlice({
@@ -36,11 +48,25 @@ const filtersSlice = createSlice({
       state.price_from = price_from;
       state.price_to = price_to;
     },
+    setTimeFilter(state, action) {
+      const updates = action.payload || {};
+      Object.keys(updates).forEach((key) => {
+        if (key in state) {
+          state[key] = updates[key];
+        }
+      });
+    },
     resetFilters() {
       return initialState;
     },
   },
 });
 
-export const { setDateFilter, toggleFilter, setPriceFilter, resetFilters } = filtersSlice.actions;
+export const {
+  setDateFilter,
+  toggleFilter,
+  setPriceFilter,
+  setTimeFilter,
+  resetFilters,
+} = filtersSlice.actions;
 export default filtersSlice.reducer;
