@@ -92,6 +92,14 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   }, [filteredCarriages.length]);
 
   const totalTicketsNeeded = adults + children;
+  const MAX_PASSENGERS = 4;
+  const MAX_CHILDREN_WITH_SEAT = 3;
+  const totalPassengers = adults + children + childrenNoSeat;
+  const remainingPassengers = Math.max(0, MAX_PASSENGERS - totalPassengers);
+  const remainingChildrenSeats = Math.max(
+    0,
+    MAX_CHILDREN_WITH_SEAT - children
+  );
 
   useEffect(() => {
     if (!routeId) return;
@@ -185,6 +193,13 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const toDatetime = departure?.to?.datetime;
   const duration = departure?.duration;
 
+  const normalizeCount = (value, max = 4) => {
+    const cleaned = String(value ?? "").replace(/\D/g, "").replace(/^0+/, "");
+    const n = parseInt(cleaned === "" ? "0" : cleaned, 10);
+    if (Number.isNaN(n)) return 0;
+    return Math.min(Math.max(n, 0), max);
+  };
+
   return (
     <div className="seats-page-content">
       <div className="seats-page-header">
@@ -194,7 +209,8 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
           className="seats-page-back"
           onClick={() => navigate("/routes" + (location.search || ""))}
         >
-          ← Выбрать другой поезд
+          <span className="seats-back-arrow">←</span>
+          <span className="seats-back-label">Выбрать другой поезд</span>
         </button>
       </div>
 
@@ -243,39 +259,64 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
         <h3 className="seats-block-title">Количество билетов</h3>
         <div className="seats-tickets-row">
           <div className="seats-ticket-field">
-            <label>Взрослых — {adults}</label>
-            <input
-              type="number"
-              min={0}
-              max={4}
-              value={adults}
-              onChange={(e) => setAdults(Number(e.target.value) || 0)}
-            />
-            <p className="seats-field-hint">Можно добавить еще 3 пассажиров</p>
+            <div className="seats-ticket-control">
+              <span className="seats-ticket-placeholder">
+                Взрослых
+              </span>
+              <input
+                className="seats-ticket-input"
+                type="number"
+                min={0}
+                max={4}
+                value={adults}
+                onChange={(e) => setAdults(normalizeCount(e.target.value, 4))}
+              />
+            </div>
+            {totalPassengers > 0 && remainingPassengers > 0 && (
+              <p className="seats-field-hint">
+                Можно добавить еще {remainingPassengers} пассажира
+              </p>
+            )}
           </div>
           <div className="seats-ticket-field">
-            <label>Детских — {children}</label>
-            <input
-              type="number"
-              min={0}
-              max={4}
-              value={children}
-              onChange={(e) => setChildren(Number(e.target.value) || 0)}
-            />
-            <p className="seats-field-hint">
-              Можно добавить еще 3 детей до 10 лет. Свое место в вагоне, как у
-              взрослых, но дешевле в среднем на 50-65%
-            </p>
+            <div className="seats-ticket-control">
+              <span className="seats-ticket-placeholder">
+                Детских
+              </span>
+              <input
+                className="seats-ticket-input"
+                type="number"
+                min={0}
+                max={4}
+                value={children}
+                onChange={(e) =>
+                  setChildren(normalizeCount(e.target.value, 4))
+                }
+              />
+            </div>
+            {children > 0 && remainingChildrenSeats > 0 && (
+              <p className="seats-field-hint">
+                Можно добавить еще 3 детей до 10 лет. Свое место в вагоне, как у
+                взрослых, но дешевле в среднем на 50-65%
+              </p>
+            )}
           </div>
           <div className="seats-ticket-field">
-            <label>Детских «без места» — {childrenNoSeat}</label>
-            <input
-              type="number"
-              min={0}
-              max={4}
-              value={childrenNoSeat}
-              onChange={(e) => setChildrenNoSeat(Number(e.target.value) || 0)}
-            />
+            <div className="seats-ticket-control">
+              <span className="seats-ticket-placeholder">
+                Детских «без места»
+              </span>
+              <input
+                className="seats-ticket-input"
+                type="number"
+                min={0}
+                max={4}
+                value={childrenNoSeat}
+                onChange={(e) =>
+                  setChildrenNoSeat(normalizeCount(e.target.value, 4))
+                }
+              />
+            </div>
           </div>
         </div>
       </div>

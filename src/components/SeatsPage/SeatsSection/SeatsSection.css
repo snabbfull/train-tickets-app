@@ -9,43 +9,78 @@
 /* Шапка: заголовок + кнопка назад */
 .seats-page-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #e5e5e5;
 }
 
 .seats-page-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2d2d2d;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 35px;
+  text-transform: uppercase;
+  color: #292929;
   margin: 0;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
 }
 
 .seats-page-back {
-  font-size: 14px;
-  color: #ffa500;
+  display: flex;
+  align-items: center;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 0;
-  font-weight: 500;
+  padding: 0;
 }
 
 .seats-page-back:hover {
-  text-decoration: underline;
+  text-decoration: none;
+}
+
+.seats-back-arrow {
+  width: 76px;
+  height: 60px;
+  background: #ffa800;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.seats-back-label {
+  box-sizing: border-box;
+  height: 60px;
+  padding: 0 32px;
+  margin-left: 10px;
+  border: 1px solid #292929;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #292929;
 }
 
 /* Блок информации о маршруте */
 .seats-route-block {
   display: flex;
   align-items: stretch;
-  background: #f5f5f5;
+  background: #f7f6f6;
   padding: 16px 24px;
   border-radius: 6px;
   margin-bottom: 24px;
+  min-height: 123px;
 }
 
 .seats-route-col {
@@ -69,7 +104,7 @@
 .seats-route-train-number {
   font-size: 24px;
   font-weight: 700;
-  color: #2d2d2d;
+  color: #3e3c41;
   margin-bottom: 6px;
 }
 
@@ -77,8 +112,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  color: #555;
+  font-size: 16px;
+  color: #928f94;
 }
 
 .seats-route-city {
@@ -102,8 +137,8 @@
 }
 
 .seats-route-station {
-  font-size: 14px;
-  color: #555;
+  font-size: 16px;
+  color: #928f94;
 }
 
 .seats-route-col-duration {
@@ -130,7 +165,7 @@
 }
 
 .seats-route-duration-text {
-  font-size: 16px;
+  font-size: 18px;
   color: #000;
 }
 
@@ -152,36 +187,50 @@
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .seats-ticket-field {
   flex: 1;
-  min-width: 140px;
+  min-width: 260px;
+  max-width: 260px;
 }
 
-.seats-ticket-field label {
-  display: block;
-  font-size: 14px;
-  color: #2d2d2d;
+.seats-ticket-control {
+  box-sizing: border-box;
+  height: 50px;
+  border: 1px solid #928f94;
+  border-radius: 5px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
   margin-bottom: 6px;
-  font-weight: 500;
 }
 
-.seats-ticket-field input {
-  width: 100%;
-  max-width: 80px;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+.seats-ticket-placeholder {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #292929;
+}
+
+.seats-ticket-input {
+  width: 40px;
+  border: none;
+  background: transparent;
+  margin-left: auto;
+  text-align: right;
+  font-size: 18px;
+  color: #292929;
 }
 
 .seats-field-hint {
-  font-size: 12px;
-  color: #888;
-  margin: 6px 0 0 0;
+  font-size: 16px;
+  line-height: 19px;
+  color: #928f94;
+  margin: 8px 0 0 0;
   max-width: 260px;
-  line-height: 1.4;
 }
 
 /* Тип вагона: иконки */
@@ -206,8 +255,8 @@
   border-radius: 6px;
   background: #fff;
   cursor: pointer;
-  font-size: 14px;
-  color: #666;
+  font-size: 24px;
+  color: #928f94;
   transition: all 0.2s;
 }
 
