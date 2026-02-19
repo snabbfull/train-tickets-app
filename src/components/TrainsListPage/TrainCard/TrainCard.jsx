@@ -3,6 +3,7 @@ import wifi from "../../../assets/wifi.png";
 import express from "../../../assets/express.png";
 import eat from "../../../assets/eat.png";
 import trainIcon from "../../../assets/train-icon.png";
+import { useNavigate } from "react-router-dom";
 
 
 const formatTime = (timestamp) => {
@@ -71,8 +72,16 @@ const AmenitiesIcons = ({ train }) => {
   return <div className="amenities">{amenities}</div>;
 };
 
+
 const TrainCard = ({ train }) => {
   const departure = train.departure;
+
+  const navigate = useNavigate();
+
+  const handleSeatsChoice = (e, trainId) => {
+    e.preventDefault();
+    navigate(`/routes/${trainId}/seats`);
+  };
 
   // Данные о местах из available_seats_info
   const seatsInfo = departure.available_seats_info || {};
@@ -182,10 +191,15 @@ const TrainCard = ({ train }) => {
         <div className="trains-right-block-container">
           {/* Иконки опций */}
           <AmenitiesIcons train={train} />
-          <button className="train-button">Выбрать места</button>
+          {/* Кнопка */}
+          <button
+            className="train-button"
+            onClick={(e) => handleSeatsChoice(e, departure._id)}
+          >
+            Выбрать места
+          </button>
         </div>
       </div>
-      {/* Кнопка */}
     </div>
   );
 };

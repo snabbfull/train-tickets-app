@@ -4,6 +4,7 @@ import lastRoutesReducer from './lastRoutes/lastRoutesSlice';
 import trainsListReducer from './trainsList/trainsListSlice';
 import trainSeatsReducer from './trainSeats/trainSeatsSlice';
 import filtersReducer from './filters/filtersSlice';
+import orderReducer from './order/orderSlice';
 
 const rootReducer = combineReducers({
   cities: citiesReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   trainsList: trainsListReducer,
   trainSeats: trainSeatsReducer,
   filters: filtersReducer,
+  order: orderReducer,
 });
 
 export default rootReducer;

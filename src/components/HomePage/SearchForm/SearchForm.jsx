@@ -103,7 +103,7 @@ const SearchForm = () => {
     }
 
     navigate(
-      `/routes?from_city_id=${formData.fromId}&to_city_id=${formData.toId}&date_start=${formData.dateStart}&date_end=${formData.dateEnd}`,
+      `/routes?from_city_id=${formData.fromId}&to_city_id=${formData.toId}&date_start=${formData.dateStart}&date_start_arrival=${formData.dateEnd}`,
     );
   };
 

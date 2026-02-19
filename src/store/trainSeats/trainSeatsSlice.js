@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { trainSeatsRequested, trainSeatsSuccessed, trainSeatsFailed } from "../actions";
 
 const initialState = {
-  trainSeats: [],
+  data: [],
   loading: false,
   error: null,
 };
@@ -19,7 +19,7 @@ const trainSeatsSlice = createSlice({
       })
       .addCase(trainSeatsSuccessed, (state, action) => {
         state.loading = false;
-        state.trainSeats = action.payload;
+        state.data = action.payload;
       })
       .addCase(trainSeatsFailed, (state, action) => {
         state.loading = false;

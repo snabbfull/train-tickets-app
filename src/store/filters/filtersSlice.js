@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   date_start: null,
-  date_end: null,
+  date_start_arrival: null,
   // Типы вагонов
   have_first_class: false,      // Люкс
   have_second_class: false,     // Купе
@@ -23,9 +23,9 @@ const filtersSlice = createSlice({
   initialState,
   reducers: {
     setDateFilter(state, action) {
-      const { date_start, date_end } = action.payload;
+      const { date_start, date_start_arrival } = action.payload;
       state.date_start = date_start;
-      state.date_end = date_end;
+      state.date_start_arrival = date_start_arrival;
     },
     toggleFilter(state, action) {
       const { filterName } = action.payload;

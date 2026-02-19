@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setDateFilter,
+  // setDateFilter,
   toggleFilter,
   setPriceFilter,
   resetFilters,

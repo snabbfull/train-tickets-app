@@ -51,9 +51,9 @@ const filteredRoutes = routes.filter((train) => {
     if (departureFromTs < startOfDay) return false;
   }
 
-  // 📅 Фильтр по дате возврата (date_end) — только если есть arrival
-  if (filters.date_end && arrivalToTs) {
-    const endOfDay = dateToTimestamp(filters.date_end) + 24 * 60 * 60;
+  // 📅 Фильтр по дате возврата (date_start_arrival) — только если есть arrival
+  if (filters.date_start_arrival && arrivalToTs) {
+    const endOfDay = dateToTimestamp(filters.date_start_arrival) + 24 * 60 * 60;
     if (arrivalToTs >= endOfDay) return false;
   }
 
@@ -179,8 +179,8 @@ const filteredRoutes = routes.filter((train) => {
 
       <div className="trains-list">
         {paginatedRoutes.length > 0
-          ? paginatedRoutes.map((train) => (
-              <TrainCard key={train._id} train={train} />
+          ? paginatedRoutes.map((train, index) => (
+              <TrainCard key={index} train={train} />
             ))
           : !loading && <div>Поездов не найдено</div>}
       </div>
