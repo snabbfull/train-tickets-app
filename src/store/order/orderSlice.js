@@ -22,6 +22,8 @@ const initialState = {
   selectedSeatNumbers: [],
   // Доп. опции ФПК, выбранные клиентом: [{ coach_id, option_key, price, label? }]
   fpkOptions: [],
+  // Сводка поезда для сайдбара (Туда / Обратно): { departure, arrival? }
+  trainSummary: null,
   orderNumber: null,
   loading: false,
   error: null,
@@ -56,7 +58,7 @@ const orderSlice = createSlice({
       state.data.departure.seats = normalizedSelectedSeats.map((seat) => ({
         coach_id: seat.coach_id || "",
         person_info: {
-          is_adult: true,
+          is_adult: seat.is_child !== true,
           first_name: "",
           last_name: "",
           patronymic: "",
@@ -66,8 +68,9 @@ const orderSlice = createSlice({
           document_data: "",
         },
         seat_number: parseInt(seat.seat_number, 10),
-        is_child: false,
+        is_child: seat.is_child === true,
         include_children_seat: false,
+        seat_price: typeof seat.seat_price === "number" ? seat.seat_price : 0,
       }));
 
       if (arrivalRouteId && Array.isArray(arrivalSeats) && arrivalSeats.length > 0) {
@@ -76,7 +79,7 @@ const orderSlice = createSlice({
           seats: arrivalSeats.map((seat) => ({
             coach_id: seat.coach_id || "",
             person_info: {
-              is_adult: true,
+              is_adult: seat.is_child !== true,
               first_name: "",
               last_name: "",
               patronymic: "",
@@ -86,8 +89,9 @@ const orderSlice = createSlice({
               document_data: "",
             },
             seat_number: parseInt(seat.seat_number, 10),
-            is_child: false,
+            is_child: seat.is_child === true,
             include_children_seat: false,
+            seat_price: typeof seat.seat_price === "number" ? seat.seat_price : 0,
           })),
         };
       } else {
@@ -95,11 +99,14 @@ const orderSlice = createSlice({
       }
     },
 
-    // Обновить данные пассажира
+    // Обновить данные пассажира (при смене is_adult синхронизируется is_child у места)
     setPassengerInfo: (state, action) => {
-      const { seatIndex, personInfo } = action.payload;
-      if (state.data.departure.seats[seatIndex]) {
-        state.data.departure.seats[seatIndex].person_info = personInfo;
+      const { seatIndex, personInfo, include_children_seat } = action.payload;
+      const seat = state.data.departure.seats[seatIndex];
+      if (seat) {
+        if (personInfo) seat.person_info = personInfo;
+        if (typeof personInfo?.is_adult === "boolean") seat.is_child = !personInfo.is_adult;
+        if (typeof include_children_seat === "boolean") seat.include_children_seat = include_children_seat;
       }
     },
 
@@ -118,11 +125,60 @@ const orderSlice = createSlice({
       state.fpkOptions = Array.isArray(action.payload) ? action.payload : [];
     },
 
+    // Сводка поезда для сайдбара: { departure: { from, to, trainName, trainNumber, ... }, arrival? }
+    setOrderTrainSummary: (state, action) => {
+      state.trainSummary = action.payload;
+    },
+
+    removeDepartureSeat: (state, action) => {
+      const index = action.payload;
+      if (index < 0 || index >= state.data.departure.seats.length) return;
+      state.data.departure.seats.splice(index, 1);
+      state.selectedSeats = state.data.departure.seats.map((s) => ({
+        coach_id: s.coach_id,
+        seat_number: s.seat_number,
+      }));
+      state.selectedSeatNumbers = state.selectedSeats.map((s) => s.seat_number);
+    },
+
+    addDepartureSeat: (state) => {
+      const seats = state.data.departure.seats;
+      const first = seats[0];
+      const coach_id = first?.coach_id ?? "";
+      const seat_price = typeof first?.seat_price === "number" ? first.seat_price : 0;
+      const maxSeatNumber = seats.length
+        ? Math.max(...seats.map((s) => parseInt(s.seat_number, 10) || 0))
+        : 0;
+      state.data.departure.seats.push({
+        coach_id,
+        person_info: {
+          is_adult: true,
+          first_name: "",
+          last_name: "",
+          patronymic: "",
+          gender: true,
+          birthday: "",
+          document_type: "паспорт",
+          document_data: "",
+        },
+        seat_number: maxSeatNumber + 1,
+        is_child: false,
+        include_children_seat: false,
+        seat_price,
+      });
+      state.selectedSeats = state.data.departure.seats.map((s) => ({
+        coach_id: s.coach_id,
+        seat_number: s.seat_number,
+      }));
+      state.selectedSeatNumbers = state.selectedSeats.map((s) => s.seat_number);
+    },
+
     resetOrder: (state) => {
       state.data = { ...initialState.data };
       state.selectedSeats = [];
       state.selectedSeatNumbers = [];
       state.fpkOptions = [];
+      state.trainSummary = null;
       state.success = false;
     },
   },
@@ -152,6 +208,9 @@ export const {
   setUserInfo,
   setPaymentMethod,
   setFpkOptions,
+  setOrderTrainSummary,
+  removeDepartureSeat,
+  addDepartureSeat,
   resetOrder,
 } = orderSlice.actions;
 

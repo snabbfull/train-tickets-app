@@ -1,6 +1,7 @@
 import HeroSection2 from "../components/TrainsListPage/HeroSection2/HeroSection2";
 import Stepper from "../components/Stepper/Stepper";
 import PassengersForm from "../components/PassengersPage/PassengersForm/PassengersForm";
+import OrderInformationSideBar from "../components/PassengersPage/OrderInformationSideBar/OrderInformationSideBar";
 import "./TrainsListPage.css";
 import "./PassengersPage.css";
 import LoadingError from "../components/LoadingError/LoadingError";
@@ -17,12 +18,12 @@ const PassengersPage = () => {
       ? "Сначала выберите места"
       : null;
 
-  // Redirect if no seats selected
+  // Redirect if no seats selected (проверяем data.departure.seats — там хранятся выбранные места)
   useEffect(() => {
-    if (!data.selectedSeats || data.selectedSeats.length === 0) {
+    if (!data.departure.seats || data.departure.seats.length === 0) {
       navigate("/routes");
     }
-  }, [data.selectedSeats, navigate]);
+  }, [data.departure.seats, navigate]);
 
   return (
     <>
@@ -30,19 +31,9 @@ const PassengersPage = () => {
       <Stepper />
       {error && <LoadingError />}
       {!error && (
-        <div className="trains-page">
+        <div className="trains-page passengers-page-layout">
           <div className="trains-left">
-            <div className="passengers-summary">
-              <h3>Информация о заказе</h3>
-              <div className="summary-item">
-                <span>Выбранные места:</span>
-                <strong>{data.selectedSeats.join(", ")}</strong>
-              </div>
-              <div className="summary-item">
-                <span>Количество пассажиров:</span>
-                <strong>{data.selectedSeats.length}</strong>
-              </div>
-            </div>
+            <OrderInformationSideBar />
           </div>
           <div className="trains-right">
             <PassengersForm />

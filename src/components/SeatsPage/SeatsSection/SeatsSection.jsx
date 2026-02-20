@@ -5,6 +5,7 @@ import { trainSeatsRequested } from "../../../store/actions";
 import {
   setSelectedSeats,
   setFpkOptions,
+  setOrderTrainSummary,
 } from "../../../store/order/orderSlice";
 import {
   WAGON_TYPES,
@@ -25,7 +26,9 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const trainFromState = location.state?.train;
   const arrivalRouteId = trainFromState?.arrival?._id ?? null;
 
-  const dataByRoute = useSelector((state) => state.trainSeats.dataByRoute ?? {});
+  const dataByRoute = useSelector(
+    (state) => state.trainSeats.dataByRoute ?? {},
+  );
   const legacyData = useSelector((state) => state.trainSeats.data);
   const rawData = dataByRoute[routeId] ?? legacyData;
   const carriages = useMemo(
@@ -36,7 +39,9 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     [rawData],
   );
 
-  const rawDataArrival = arrivalRouteId ? (dataByRoute[arrivalRouteId] ?? null) : null;
+  const rawDataArrival = arrivalRouteId
+    ? (dataByRoute[arrivalRouteId] ?? null)
+    : null;
   const carriagesArrival = useMemo(
     () =>
       !rawDataArrival
@@ -59,9 +64,13 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const [fpkSelectedByCoach, setFpkSelectedByCoach] = useState({});
   // Обратный маршрут: те же состояния
   const [wagonTypeFilterArrival, setWagonTypeFilterArrival] = useState(null);
-  const [selectedSeatsByCoachArrival, setSelectedSeatsByCoachArrival] = useState({});
-  const [userSelectedCoachIdsArrival, setUserSelectedCoachIdsArrival] = useState([]);
-  const [fpkSelectedByCoachArrival, setFpkSelectedByCoachArrival] = useState({});
+  const [selectedSeatsByCoachArrival, setSelectedSeatsByCoachArrival] =
+    useState({});
+  const [userSelectedCoachIdsArrival, setUserSelectedCoachIdsArrival] =
+    useState([]);
+  const [fpkSelectedByCoachArrival, setFpkSelectedByCoachArrival] = useState(
+    {},
+  );
 
   // Какие типы вагонов реально есть в ответе сервера
   const availableWagonTypes = useMemo(() => {
@@ -311,6 +320,16 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     });
   };
 
+  const getSeatPrice = (carriageList, coachId, seatNum) => {
+    const idx = carriageList.findIndex((c, i) => getCoachId(c, i) === coachId);
+    if (idx < 0) return 0;
+    const coach = carriageList[idx]?.coach ?? carriageList[idx];
+    const num = parseInt(seatNum, 10);
+    const isTop = num % 2 === 0;
+    const price = isTop ? coach?.top_price : coach?.bottom_price;
+    return Number(price ?? coach?.price ?? 0) || 0;
+  };
+
   const handleConfirmSeats = () => {
     const totalSelected = Object.values(selectedSeatsByCoach).reduce(
       (acc, set) => acc + set.size,
@@ -318,29 +337,71 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     );
     if (totalSelected === 0) return;
 
-    const selectedSeats = Object.entries(selectedSeatsByCoach).flatMap(
+    const departureList = Object.entries(selectedSeatsByCoach).flatMap(
       ([coachId, set]) =>
         Array.from(set).map((seatNum) => ({
           coach_id: coachId,
           seat_number: parseInt(seatNum, 10),
+          seat_price: getSeatPrice(carriages, coachId, seatNum),
         })),
     );
+    const adultsCount = adults;
+    const selectedSeats = departureList.map((seat, i) => ({
+      ...seat,
+      is_child: i >= adultsCount,
+    }));
 
-    const arrivalSeats =
+    const arrivalList =
       arrivalRouteId && carriagesArrival.length > 0
-        ? Object.entries(selectedSeatsByCoachArrival).flatMap(([coachId, set]) =>
-            Array.from(set).map((seatNum) => ({
-              coach_id: coachId,
-              seat_number: parseInt(seatNum, 10),
-            })),
+        ? Object.entries(selectedSeatsByCoachArrival).flatMap(
+            ([coachId, set]) =>
+              Array.from(set).map((seatNum) => ({
+                coach_id: coachId,
+                seat_number: parseInt(seatNum, 10),
+                seat_price: getSeatPrice(carriagesArrival, coachId, seatNum),
+              })),
           )
         : [];
+    const arrivalSeats = arrivalList.map((seat, i) => ({
+      ...seat,
+      is_child: i >= adultsCount,
+    }));
+
+    const trainSummary = {
+      departure: {
+        fromCity: departure?.from?.city?.name || "—",
+        fromStation: departure?.from?.railway_station_name || "",
+        toCity: departure?.to?.city?.name || "—",
+        toStation: departure?.to?.railway_station_name || "",
+        fromDatetime: departure?.from?.datetime,
+        toDatetime: departure?.to?.datetime,
+        trainName: departure?.train?.name || "—",
+        trainNumber: departure?.train?.name || "—",
+        duration: departure?.duration,
+      },
+      ...(arrival &&
+        arrivalList.length > 0 && {
+          arrival: {
+            fromCity: arrival?.from?.city?.name || "—",
+            fromStation: arrival?.from?.railway_station_name || "",
+            toCity: arrival?.to?.city?.name || "—",
+            toStation: arrival?.to?.railway_station_name || "",
+            fromDatetime: arrival?.from?.datetime,
+            toDatetime: arrival?.to?.datetime,
+            trainName: arrival?.train?.name || "—",
+            trainNumber: arrival?.train?.name || "—",
+            duration: arrival?.duration,
+          },
+        }),
+    };
+    dispatch(setOrderTrainSummary(trainSummary));
 
     dispatch(
       setSelectedSeats({
         selectedSeats,
         routeId,
-        ...(arrivalRouteId && arrivalSeats.length > 0 && { arrivalRouteId, arrivalSeats }),
+        ...(arrivalRouteId &&
+          arrivalSeats.length > 0 && { arrivalRouteId, arrivalSeats }),
       }),
     );
 

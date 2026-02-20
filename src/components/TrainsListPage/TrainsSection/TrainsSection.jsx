@@ -50,8 +50,8 @@ const filteredRoutes = routes.filter((train) => {
 
   const departureFromTs = train.departure.from.datetime;
 
-  // Для arrival проверка опциональна (если есть обратный рейс)
-  const arrivalToTs = train.arrival?.to?.datetime;
+  // date_end — дата отбытия обратно (у поездов с обратным рейсом)
+  const arrivalFromTs = train.arrival?.from?.datetime;
 
   // 📅 Фильтр по дате отправления (date_start)
   if (filters.date_start && departureFromTs) {
@@ -59,10 +59,13 @@ const filteredRoutes = routes.filter((train) => {
     if (departureFromTs < startOfDay) return false;
   }
 
-  // 📅 Фильтр по дате возврата (date_start_arrival) — только если есть arrival
-  if (filters.date_start_arrival && arrivalToTs) {
-    const endOfDay = dateToTimestamp(filters.date_start_arrival) + 24 * 60 * 60;
-    if (arrivalToTs >= endOfDay) return false;
+  // 📅 Фильтр по дате возвращения (date_end): только поезда с обратным рейсом,
+  // у которых дата отбытия обратно попадает в выбранный день (клиентская фильтрация)
+  if (filters.date_start_arrival) {
+    if (!train.arrival || arrivalFromTs == null) return false; // без обратного маршрута — не подходит
+    const startOfDay = dateToTimestamp(filters.date_start_arrival);
+    const endOfDay = startOfDay + 24 * 60 * 60;
+    if (arrivalFromTs < startOfDay || arrivalFromTs >= endOfDay) return false;
   }
 
   // 🚃 Filter by train class (с защитой)

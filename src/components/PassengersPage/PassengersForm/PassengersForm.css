@@ -1,216 +1,713 @@
 .passengers-form {
   width: 100%;
+  max-width: 960px;
+  font-family: "Roboto", sans-serif;
 }
 
-/* Passenger Card */
+.passengers-section-title {
+  margin: 0 0 24px 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #292929;
+}
+
+/* Card container — Rectangle 9 */
 .passenger-card {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.passenger-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
   margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
 }
 
-.passenger-header h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-}
-
-.seat-badge {
-  background: #ff9900;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* Form Grid */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+/* Header — Rectangle 11 */
+.passenger-card-header {
+  display: flex;
+  align-items: center;
   gap: 16px;
+  min-height: 107px;
+  padding: 0 24px;
+  background: #f9f9f9;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.passenger-card-header:hover {
+  background: #f0f0f0;
+}
+
+.passenger-card-header-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #928f94;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.passenger-card-header[aria-expanded="true"] .passenger-card-header-icon {
+  transform: rotate(180deg);
+}
+
+.passenger-card-header-icon svg {
+  flex-shrink: 0;
+}
+
+.passenger-card-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 35px;
+  color: #292929;
+  flex: 1;
+}
+
+.passenger-seat-badge {
+  font-size: 18px;
+  color: #928f94;
+}
+
+.passenger-card-delete {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #928f94;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.passenger-card-delete:hover:not(:disabled) {
+  color: #292929;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.passenger-card-delete:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Body */
+.passenger-card-body {
+  padding: 24px 24px 28px;
+}
+
+/* Тип пассажира: Взрослый / Детский */
+.passenger-type-row {
+  margin-bottom: 28px;
+}
+
+.passenger-type-label {
+  display: block;
+  font-size: 16px;
+  line-height: 19px;
+  color: #928f94;
   margin-bottom: 10px;
 }
 
-.form-group {
+/* Rectangle 9.1 — селект типа пассажира */
+.passenger-type-select {
+  box-sizing: border-box;
+  width: 280px;
+  height: 50px;
+  padding: 0 44px 0 14px;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+  background: #ffffff url("../../../assets/select-arrow.png") no-repeat right 14px center;
+  background-size: 12px auto;
+  border: 1px solid #928f94;
+  border-radius: 5px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.passenger-type-select:focus,
+.passenger-select-btn:focus {
+  outline: none;
+  border-color: #ffa800;
+}
+
+/* Обёртка кастомного селекта (как в сортировке TrainsSection) */
+.passenger-select-wrap {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.passenger-select-btn {
+  text-align: left;
+  cursor: pointer;
+}
+
+.passenger-field-select-btn {
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 205px;
+  height: 50px;
+  padding: 0 44px 0 14px;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+  background: #ffffff url("../../../assets/select-arrow.png") no-repeat right 14px center;
+  background-size: 12px auto;
+  border: 1px solid #928f94;
+  border-radius: 5px;
+}
+
+/* Список выпадающий — ширина по самому длинному пункту */
+.passenger-select-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: max-content;
+  min-width: 100%;
+  background: #f7f5f9;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-.form-group label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #333;
-}
-
-.form-group input,
-.form-group select {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: #ff9900;
-  box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.1);
-}
-
-.form-group input::placeholder {
-  color: #999;
-}
-
-/* Checkbox in form group */
-.form-group input[type="checkbox"] {
+.passenger-select-dropdown-item {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 38px;
+  border: none;
+  background: transparent;
+  color: #292929;
   cursor: pointer;
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  accent-color: #ff9900;
+  text-align: left;
+  padding: 0 14px;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  white-space: nowrap;
 }
 
-.form-group label:has(input[type="checkbox"]) {
+.passenger-select-dropdown-item:hover {
+  background: rgba(255, 168, 0, 0.12);
+}
+
+.passenger-select-dropdown-item.active {
+  min-height: 41px;
+  background: #ffca62;
+}
+
+/* Fields */
+.passenger-fields {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.passenger-field-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.passenger-field-row-triple .passenger-field {
+  flex: 1;
+  min-width: 200px;
+  max-width: 280px;
+}
+
+.passenger-field-row-doc .passenger-field {
+  flex: 0 1 205px;
+}
+
+.passenger-field-doc-type {
+  flex: 0 0 auto;
+  width: fit-content;
+}
+
+
+.passenger-field-row-gender-date {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+.passenger-field-gender-date .passenger-field-date {
+  flex: 0 1 240px;
+}
+
+.passenger-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.passenger-field label {
+  font-size: 16px;
+  line-height: 19px;
+  color: #928f94;
+}
+
+.passenger-field input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  padding: 0 14px;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+  background: #ffffff;
+  border: 1px solid #928f94;
+  border-radius: 5px;
+}
+
+.passenger-field select {
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  padding: 0 44px 0 14px;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+  background: #ffffff url("../../../assets/select-arrow.png") no-repeat right 14px center;
+  background-size: 12px auto;
+  border: 1px solid #928f94;
+  border-radius: 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.passenger-field input::placeholder {
+  color: #c4c4c4;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.passenger-field input:focus,
+.passenger-field select:focus {
+  outline: none;
+  border-color: #ffa800;
+}
+
+.passenger-field-cert-number {
+  flex: 1;
+  min-width: 200px;
+}
+
+.passenger-cert-input {
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.passenger-cert-input-error {
+  border: 1px solid rgba(255, 61, 0, 0.76) !important;
+  color: rgba(255, 61, 0, 0.76);
+}
+
+/* Предупреждение о некорректном номере свидетельства о рождении — по ширине формы */
+.passenger-certificate-warning {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  min-height: 119px;
+  margin-top: 20px;
+  padding: 20px 24px 20px 72px;
+  background: rgba(255, 61, 0, 0.38);
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #292929;
+  display: flex;
   align-items: center;
 }
 
-/* Sections */
-.passengers-section,
-.buyer-section {
-  animation: fadeIn 0.3s ease;
+.passenger-certificate-warning-text {
+  margin: 0;
+  flex: 1;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.passenger-certificate-warning-close {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.81);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
 }
 
-.passengers-section h2,
-.buyer-section h2 {
-  font-size: 22px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 24px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
+.passenger-certificate-warning-close:hover {
+  background: rgba(255, 255, 255, 1);
 }
 
-/* Form Actions */
+.passenger-certificate-warning-close svg {
+  flex-shrink: 0;
+}
+
+/* Пол М/Ж — Rectangle 9.3 */
+.passenger-gender-toggle {
+  box-sizing: border-box;
+  display: inline-flex;
+  width: 204px;
+  height: 50px;
+  background: #ffffff;
+  border: 1px solid #928f94;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.passenger-gender-btn {
+  box-sizing: border-box;
+  flex: 1;
+  height: 50px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 35px;
+  text-transform: uppercase;
+  color: #000000;
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.passenger-gender-btn:first-child {
+  border-right: 1px solid #928f94;
+}
+
+.passenger-gender-btn.active {
+  background: #ffa800;
+}
+
+.passenger-gender-btn:hover:not(.active) {
+  background: #f5f5f5;
+}
+
+.passenger-field-date input {
+  max-width: 240px;
+}
+
+/* Ограниченная подвижность */
+.passenger-mobility {
+  margin-top: 4px;
+}
+
+.passenger-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  line-height: 21px;
+  color: #292929;
+  cursor: pointer;
+}
+
+.passenger-checkbox-label input[type="checkbox"] {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  accent-color: #ffa800;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Разделитель между карточками */
+.passenger-divider-dashed {
+  width: 100%;
+  height: 0;
+  border: none;
+  border-top: 1px dashed #928f94;
+  margin: 0;
+}
+
+/* Кнопка «Следующий пассажир» */
+.passenger-next-btn {
+  box-sizing: border-box;
+  width: calc(100% - 48px);
+  max-width: 303px;
+  height: 52px;
+  margin: 20px 24px 24px auto;
+  display: block;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #292929;
+  background: #ffffff;
+  border: 1px solid #292929;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.passenger-next-btn:hover {
+  background: #292929;
+  color: #ffffff;
+}
+
+/* Блок «Готово» при валидном номере свидетельства (Rectangle 10) */
+.passenger-certificate-done {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 118px;
+  background: #b2f6a1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 24px;
+  margin-top: 0;
+}
+
+.passenger-certificate-done-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fef7;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.passenger-certificate-done-icon-img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.passenger-certificate-done-text {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #ffffff;
+}
+
+.passenger-next-btn-in-done {
+  margin-left: auto;
+}
+
+/* Form actions */
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   margin-top: 30px;
   padding-top: 24px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px dashed #928f94;
+}
+
+.form-actions-main {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn-add-passenger {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 960px;
+  height: 97px;
+  margin-bottom: 20px;
+  padding: 0 26px 0 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 35px;
+  color: #292929;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-add-passenger:hover {
+  background: #f9f9f9;
+  border-color: #928f94;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-add-passenger-text {
+  flex: 1;
+}
+
+.btn-add-passenger-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Кнопка ДАЛЕЕ — те же стили, что и в SeatsSection */
+.passengers-btn-next {
+  width: 222px;
+  height: 60px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffa800;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s, filter 0.2s, background 0.2s;
+}
+
+.passengers-btn-next:hover:not(:disabled) {
+  background: #ffa800;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.passengers-btn-next:active:not(:disabled) {
+  border: 1px solid #ffa800;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.passengers-btn-next:disabled {
+  background: #928f94;
+  cursor: not-allowed;
 }
 
 .btn-primary,
 .btn-secondary {
-  padding: 12px 30px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 14px 32px;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-primary {
-  background: #ff9900;
-  color: white;
+  background: #ffa800;
+  color: #292929;
+  border: none;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #ff7700;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+  background: #f5a000;
+  box-shadow: 0 2px 8px rgba(255, 168, 0, 0.4);
 }
 
 .btn-primary:disabled {
-  background: #ccc;
+  background: #c4c4c4;
+  color: #928f94;
   cursor: not-allowed;
-  opacity: 0.6;
 }
 
 .btn-secondary {
-  background: white;
-  color: #666;
-  border: 1px solid #ddd;
+  background: #ffffff;
+  color: #292929;
+  border: 1px solid #292929;
 }
 
 .btn-secondary:hover {
-  background: #f5f5f5;
-  border-color: #999;
+  background: #292929;
+  color: #ffffff;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .form-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+/* Buyer section */
+.buyer-section .passenger-card {
+  margin-bottom: 24px;
+}
+
+.buyer-section .passenger-card-body {
+  padding: 24px;
+}
+
+@media (max-width: 900px) {
+  .passenger-field-row-triple .passenger-field {
+    max-width: none;
   }
 
-  .form-actions {
+  .passenger-field-row-doc {
     flex-direction: column;
-    gap: 10px;
   }
 
-  .btn-primary,
-  .btn-secondary {
+  .passenger-field-row-doc .passenger-field {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .passenger-next-btn {
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .passenger-card-header {
+    padding: 16px;
+  }
+
+  .passenger-card-title {
+    font-size: 22px;
+  }
+
+  .passenger-card-body {
+    padding: 16px;
+  }
+
+  .passenger-type-toggle {
     width: 100%;
   }
-}
 
-@media (max-width: 768px) {
-  .passenger-card {
-    padding: 16px;
-    margin-bottom: 16px;
+  .passenger-type-btn {
+    flex: 1;
   }
 
-  .passenger-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .passengers-section h2,
-  .buyer-section h2 {
+  .passenger-field input,
+  .passenger-field select {
     font-size: 18px;
-    margin-bottom: 16px;
-  }
-
-  .form-actions {
-    margin-top: 20px;
-    padding-top: 16px;
   }
 }

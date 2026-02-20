@@ -160,11 +160,6 @@
   color: white;
 }
 
-.chevron-step.completed .chevron-number {
-  background-color: white;
-  color: #292929;
-}
-
 /* Название шага */
 .chevron-label {
   width: 231px;
@@ -187,11 +182,6 @@
 
 .chevron-step.completed .chevron-label {
   color: white;
-}
-
-/* Наведение */
-.chevron-step:hover {
-  filter: brightness(0.95);
 }
 
 /* Адаптивность для мобильных */
