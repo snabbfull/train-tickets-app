@@ -442,6 +442,21 @@
 }
 
 /* Нижний повторный блок */
+.seats-arrival-section {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.seats-arrival-title {
+  margin: 0 0 20px 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 35px;
+  color: #292929;
+}
+
 .seats-summary-block {
   margin-top: 32px;
   padding-top: 24px;

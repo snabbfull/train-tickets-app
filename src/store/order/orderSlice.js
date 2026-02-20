@@ -32,9 +32,16 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    // Сохранить выбранные места
+    // Сохранить выбранные места (туда и опционально обратно)
     setSelectedSeats: (state, action) => {
-      const { seatNumbers, routeId, coach_id, selectedSeats } = action.payload;
+      const {
+        seatNumbers,
+        routeId,
+        coach_id,
+        selectedSeats,
+        arrivalRouteId,
+        arrivalSeats,
+      } = action.payload;
       const normalizedSelectedSeats = Array.isArray(selectedSeats)
         ? selectedSeats
         : (seatNumbers || []).map((seatNum) => ({
@@ -46,7 +53,6 @@ const orderSlice = createSlice({
       state.selectedSeatNumbers = normalizedSelectedSeats.map((s) => s.seat_number);
       state.data.departure.route_direction_id = routeId;
 
-      // Инициализировать пассажиров для всех выбранных мест (в т.ч. из разных вагонов)
       state.data.departure.seats = normalizedSelectedSeats.map((seat) => ({
         coach_id: seat.coach_id || "",
         person_info: {
@@ -63,6 +69,30 @@ const orderSlice = createSlice({
         is_child: false,
         include_children_seat: false,
       }));
+
+      if (arrivalRouteId && Array.isArray(arrivalSeats) && arrivalSeats.length > 0) {
+        state.data.arrival = {
+          route_direction_id: arrivalRouteId,
+          seats: arrivalSeats.map((seat) => ({
+            coach_id: seat.coach_id || "",
+            person_info: {
+              is_adult: true,
+              first_name: "",
+              last_name: "",
+              patronymic: "",
+              gender: true,
+              birthday: "",
+              document_type: "паспорт",
+              document_data: "",
+            },
+            seat_number: parseInt(seat.seat_number, 10),
+            is_child: false,
+            include_children_seat: false,
+          })),
+        };
+      } else {
+        state.data.arrival = null;
+      }
     },
 
     // Обновить данные пассажира

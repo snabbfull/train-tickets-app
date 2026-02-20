@@ -3,9 +3,10 @@ import { fetchSeats } from "../../api/API";
 import { trainSeatsRequested, trainSeatsSuccessed, trainSeatsFailed } from "../actions";
 
 function* fetchTrainSeatsSaga(action) {
+  const routeId = action.payload;
   try {
-    const seats = yield call(fetchSeats, action.payload);
-    yield put(trainSeatsSuccessed(seats));
+    const data = yield call(fetchSeats, routeId);
+    yield put(trainSeatsSuccessed({ routeId, data }));
   } catch (error) {
     yield put(trainSeatsFailed(error.message || "Ошибка загрузки"));
     console.error("Error fetching train seats:", error);

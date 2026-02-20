@@ -2,87 +2,49 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { trainSeatsRequested } from "../../../store/actions";
-import seetIcon from "../../../assets/seet.png";
-import plackartIcon from "../../../assets/plackart.png";
-import coupeIcon from "../../../assets/coope.png";
-import luxIcon from "../../../assets/lux.png";
-import trainSeatsImg from "../../../assets/train-seats.png";
-import conderWagonIcon from "../../../assets/conder-wagon.png";
-import wifiWagonIcon from "../../../assets/wifi-wagon.png";
-import underwearWagonIcon from "../../../assets/underwear-wagon.png";
-import foodWagonIcon from "../../../assets/food-wagon.png";
-import { setSelectedSeats, setFpkOptions } from "../../../store/order/orderSlice";
+import {
+  setSelectedSeats,
+  setFpkOptions,
+} from "../../../store/order/orderSlice";
+import {
+  WAGON_TYPES,
+  mapClassTypeToWagonId,
+  getCoachId,
+  FPK_LABELS,
+  getFpkPrice,
+} from "./seatsSectionUtils";
+import RouteBlock from "./RouteBlock";
+import WagonTypeBlock from "./WagonTypeBlock";
+import WagonMainBlock from "./WagonMainBlock";
 import "./SeatsSection.css";
-
-// Соответствие типов вагонов из API (class_type) нашим табам
-const WAGON_TYPES = [
-  { id: "lux", class_type: "first", name: "Люкс", icon: luxIcon },
-  { id: "coupe", class_type: "second", name: "Купе", icon: coupeIcon },
-  { id: "platzkart", class_type: "third", name: "Плацкарт", icon: plackartIcon },
-  { id: "sitting", class_type: "fourth", name: "Сидячий", icon: seetIcon },
-];
-
-const formatTime = (ts) => {
-  if (ts == null) return "--:--";
-  const date = new Date(typeof ts === "number" ? ts * 1000 : ts);
-  return date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-};
-
-const formatDuration = (seconds) => {
-  if (seconds == null) return "";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return `${h} ч ${m} мин`;
-};
-
-const mapClassTypeToWagonId = (classType) => {
-  const ct = (classType || "").toLowerCase();
-  if (ct === "first") return "lux";
-  if (ct === "second") return "coupe";
-  if (ct === "third") return "platzkart";
-  if (ct === "fourth") return "sitting";
-  return null;
-};
-
-const getWagonDisplayNumber = (carriage, idx) => {
-  const coach = carriage?.coach ?? carriage;
-  const rawName = String(coach?.name || "").trim();
-  const digits = rawName.match(/\d+/g);
-  if (digits && digits.length > 0) {
-    return digits[digits.length - 1];
-  }
-  return String(idx + 1).padStart(2, "0");
-};
-
-const getCoachId = (carriage, idx) => {
-  const coach = carriage?.coach ?? carriage;
-  return coach?._id || coach?.coach_id || `carriage-${idx}`;
-};
-
-const FPK_LABELS = { conder: "Кондиционер", wifi: "Wi-Fi", underwear: "Бельё", food: "Питание" };
-
-const getFpkPrice = (coach, optionKey) => {
-  if (!coach) return 0;
-  if (optionKey === "underwear") return Number(coach.linens_price) || 0;
-  if (optionKey === "conder") return Number(coach.air_conditioning_price) || 0;
-  if (optionKey === "wifi") return Number(coach.wifi_price) || 0;
-  if (optionKey === "food") return Number(coach.food_price ?? coach.express_price) || 0;
-  return 0;
-};
 
 const SeatsSection = ({ routeId, fetchedRef }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const trainFromState = location.state?.train;
+  const arrivalRouteId = trainFromState?.arrival?._id ?? null;
 
-  const rawData = useSelector((state) => state.trainSeats.data);
+  const dataByRoute = useSelector((state) => state.trainSeats.dataByRoute ?? {});
+  const legacyData = useSelector((state) => state.trainSeats.data);
+  const rawData = dataByRoute[routeId] ?? legacyData;
   const carriages = useMemo(
     () =>
       Array.isArray(rawData)
         ? rawData
-        : rawData?.coaches ?? rawData?.data ?? [],
-    [rawData]
+        : (rawData?.coaches ?? rawData?.data ?? []),
+    [rawData],
+  );
+
+  const rawDataArrival = arrivalRouteId ? (dataByRoute[arrivalRouteId] ?? null) : null;
+  const carriagesArrival = useMemo(
+    () =>
+      !rawDataArrival
+        ? []
+        : Array.isArray(rawDataArrival)
+          ? rawDataArrival
+          : (rawDataArrival?.coaches ?? rawDataArrival?.data ?? []),
+    [rawDataArrival],
   );
 
   const [adults, setAdults] = useState(1);
@@ -95,6 +57,11 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const [userSelectedCoachIds, setUserSelectedCoachIds] = useState([]);
   // выбранные опции ФПК по вагону: { [coach_id]: { conder, wifi, underwear, food } }
   const [fpkSelectedByCoach, setFpkSelectedByCoach] = useState({});
+  // Обратный маршрут: те же состояния
+  const [wagonTypeFilterArrival, setWagonTypeFilterArrival] = useState(null);
+  const [selectedSeatsByCoachArrival, setSelectedSeatsByCoachArrival] = useState({});
+  const [userSelectedCoachIdsArrival, setUserSelectedCoachIdsArrival] = useState([]);
+  const [fpkSelectedByCoachArrival, setFpkSelectedByCoachArrival] = useState({});
 
   // Какие типы вагонов реально есть в ответе сервера
   const availableWagonTypes = useMemo(() => {
@@ -121,11 +88,13 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
 
   const availableCoachIds = useMemo(
     () => filteredCarriages.map((c, idx) => getCoachId(c, idx)),
-    [filteredCarriages]
+    [filteredCarriages],
   );
 
   const selectedCoachIds = useMemo(() => {
-    const kept = userSelectedCoachIds.filter((id) => availableCoachIds.includes(id));
+    const kept = userSelectedCoachIds.filter((id) =>
+      availableCoachIds.includes(id),
+    );
     if (kept.length > 0) return kept;
     return availableCoachIds.length ? [availableCoachIds[0]] : [];
   }, [userSelectedCoachIds, availableCoachIds]);
@@ -135,10 +104,7 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const MAX_CHILDREN_WITH_SEAT = 3;
   const totalPassengers = adults + children + childrenNoSeat;
   const remainingPassengers = Math.max(0, MAX_PASSENGERS - totalPassengers);
-  const remainingChildrenSeats = Math.max(
-    0,
-    MAX_CHILDREN_WITH_SEAT - children
-  );
+  const remainingChildrenSeats = Math.max(0, MAX_CHILDREN_WITH_SEAT - children);
 
   useEffect(() => {
     if (!routeId) return;
@@ -146,6 +112,13 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     fetchedRef.current.add(routeId);
     dispatch(trainSeatsRequested(routeId));
   }, [routeId, dispatch, fetchedRef]);
+
+  useEffect(() => {
+    if (!arrivalRouteId) return;
+    if (fetchedRef.current.has(arrivalRouteId)) return;
+    fetchedRef.current.add(arrivalRouteId);
+    dispatch(trainSeatsRequested(arrivalRouteId));
+  }, [arrivalRouteId, dispatch, fetchedRef]);
 
   const seatsByCoach = useMemo(
     () =>
@@ -156,7 +129,9 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
 
         const seatMap = Array.isArray(carriage?.seats)
           ? carriage.seats.reduce((obj, seat) => {
-              obj[String(seat.index)] = { is_available: seat.available !== false };
+              obj[String(seat.index)] = {
+                is_available: seat.available !== false,
+              };
               return obj;
             }, {})
           : carriage?.seats || {};
@@ -164,16 +139,16 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
         acc[coachId] = seatMap;
         return acc;
       }, {}),
-    [carriages]
+    [carriages],
   );
 
   const globalSelectedCount = useMemo(
     () =>
       Object.values(selectedSeatsByCoach).reduce(
         (acc, set) => acc + (set?.size || 0),
-        0
+        0,
       ),
-    [selectedSeatsByCoach]
+    [selectedSeatsByCoach],
   );
 
   const handleSeatClick = (seatNum, coachId) => {
@@ -201,7 +176,12 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const toggleCoachSelection = (coachId) => {
     setUserSelectedCoachIds((prev) => {
       const base = prev.filter((id) => availableCoachIds.includes(id));
-      const current = base.length > 0 ? base : availableCoachIds.length ? [availableCoachIds[0]] : [];
+      const current =
+        base.length > 0
+          ? base
+          : availableCoachIds.length
+            ? [availableCoachIds[0]]
+            : [];
 
       if (current.includes(coachId)) {
         // оставляем хотя бы один выбранный вагон
@@ -222,11 +202,119 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     });
   };
 
+  // Обратный маршрут: типы вагонов, фильтр, вагоны, места
+  const availableWagonTypesArrival = useMemo(() => {
+    const present = new Set();
+    carriagesArrival.forEach((c) => {
+      const classType = c.coach?.class_type || c.class_type;
+      const id = mapClassTypeToWagonId(classType);
+      if (id) present.add(id);
+    });
+    return WAGON_TYPES.filter((t) => present.has(t.id));
+  }, [carriagesArrival]);
+
+  const activeWagonTypeArrival =
+    wagonTypeFilterArrival || availableWagonTypesArrival[0]?.id || null;
+
+  const filteredCarriagesArrival = useMemo(() => {
+    if (!activeWagonTypeArrival) return carriagesArrival;
+    const filtered = carriagesArrival.filter((c) => {
+      const classType = c.coach?.class_type || c.class_type;
+      return mapClassTypeToWagonId(classType) === activeWagonTypeArrival;
+    });
+    return filtered.length ? filtered : carriagesArrival;
+  }, [carriagesArrival, activeWagonTypeArrival]);
+
+  const availableCoachIdsArrival = useMemo(
+    () => filteredCarriagesArrival.map((c, idx) => getCoachId(c, idx)),
+    [filteredCarriagesArrival],
+  );
+
+  const selectedCoachIdsArrival = useMemo(() => {
+    const kept = userSelectedCoachIdsArrival.filter((id) =>
+      availableCoachIdsArrival.includes(id),
+    );
+    if (kept.length > 0) return kept;
+    return availableCoachIdsArrival.length ? [availableCoachIdsArrival[0]] : [];
+  }, [userSelectedCoachIdsArrival, availableCoachIdsArrival]);
+
+  const seatsByCoachArrival = useMemo(
+    () =>
+      carriagesArrival.reduce((acc, carriage) => {
+        const c = carriage?.coach ?? carriage;
+        const coachId = c?._id || c?.coach_id || "";
+        if (!coachId) return acc;
+        const seatMap = Array.isArray(carriage?.seats)
+          ? carriage.seats.reduce((obj, seat) => {
+              obj[String(seat.index)] = {
+                is_available: seat.available !== false,
+              };
+              return obj;
+            }, {})
+          : carriage?.seats || {};
+        acc[coachId] = seatMap;
+        return acc;
+      }, {}),
+    [carriagesArrival],
+  );
+
+  const globalSelectedCountArrival = useMemo(
+    () =>
+      Object.values(selectedSeatsByCoachArrival).reduce(
+        (acc, set) => acc + (set?.size || 0),
+        0,
+      ),
+    [selectedSeatsByCoachArrival],
+  );
+
+  const handleSeatClickArrival = (seatNum, coachId) => {
+    const seat = seatsByCoachArrival[coachId]?.[seatNum];
+    if (!seat || seat.is_available === false) return;
+    const prevSet = selectedSeatsByCoachArrival[coachId] || new Set();
+    const nextSet = new Set(prevSet);
+    if (nextSet.has(seatNum)) {
+      nextSet.delete(seatNum);
+    } else {
+      if (globalSelectedCountArrival >= totalTicketsNeeded) return;
+      nextSet.add(seatNum);
+    }
+    setSelectedSeatsByCoachArrival((prev) => ({
+      ...prev,
+      [coachId]: nextSet,
+    }));
+  };
+
+  const toggleCoachSelectionArrival = (coachId) => {
+    setUserSelectedCoachIdsArrival((prev) => {
+      const base = prev.filter((id) => availableCoachIdsArrival.includes(id));
+      const current =
+        base.length > 0
+          ? base
+          : availableCoachIdsArrival.length
+            ? [availableCoachIdsArrival[0]]
+            : [];
+      if (current.includes(coachId)) {
+        if (current.length === 1) return current;
+        return current.filter((id) => id !== coachId);
+      }
+      return [...current, coachId];
+    });
+  };
+
+  const toggleFpkOptionArrival = (coachId, key) => {
+    setFpkSelectedByCoachArrival((prev) => {
+      const cur = prev[coachId] || {};
+      return {
+        ...prev,
+        [coachId]: { ...cur, [key]: !cur[key] },
+      };
+    });
+  };
+
   const handleConfirmSeats = () => {
-    // Если нет выбранных мест вообще — не переходим
     const totalSelected = Object.values(selectedSeatsByCoach).reduce(
       (acc, set) => acc + set.size,
-      0
+      0,
     );
     if (totalSelected === 0) return;
 
@@ -235,41 +323,57 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
         Array.from(set).map((seatNum) => ({
           coach_id: coachId,
           seat_number: parseInt(seatNum, 10),
-        }))
+        })),
     );
+
+    const arrivalSeats =
+      arrivalRouteId && carriagesArrival.length > 0
+        ? Object.entries(selectedSeatsByCoachArrival).flatMap(([coachId, set]) =>
+            Array.from(set).map((seatNum) => ({
+              coach_id: coachId,
+              seat_number: parseInt(seatNum, 10),
+            })),
+          )
+        : [];
 
     dispatch(
       setSelectedSeats({
         selectedSeats,
         routeId,
-      })
+        ...(arrivalRouteId && arrivalSeats.length > 0 && { arrivalRouteId, arrivalSeats }),
+      }),
     );
 
-    // Собрать выбранные доп. опции ФПК с ценами и сохранить в order
     const fpkOptionsList = [];
-    Object.entries(fpkSelectedByCoach || {}).forEach(([coachId, selected]) => {
-      if (!selected || typeof selected !== "object") return;
-      const carriageIdx = carriages.findIndex((c, i) => getCoachId(c, i) === coachId);
-      const carriage = carriageIdx >= 0 ? carriages[carriageIdx] : null;
-      const coach = carriage?.coach ?? carriage;
-      ["conder", "wifi", "underwear", "food"].forEach((key) => {
-        if (selected[key]) {
-          const price = getFpkPrice(coach, key);
-          fpkOptionsList.push({
-            coach_id: coachId,
-            option_key: key,
-            price,
-            label: FPK_LABELS[key],
-          });
-        }
+    const collectFpk = (fpkByCoach, carrList) => {
+      Object.entries(fpkByCoach || {}).forEach(([coachId, selected]) => {
+        if (!selected || typeof selected !== "object") return;
+        const carriageIdx = carrList.findIndex(
+          (c, i) => getCoachId(c, i) === coachId,
+        );
+        const carriage = carriageIdx >= 0 ? carrList[carriageIdx] : null;
+        const coach = carriage?.coach ?? carriage;
+        ["conder", "wifi", "underwear", "food"].forEach((key) => {
+          if (selected[key]) {
+            fpkOptionsList.push({
+              coach_id: coachId,
+              option_key: key,
+              price: getFpkPrice(coach, key),
+              label: FPK_LABELS[key],
+            });
+          }
+        });
       });
-    });
+    };
+    collectFpk(fpkSelectedByCoach, carriages);
+    collectFpk(fpkSelectedByCoachArrival, carriagesArrival);
     dispatch(setFpkOptions(fpkOptionsList));
 
     navigate("/passengers");
   };
 
   const departure = trainFromState?.departure;
+  const arrival = trainFromState?.arrival;
   const trainNumber = departure?.train?.name || "—";
   const fromCity = departure?.from?.city?.name || "—";
   const toCity = departure?.to?.city?.name || "—";
@@ -279,8 +383,19 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const toDatetime = departure?.to?.datetime;
   const duration = departure?.duration;
 
+  const trainNumberArrival = arrival?.train?.name || "—";
+  const fromCityArrival = arrival?.from?.city?.name || "—";
+  const toCityArrival = arrival?.to?.city?.name || "—";
+  const fromStationArrival = arrival?.from?.railway_station_name || "";
+  const toStationArrival = arrival?.to?.railway_station_name || "";
+  const fromDatetimeArrival = arrival?.from?.datetime;
+  const toDatetimeArrival = arrival?.to?.datetime;
+  const durationArrival = arrival?.duration;
+
   const normalizeCount = (value, max = 4) => {
-    const cleaned = String(value ?? "").replace(/\D/g, "").replace(/^0+/, "");
+    const cleaned = String(value ?? "")
+      .replace(/\D/g, "")
+      .replace(/^0+/, "");
     const n = parseInt(cleaned === "" ? "0" : cleaned, 10);
     if (Number.isNaN(n)) return 0;
     return Math.min(Math.max(n, 0), max);
@@ -301,60 +416,16 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
           </button>
         </div>
 
-        <div className="seats-route-block">
-          <div className="seats-route-col seats-route-col-train">
-            <div className="seats-route-train-icon-wrap">
-              <img
-                src={trainSeatsImg}
-                alt=""
-                className="seats-route-train-img"
-              />
-            </div>
-            <div className="seats-route-train-info">
-              <div className="seats-route-train-info-wrapper">
-                <div className="seats-route-train-number">{trainNumber}</div>
-                <div className="seats-route-cities-main">
-                  <span className="seats-route-city">
-                    {fromCity} <span className="seats-route-city-arrow">→</span>
-                  </span>
-                  <span className="seats-route-city seats-route-city-to">
-                    {toCity}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="seats-route-col seats-route-col-depart">
-            <div className="seats-route-time-main">
-              {formatTime(fromDatetime)}
-            </div>
-            <div className="seats-route-station">
-              {fromCity}, {fromStation}
-            </div>
-          </div>
-
-          {/* Стрелка направления между отправлением и прибытием */}
-          <div className="seats-route-col seats-route-col-arrow">
-            <div className="seats-route-arrow-line">━━━━━━━━━━►</div>
-          </div>
-
-          <div className="seats-route-col seats-route-col-arrive">
-            <div className="seats-route-time-main">
-              {formatTime(toDatetime)}
-            </div>
-            <div className="seats-route-station">
-              {toCity}, {toStation}
-            </div>
-          </div>
-
-          <div className="seats-route-col seats-route-col-duration">
-            <div className="seats-route-duration-icon">⏱</div>
-            <div className="seats-route-duration-text">
-              {formatDuration(duration)}
-            </div>
-          </div>
-        </div>
+        <RouteBlock
+          trainNumber={trainNumber}
+          fromCity={fromCity}
+          toCity={toCity}
+          fromStation={fromStation}
+          toStation={toStation}
+          fromDatetime={fromDatetime}
+          toDatetime={toDatetime}
+          duration={duration}
+        />
 
         <div className="seats-tickets-count-block">
           <h3 className="seats-block-title">Количество билетов</h3>
@@ -418,394 +489,52 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
           </div>
         </div>
 
-        <div className="seats-wagon-type-block">
-          <h3 className="seats-block-title">Тип вагона</h3>
-          <div className="seats-wagon-type-icons">
-            {availableWagonTypes.map((type) => {
-              const isActive = activeWagonType === type.id;
-              return (
-                <button
-                  key={type.id}
-                  type="button"
-                  className={`seats-wagon-type-btn ${isActive ? "active" : ""}`}
-                  onClick={() => setWagonTypeFilter(type.id)}
-                >
-                  <span className="seats-wagon-type-icon">
-                    <img src={type.icon} alt={type.name} />
-                  </span>
-                  <span className="seats-wagon-type-name">{type.name}</span>
-                </button>
-              );
-            })}
+        <WagonTypeBlock
+          types={availableWagonTypes}
+          activeTypeId={activeWagonType}
+          onSelect={setWagonTypeFilter}
+        />
+
+        <WagonMainBlock
+          filteredCarriages={filteredCarriages}
+          selectedCoachIds={selectedCoachIds}
+          onCoachToggle={toggleCoachSelection}
+          selectedSeatsByCoach={selectedSeatsByCoach}
+          fpkSelectedByCoach={fpkSelectedByCoach}
+          onSeatClick={handleSeatClick}
+          onFpkToggle={toggleFpkOption}
+        />
+
+        {arrival && carriagesArrival.length > 0 && (
+          <div className="seats-arrival-section">
+            <h3 className="seats-arrival-title">Обратный рейс</h3>
+            <RouteBlock
+              trainNumber={trainNumberArrival}
+              fromCity={fromCityArrival}
+              toCity={toCityArrival}
+              fromStation={fromStationArrival}
+              toStation={toStationArrival}
+              fromDatetime={fromDatetimeArrival}
+              toDatetime={toDatetimeArrival}
+              duration={durationArrival}
+              compact
+            />
+            <WagonTypeBlock
+              types={availableWagonTypesArrival}
+              activeTypeId={activeWagonTypeArrival}
+              onSelect={setWagonTypeFilterArrival}
+            />
+            <WagonMainBlock
+              filteredCarriages={filteredCarriagesArrival}
+              selectedCoachIds={selectedCoachIdsArrival}
+              onCoachToggle={toggleCoachSelectionArrival}
+              selectedSeatsByCoach={selectedSeatsByCoachArrival}
+              fpkSelectedByCoach={fpkSelectedByCoachArrival}
+              onSeatClick={handleSeatClickArrival}
+              onFpkToggle={toggleFpkOptionArrival}
+            />
           </div>
-        </div>
-
-        <div className="seats-wagon-main">
-          <div className="seats-wagon-bar">
-            Нумерация вагонов начинается с головы поезда
-          </div>
-          <div className="seats-wagon-selector-row">
-            <span className="seats-wagon-label">Вагоны</span>
-            <div className="seats-wagon-numbers">
-              {filteredCarriages.map((carriage, idx) => {
-                const wagonLabel = getWagonDisplayNumber(carriage, idx);
-                const coachId = getCoachId(carriage, idx);
-                const isActive = selectedCoachIds.includes(coachId);
-                return (
-                  <button
-                    key={coachId}
-                    type="button"
-                    className={`seats-wagon-num ${isActive ? "active" : ""}`}
-                    onClick={() => toggleCoachSelection(coachId)}
-                  >
-                    {wagonLabel}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {filteredCarriages
-            .filter((carriage, carriageIdx) =>
-              selectedCoachIds.includes(getCoachId(carriage, carriageIdx)),
-            )
-            .map((carriage, carriageIdx) => {
-              const carriageCoach = carriage?.coach ?? carriage;
-              const carriageCoachId = getCoachId(carriage, carriageIdx);
-              const carriageSeats = Array.isArray(carriage?.seats)
-                ? carriage.seats.reduce((acc, seat) => {
-                    acc[String(seat.index)] = {
-                      is_available: seat.available !== false,
-                    };
-                    return acc;
-                  }, {})
-                : carriage?.seats || {};
-              const carriageSeatNumbers = Object.keys(carriageSeats).sort(
-                (a, b) => parseInt(a, 10) - parseInt(b, 10),
-              );
-              const carriageUpperSeats = carriageSeatNumbers.filter(
-                (n) => parseInt(n, 10) % 2 === 0,
-              );
-              const carriageLowerSeats = carriageSeatNumbers.filter(
-                (n) => parseInt(n, 10) % 2 === 1,
-              );
-              const carriageTopPrice =
-                carriageCoach?.top_price ?? carriageCoach?.price ?? 0;
-              const carriageBottomPrice =
-                carriageCoach?.bottom_price ?? carriageCoach?.price ?? 0;
-              const carriageHasAirConditioning =
-                !!carriageCoach?.have_air_conditioning;
-              const carriageHasWifi = !!carriageCoach?.have_wifi;
-              const carriageHasLinens =
-                carriageCoach?.is_linens_included ||
-                (carriageCoach?.linens_price ?? 0) > 0;
-              const carriageHasFood = !!carriageCoach?.have_express;
-              const carriageSelectedSet =
-                selectedSeatsByCoach[carriageCoachId] || new Set();
-              const carriageSeatPairs = (() => {
-                const sorted = [...carriageSeatNumbers]
-                  .map(Number)
-                  .sort((a, b) => a - b);
-                const pairs = [];
-                for (let i = 0; i < sorted.length; i += 2) {
-                  const lower = sorted[i];
-                  const upper = sorted[i + 1] ?? null;
-                  pairs.push({
-                    lower: String(lower),
-                    upper: upper !== null ? String(upper) : null,
-                  });
-                }
-                return pairs;
-              })();
-              const carriageHalf = Math.ceil(carriageSeatPairs.length / 2);
-              const carriageTopRowPairs = carriageSeatPairs.slice(
-                0,
-                carriageHalf,
-              );
-              const carriageBottomRowPairs =
-                carriageSeatPairs.slice(carriageHalf);
-              const wagonLabel = getWagonDisplayNumber(carriage, carriageIdx);
-
-              return (
-                <div
-                  key={carriageCoachId || carriageIdx}
-                  className="seats-wagon-detail-row"
-                >
-                  <div className="seats-wagon-badge-large">
-                    <span className="seats-wagon-badge-num">{wagonLabel}</span>
-                    <span className="seats-wagon-badge-label">вагон</span>
-                  </div>
-                  <div className="seats-layout-left">
-                    <div className="seats-summary-card">
-                      <div className="seats-summary-main">
-                        <div className="seats-summary-column">
-                          <div className="seats-summary-title-row">
-                            <span className="seats-summary-title">Места</span>
-                            <span className="seats-total-value">
-                              {carriageSeatNumbers.length}
-                            </span>
-                          </div>
-                          <span className="seats-places-line">
-                            Верхние{" "}
-                            <span className="seats-count">
-                              {carriageUpperSeats.length}
-                            </span>
-                          </span>
-                          <span className="seats-places-line">
-                            Нижние{" "}
-                            <span className="seats-count">
-                              {carriageLowerSeats.length}
-                            </span>
-                          </span>
-                        </div>
-
-                        <div className="seats-summary-column seats-summary-column-cost">
-                          <span className="seats-summary-title">Стоимость</span>
-                          <div className="seats-cost-value-wrapper">
-                            <span className="seats-cost-value">
-                              {carriageUpperSeats.length ? (
-                                <>
-                                  {Math.round(carriageTopPrice).toLocaleString(
-                                    "ru-RU",
-                                  )}{" "}
-                                  <span
-                                    className="seats-cost-currency"
-                                    aria-hidden="true"
-                                  >
-                                    ₽
-                                  </span>
-                                </>
-                              ) : (
-                                "—"
-                              )}
-                            </span>
-                            <span className="seats-cost-value">
-                              {carriageLowerSeats.length ? (
-                                <>
-                                  {Math.round(
-                                    carriageBottomPrice,
-                                  ).toLocaleString("ru-RU")}{" "}
-                                  <span
-                                    className="seats-cost-currency"
-                                    aria-hidden="true"
-                                  >
-                                    ₽
-                                  </span>
-                                </>
-                              ) : (
-                                "—"
-                              )}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="seats-summary-column seats-summary-right">
-                          <span className="seats-services-label">
-                            Обслуживание <span>ФПК</span>
-                          </span>
-                          <div className="seats-services-icons">
-                            {[
-                              {
-                                key: "conder",
-                                included: carriageHasAirConditioning,
-                                title: "Кондиционер",
-                                src: conderWagonIcon,
-                              },
-                              {
-                                key: "wifi",
-                                included: carriageHasWifi,
-                                title: "Wi-Fi",
-                                src: wifiWagonIcon,
-                              },
-                              {
-                                key: "underwear",
-                                included: carriageHasLinens,
-                                title: "Бельё",
-                                src: underwearWagonIcon,
-                              },
-                              {
-                                key: "food",
-                                included: carriageHasFood,
-                                title: "Питание",
-                                src: foodWagonIcon,
-                              },
-                            ].map(({ key, included, title, src }) => {
-                              const selected = !!(fpkSelectedByCoach[
-                                carriageCoachId
-                              ] || {})[key];
-                              const stateClass = included
-                                ? "seats-service-btn--included"
-                                : selected
-                                  ? "seats-service-btn--selected"
-                                  : "seats-service-btn--inactive";
-                              return (
-                                <button
-                                  key={key}
-                                  type="button"
-                                  className={`seats-service-btn seats-service-btn--${key} ${stateClass}`}
-                                  onClick={() =>
-                                    !included &&
-                                    toggleFpkOption(carriageCoachId, key)
-                                  }
-                                  title={title}
-                                  aria-pressed={included ? undefined : selected}
-                                >
-                                  <span className="seats-service-icon-inner">
-                                    <img
-                                      src={src}
-                                      alt=""
-                                      className="seats-service-icon-img"
-                                      aria-hidden
-                                    />
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="seats-legend">
-                      <div className="seats-legend-item">
-                        <div className="seats-legend-box available" />
-                        <span>Свободное</span>
-                      </div>
-                      <div className="seats-legend-item">
-                        <div className="seats-legend-box occupied" />
-                        <span>Занято</span>
-                      </div>
-                      <div className="seats-legend-item">
-                        <div className="seats-legend-box selected" />
-                        <span>Выбрано</span>
-                      </div>
-                    </div>
-
-                    <div className="carriage-scheme">
-                      <div className="carriage-scheme-header">
-                        <div className="carriage-number-badge">
-                          {wagonLabel}
-                        </div>
-                        <div className="carriage-end-icons carriage-end-left" />
-                        <div className="carriage-aisle-header" />
-                        <div className="carriage-end-icons carriage-end-right" />
-                      </div>
-
-                      <div className="carriage-rows">
-                        <div className="carriage-row carriage-row-top">
-                          {carriageTopRowPairs.map((pair, idx) => (
-                            <div key={idx} className="seat-block">
-                              <button
-                                type="button"
-                                className={`seat-btn-inline ${
-                                  carriageSeats[pair.upper]?.is_available ===
-                                  false
-                                    ? "occupied"
-                                    : ""
-                                } ${
-                                  carriageSelectedSet.has(pair.upper)
-                                    ? "selected"
-                                    : ""
-                                }`}
-                                disabled={
-                                  carriageSeats[pair.upper]?.is_available ===
-                                  false
-                                }
-                                onClick={() =>
-                                  handleSeatClick(pair.upper, carriageCoachId)
-                                }
-                                title={`Место ${pair.upper}`}
-                              >
-                                {pair.upper}
-                              </button>
-                              <button
-                                type="button"
-                                className={`seat-btn-inline ${
-                                  carriageSeats[pair.lower]?.is_available ===
-                                  false
-                                    ? "occupied"
-                                    : ""
-                                } ${
-                                  carriageSelectedSet.has(pair.lower)
-                                    ? "selected"
-                                    : ""
-                                }`}
-                                disabled={
-                                  carriageSeats[pair.lower]?.is_available ===
-                                  false
-                                }
-                                onClick={() =>
-                                  handleSeatClick(pair.lower, carriageCoachId)
-                                }
-                                title={`Место ${pair.lower}`}
-                              >
-                                {pair.lower}
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="carriage-aisle-visual" />
-                        <div className="carriage-row carriage-row-bottom">
-                          {carriageBottomRowPairs.map((pair, idx) => (
-                            <div key={idx} className="seat-block">
-                              <button
-                                type="button"
-                                className={`seat-btn-inline ${
-                                  carriageSeats[pair.upper]?.is_available ===
-                                  false
-                                    ? "occupied"
-                                    : ""
-                                } ${
-                                  carriageSelectedSet.has(pair.upper)
-                                    ? "selected"
-                                    : ""
-                                }`}
-                                disabled={
-                                  pair.upper &&
-                                  carriageSeats[pair.upper]?.is_available ===
-                                    false
-                                }
-                                onClick={() =>
-                                  pair.upper &&
-                                  handleSeatClick(pair.upper, carriageCoachId)
-                                }
-                                title={pair.upper ? `Место ${pair.upper}` : ""}
-                              >
-                                {pair.upper ?? "—"}
-                              </button>
-                              <button
-                                type="button"
-                                className={`seat-btn-inline ${
-                                  carriageSeats[pair.lower]?.is_available ===
-                                  false
-                                    ? "occupied"
-                                    : ""
-                                } ${
-                                  carriageSelectedSet.has(pair.lower)
-                                    ? "selected"
-                                    : ""
-                                }`}
-                                disabled={
-                                  carriageSeats[pair.lower]?.is_available ===
-                                  false
-                                }
-                                onClick={() =>
-                                  handleSeatClick(pair.lower, carriageCoachId)
-                                }
-                                title={`Место ${pair.lower}`}
-                              >
-                                {pair.lower}
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-        </div>
+        )}
 
         <div className="seats-page-actions">
           <button
@@ -826,4 +555,3 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
 };
 
 export default SeatsSection;
-

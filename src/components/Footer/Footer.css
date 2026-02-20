@@ -1,5 +1,5 @@
 .footer {
-  background-color: #333333;
+  background-color: #222222;
   color: white;
   padding: 3rem 0 0;
 }
@@ -144,6 +144,7 @@
   background-color: #222222;
   padding: 1rem 0;
   margin-top: 3rem;
+  border-top: 1px solid white;
 }
 
 .footer__bottom-container {
@@ -155,6 +156,7 @@
   max-width: var(--content-max);
   flex-wrap: wrap;
   gap: 1rem;
+  background-color: #222222;
 }
 
 .footer__logo {

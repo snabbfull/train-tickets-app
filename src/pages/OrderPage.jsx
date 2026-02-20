@@ -25,13 +25,13 @@ const OrderPage = () => {
   }, [data.departure.seats, navigate]);
 
   const handleConfirmOrder = () => {
-    // Prepare order data for API (включая выбранные доп. опции ФПК)
     const orderData = {
       user: data.user,
       departure: {
         ...data.departure,
         optional_services: fpkOptions.length ? fpkOptions : undefined,
       },
+      ...(data.arrival && { arrival: data.arrival }),
     };
 
     dispatch(sendOrderRequested(orderData));
