@@ -1,9 +1,9 @@
 /* Контейнер правой колонки страницы выбора мест */
 .seats-page-content {
   background: #fff;
-  border-radius: 8px;
   padding: 24px 32px 32px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px #0000000f;
+  margin-left: 15px;
 }
 
 /* Шапка: заголовок + кнопка назад */
@@ -23,8 +23,9 @@
   line-height: 35px;
   text-transform: uppercase;
   color: #292929;
-  margin: 0;
+  margin-bottom: 30px;
   letter-spacing: 0;
+  margin-left: 15px;
 }
 
 .seats-page-back {
@@ -40,7 +41,9 @@
   text-decoration: none;
 }
 
+/* Кнопка «назад»: 76×60, #FFA800, стрелка 30×20 белая (по макету Subtract / Rectangle / Vector) */
 .seats-back-arrow {
+  box-sizing: border-box;
   width: 76px;
   height: 60px;
   background: #ffa800;
@@ -48,9 +51,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 40px;
+  line-height: 20px;
   font-weight: 700;
   color: #ffffff;
+  flex-shrink: 0;
 }
 
 .seats-back-label {
@@ -99,19 +104,51 @@
 .seats-route-col-train {
   min-width: 220px;
   flex: 1.4 1 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 50px;
+}
+
+/* Круг 30×30, бордер #FFA800 — по макету Group 9.1 / Ellipse 2 */
+.seats-route-train-icon-wrap {
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #ffa800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Вектор по макету ~15.35×18.14px, заливка #FFA800 — если PNG не оранжевый, добавь filter или используй SVG */
+.seats-route-train-img {
+  width: 15.35px;
+  height: 18.14px;
+  object-fit: contain;
+}
+
+.seats-route-train-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 }
 
 .seats-route-train-number {
   font-size: 24px;
   font-weight: 700;
   color: #3e3c41;
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 .seats-route-cities-main {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 2px;
   font-size: 16px;
   color: #928f94;
 }
@@ -171,7 +208,7 @@
 
 /* Блок "Количество билетов" */
 .seats-tickets-count-block {
-  margin-bottom: 24px;
+  margin-bottom: 50px;
 }
 
 .seats-block-title {
@@ -180,7 +217,7 @@
   line-height: 100%;
   letter-spacing: 0;
   color: #2d2d2d;
-  margin: 0 0 12px 0;
+  margin: 0 0 30px 0;
 }
 
 .seats-tickets-row {
@@ -264,15 +301,16 @@
 }
 
 .seats-wagon-type-btn:hover {
-  border-color: #ffa500;
+  border-color: #FFA800;
   color: #2d2d2d;
 }
 
 .seats-wagon-type-btn.active {
-  border-color: #ffa500;
+  border-color: #ffa800;
   background: rgba(255, 165, 0, 0.08);
   color: #ffa800;
 }
+
 
 .seats-wagon-type-icon {
   width: 50px;
@@ -289,8 +327,10 @@
   filter: grayscale(100%);
 }
 
+/* При активации окрашиваем иконку в #FFA800 */
 .seats-wagon-type-btn.active .seats-wagon-type-icon img {
-  filter: none;
+  filter: brightness(0) saturate(100%) invert(65%) sepia(60%) saturate(800%)
+    hue-rotate(360deg) brightness(92%) contrast(95%);
 }
 
 .seats-wagon-type-btn.active .seats-wagon-type-name {
@@ -339,12 +379,12 @@
 }
 
 .seats-wagon-num:hover {
-  border-color: #ffa500;
+  border-color: #FFD98F;
 }
 
 .seats-wagon-num.active {
-  border-color: #ffa500;
-  background: #ffa500;
+  border-color: #FFD98F;
+  background: #FFD98F;
   color: #fff;
 }
 
@@ -362,19 +402,36 @@
   gap: 24px;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-top: 16px;
+  margin-top: 30px;
 }
 
 .seats-wagon-badge-large {
   flex-shrink: 0;
-  background: #ffa500;
-  color: #fff;
-  font-size: 18px;
+  padding-left: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 190px;
+  min-height: 161px;
+  background: #FFD98F;
+}
+
+.seats-wagon-badge-num {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
   font-weight: 700;
-  padding: 16px 24px;
-  border-radius: 6px;
-  min-width: 120px;
-  text-align: center;
+  font-size: 72px;
+  line-height: 84px;
+  color: #292929;
+}
+
+.seats-wagon-badge-label {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
 }
 
 .seats-wagon-layout-row {
@@ -624,10 +681,10 @@
 }
 
 .seats-summary-card {
-  background: #f5f5f5;
+  background: white;
   padding: 20px;
   border-radius: 6px;
-  border: 1px solid #eee;
+  margin-bottom: 60px;
 }
 
 .seats-summary-main {
@@ -643,6 +700,13 @@
   gap: 8px;
 }
 
+.seats-summary-title-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+}
+
 .seats-summary-column-cost {
   min-width: 190px;
 }
@@ -651,15 +715,23 @@
   min-width: 150px;
 }
 
+/* Заголовки «Места» и «Стоимость»: 18px, #928F94 */
 .seats-summary-title {
-  font-size: 24px;
-  color: #888;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #928f94;
 }
 
 .seats-total-value {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
   font-size: 24px;
-  font-weight: 600;
-  color: #2d2d2d;
+  line-height: 28px;
+  color: #000000;
 }
 
 .seats-summary-row {
@@ -675,20 +747,60 @@
   color: #2d2d2d;
 }
 
-.seats-count {
-  margin-left: 6px;
-  font-weight: 600;
-}
-
+/* Строки «Верхние N» / «Нижние N»: 24px, 28px, #000, с иконкой 14×17 */
 .seats-places-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
   font-size: 24px;
-  color: #2d2d2d;
+  line-height: 28px;
+  color: #000000;
 }
 
+.seats-places-line::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 17px;
+  background: #928f94;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.seats-count {
+  margin-left: 0;
+  font-weight: 400;
+}
+
+/* Цены верх/низ: 24px, 700, #000 */
+
+.seats-cost-value-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .seats-cost-value {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
   font-size: 24px;
-  font-weight: 600;
-  color: #2d2d2d;
+  line-height: 28px;
+  color: #000000;
+}
+
+/* Знак рубля — как в TrainCard/LastTickets, font-size не меняем */
+.seats-cost-currency {
+  font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #928f94;
 }
 
 .seats-cost-placeholder {
@@ -698,15 +810,90 @@
 
 .seats-services-label {
   display: block;
-  font-size: 24px;
-  color: #888;
+  font: size 18px;
+  color: #928F94;
   margin-bottom: 8px;
 }
-
+.seats-services-label span {
+  color: #C4C4C4;
+}
 .seats-services-icons {
   display: flex;
-  gap: 10px;
-  font-size: 18px;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}
+
+.seats-service-btn {
+  box-sizing: border-box;
+  width: 36px;
+  height: 34px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.seats-service-icon-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.seats-service-icon-svg,
+.seats-service-icon-img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.seats-service-icon-img {
+  object-fit: contain;
+}
+
+/* Не выбрано: только рамка, иконка #292929 */
+.seats-service-btn--inactive {
+  border: 1px solid #292929;
+  background: transparent;
+  color: #292929;
+}
+
+.seats-service-btn--inactive:hover {
+  background: #ffa800;
+  border: 1px solid #292929;
+  color: #292929;
+}
+
+/* Выбрано пользователем: фон #FDB935, иконка #F4F2F6 */
+.seats-service-btn--selected {
+  background: #fdb935;
+  border: none;
+  color: #f4f2f6;
+}
+
+/* Один вариант из макета — питание с полупрозрачным оранжевым */
+.seats-service-btn--selected.seats-service-btn--food {
+  background: rgba(255, 168, 0, 0.79);
+}
+
+/* Включено в вагоне по умолчанию: фон #FCDC9D, иконка #928F94 */
+.seats-service-btn--included {
+  background: #fcdc9d;
+  border: none;
+  color: #928f94;
+  cursor: default;
+}
+
+.seats-service-btn--included:hover {
+  background: #fcdc9d;
+  color: #928f94;
 }
 
 .seats-people-hint {

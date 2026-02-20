@@ -22,7 +22,7 @@ const SeatsPage = () => {
       {loading && <Loader />}
       {error && <LoadingError />}
       {!loading && !error && (
-        <div className="trains-page">
+        <div className="trains-page seats-page">
           <div className="trains-left">
             <FilterSideBar />
             <LastTickets />

@@ -20,6 +20,8 @@ const initialState = {
   // Временные данные для навигации
   selectedSeats: [],
   selectedSeatNumbers: [],
+  // Доп. опции ФПК, выбранные клиентом: [{ coach_id, option_key, price, label? }]
+  fpkOptions: [],
   orderNumber: null,
   loading: false,
   error: null,
@@ -81,10 +83,16 @@ const orderSlice = createSlice({
       state.data.user.payment_method = action.payload;
     },
 
+    // Сохранить выбранные доп. опции ФПК (с ценами)
+    setFpkOptions: (state, action) => {
+      state.fpkOptions = Array.isArray(action.payload) ? action.payload : [];
+    },
+
     resetOrder: (state) => {
       state.data = { ...initialState.data };
       state.selectedSeats = [];
       state.selectedSeatNumbers = [];
+      state.fpkOptions = [];
       state.success = false;
     },
   },
@@ -113,6 +121,11 @@ export const {
   setPassengerInfo,
   setUserInfo,
   setPaymentMethod,
+  setFpkOptions,
   resetOrder,
 } = orderSlice.actions;
+
+/** Сумма за выбранные доп. опции ФПК */
+export const selectFpkTotalPrice = (state) =>
+  (state.order.fpkOptions || []).reduce((sum, item) => sum + (Number(item.price) || 0), 0);
 export default orderSlice.reducer;

@@ -348,6 +348,7 @@ const FilterSideBar = () => {
           type="button"
           className="filter-expand-btn"
           onClick={() => setIsForwardOpen((prev) => !prev)}
+          aria-expanded={isForwardOpen}
         >
           <span className="filter-expand-title-wrap">
             <span className="filter-direction-badge" aria-hidden="true">
@@ -355,7 +356,9 @@ const FilterSideBar = () => {
             </span>
             <span className="filter-expand-title">Туда</span>
           </span>
-          <span className="filter-expand-icon">{isForwardOpen ? "−" : "+"}</span>
+          <span className="filter-expand-icon" aria-hidden="true">
+            <span className="filter-expand-icon-char">{isForwardOpen ? "−" : "+"}</span>
+          </span>
         </button>
         {isForwardOpen && (
           <div className="time-filters-group">
@@ -465,6 +468,7 @@ const FilterSideBar = () => {
           type="button"
           className="filter-expand-btn"
           onClick={() => setIsBackOpen((prev) => !prev)}
+          aria-expanded={isBackOpen}
         >
           <span className="filter-expand-title-wrap">
             <span className="filter-direction-badge" aria-hidden="true">
@@ -472,7 +476,9 @@ const FilterSideBar = () => {
             </span>
             <span className="filter-expand-title">Обратно</span>
           </span>
-          <span className="filter-expand-icon">{isBackOpen ? "−" : "+"}</span>
+          <span className="filter-expand-icon" aria-hidden="true">
+            <span className="filter-expand-icon-char">{isBackOpen ? "−" : "+"}</span>
+          </span>
         </button>
         {isBackOpen && (
           <div className="time-filters-group">

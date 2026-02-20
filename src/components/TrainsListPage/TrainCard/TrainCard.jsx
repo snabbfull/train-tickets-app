@@ -1,5 +1,6 @@
 import "./TrainCard.css";
 import amenitiesSprite from "../../../assets/wifi-express-food.png";
+import eatIcon from "../../../assets/eat.png";
 import trainIcon from "../../../assets/train-icon.png";
 import { useNavigate } from "react-router-dom";
 
@@ -70,10 +71,11 @@ const AmenitiesIcons = ({ train }) => {
   }
 
   amenities.push(
-    <span
+    <img
       key="eat"
-      className="amenity-icon amenity-icon-sprite amenity-icon-sprite-food"
-      style={{ backgroundImage: `url(${amenitiesSprite})` }}
+      src={eatIcon}
+      className="amenity-icon-train amenity-icon-food"
+      alt=""
       aria-hidden="true"
       title="Food"
     />
@@ -82,7 +84,7 @@ const AmenitiesIcons = ({ train }) => {
 
   if (amenities.length === 0) return null;
 
-  return <div className="amenities">{amenities}</div>;
+  return <div className="amenities-train-card">{amenities}</div>;
 };
 
 

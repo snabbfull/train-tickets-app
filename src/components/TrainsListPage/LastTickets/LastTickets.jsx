@@ -76,13 +76,15 @@ const LastTickets = () => {
 
           {/* Нижняя часть: иконки и цена */}
           <div className="ticket-footer">
-            <AmenitiesIcons train={route} />
-            <div className="ticket-price-block">
-              <span className="ticket-price-from">от</span>
-              <span className="ticket-price-value">
-                {Math.round(route.min_price).toLocaleString("ru-RU")}
-              </span>
-              <span className="ticket-price-currency">₽</span>
+            <div className="ticket-footer-wrapper">
+              <AmenitiesIcons train={route} />
+              <div className="ticket-price-block">
+                <span className="ticket-price-from">от</span>
+                <span className="ticket-price-value">
+                  {Math.round(route.min_price).toLocaleString("ru-RU")}
+                </span>
+                <span className="ticket-price-currency">₽</span>
+              </div>
             </div>
           </div>
         </div>

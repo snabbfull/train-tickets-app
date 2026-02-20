@@ -7,13 +7,15 @@ import Loader from "../components/Loader/Loader";
 import LoadingError from "../components/LoadingError/LoadingError";
 import "./OrderPage.css";
 import { sendOrderRequested } from "../store/actions";
-import { resetOrder } from "../store/order/orderSlice";
+import { resetOrder, selectFpkTotalPrice } from "../store/order/orderSlice";
 
 const OrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const order = useSelector((state) => state.order);
   const { data, loading, error, success, orderNumber } = order;
+  const fpkOptions = order.fpkOptions || [];
+  const fpkTotal = useSelector(selectFpkTotalPrice);
 
   // Redirect if no seats selected
   useEffect(() => {
@@ -23,13 +25,15 @@ const OrderPage = () => {
   }, [data.departure.seats, navigate]);
 
   const handleConfirmOrder = () => {
-    // Prepare order data for API
+    // Prepare order data for API (включая выбранные доп. опции ФПК)
     const orderData = {
       user: data.user,
-      departure: data.departure,
+      departure: {
+        ...data.departure,
+        optional_services: fpkOptions.length ? fpkOptions : undefined,
+      },
     };
 
-    // Dispatch order sending
     dispatch(sendOrderRequested(orderData));
   };
 
@@ -86,6 +90,25 @@ const OrderPage = () => {
                   </div>
                 ))}
               </div>
+
+              {fpkOptions.length > 0 && (
+                <div className="summary-section">
+                  <h4>Доп. услуги ФПК:</h4>
+                  <ul className="order-fpk-list">
+                    {fpkOptions.map((item, idx) => (
+                      <li key={idx}>
+                        <span>{item.label || item.option_key}</span>
+                        <span className="order-fpk-price">
+                          {Number(item.price).toLocaleString("ru-RU")} ₽
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="order-fpk-total">
+                    Итого доп. услуги: <strong>{fpkTotal.toLocaleString("ru-RU")} ₽</strong>
+                  </p>
+                </div>
+              )}
 
               <div className="summary-section">
                 <h4>Покупатель:</h4>
