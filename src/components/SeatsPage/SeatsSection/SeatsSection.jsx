@@ -6,6 +6,8 @@ import {
   setSelectedSeats,
   setFpkOptions,
   setOrderTrainSummary,
+  setLastRoutesSearch,
+  setLastSelectedTrain,
 } from "../../../store/order/orderSlice";
 import {
   WAGON_TYPES,
@@ -24,6 +26,7 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const trainFromState = location.state?.train;
+  const searchParams = location.state?.searchParams;
   const arrivalRouteId = trainFromState?.arrival?._id ?? null;
 
   const dataByRoute = useSelector(
@@ -395,6 +398,8 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
         }),
     };
     dispatch(setOrderTrainSummary(trainSummary));
+    if (searchParams) dispatch(setLastRoutesSearch(searchParams));
+    if (trainFromState) dispatch(setLastSelectedTrain(trainFromState));
 
     dispatch(
       setSelectedSeats({
@@ -461,6 +466,49 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     if (Number.isNaN(n)) return 0;
     return Math.min(Math.max(n, 0), max);
   };
+
+  const departureTotal = useMemo(() => {
+    let seats = 0;
+    Object.entries(selectedSeatsByCoach).forEach(([coachId, set]) => {
+      Array.from(set || []).forEach((seatNum) => {
+        seats += getSeatPrice(carriages, coachId, seatNum);
+      });
+    });
+    let fpk = 0;
+    Object.entries(fpkSelectedByCoach || {}).forEach(([coachId, selected]) => {
+      if (!selected || typeof selected !== "object") return;
+      const carriageIdx = carriages.findIndex(
+        (c, i) => getCoachId(c, i) === coachId,
+      );
+      const coach = carriageIdx >= 0 ? (carriages[carriageIdx]?.coach ?? carriages[carriageIdx]) : null;
+      ["conder", "wifi", "underwear", "food"].forEach((key) => {
+        if (selected[key]) fpk += getFpkPrice(coach, key);
+      });
+    });
+    return seats + fpk;
+  }, [selectedSeatsByCoach, fpkSelectedByCoach, carriages]);
+
+  const arrivalTotal = useMemo(() => {
+    if (!arrival || carriagesArrival.length === 0) return 0;
+    let seats = 0;
+    Object.entries(selectedSeatsByCoachArrival).forEach(([coachId, set]) => {
+      Array.from(set || []).forEach((seatNum) => {
+        seats += getSeatPrice(carriagesArrival, coachId, seatNum);
+      });
+    });
+    let fpk = 0;
+    Object.entries(fpkSelectedByCoachArrival || {}).forEach(([coachId, selected]) => {
+      if (!selected || typeof selected !== "object") return;
+      const carriageIdx = carriagesArrival.findIndex(
+        (c, i) => getCoachId(c, i) === coachId,
+      );
+      const coach = carriageIdx >= 0 ? (carriagesArrival[carriageIdx]?.coach ?? carriagesArrival[carriageIdx]) : null;
+      ["conder", "wifi", "underwear", "food"].forEach((key) => {
+        if (selected[key]) fpk += getFpkPrice(coach, key);
+      });
+    });
+    return seats + fpk;
+  }, [selectedSeatsByCoachArrival, fpkSelectedByCoachArrival, carriagesArrival, arrival]);
 
   return (
     <>
@@ -565,6 +613,14 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
           onSeatClick={handleSeatClick}
           onFpkToggle={toggleFpkOption}
         />
+        {departureTotal > 0 && (
+          <div className="seats-block-sum">
+            <span className="seats-block-sum-amount">
+              {departureTotal.toLocaleString("ru-RU")}
+            </span>
+            <span className="seats-block-sum-currency" aria-hidden>₽</span>
+          </div>
+        )}
 
         {arrival && carriagesArrival.length > 0 && (
           <div className="seats-arrival-section">
@@ -594,6 +650,14 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
               onSeatClick={handleSeatClickArrival}
               onFpkToggle={toggleFpkOptionArrival}
             />
+            {arrivalTotal > 0 && (
+              <div className="seats-block-sum">
+                <span className="seats-block-sum-amount">
+                  {arrivalTotal.toLocaleString("ru-RU")}
+                </span>
+                <span className="seats-block-sum-currency" aria-hidden>₽</span>
+              </div>
+            )}
           </div>
         )}
 

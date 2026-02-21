@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import TrainsListPage from "./pages/TrainsListPage";
 import SeatsPage from "./pages/SeatsPage";
 import PassengersPage from "./pages/PassengersPage";
+import PaymentPage from "./pages/PaymentPage";
 import OrderPage from "./pages/OrderPage";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
@@ -18,6 +19,7 @@ function App() {
           <Route path="/routes" element={<TrainsListPage />} />
           <Route path="/routes/:routeId/seats" element={<SeatsPage />} />
           <Route path="/passengers" element={<PassengersPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
           <Route path="/order" element={<OrderPage />} />
         </Routes>
       </main>

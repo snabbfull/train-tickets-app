@@ -9,7 +9,7 @@ const initialState = {
       patronymic: "",
       phone: "",
       email: "",
-      payment_method: "cash",
+      payment_method: "card",
     },
     departure: {
       route_direction_id: "",
@@ -24,6 +24,10 @@ const initialState = {
   fpkOptions: [],
   // Сводка поезда для сайдбара (Туда / Обратно): { departure, arrival? }
   trainSummary: null,
+  // Полный объект поезда для карточки на OrderPage
+  lastSelectedTrain: null,
+  // Поисковый запрос для возврата на TrainsListPage
+  lastRoutesSearch: "",
   orderNumber: null,
   loading: false,
   error: null,
@@ -130,6 +134,14 @@ const orderSlice = createSlice({
       state.trainSummary = action.payload;
     },
 
+    setLastRoutesSearch: (state, action) => {
+      state.lastRoutesSearch = action.payload || "";
+    },
+
+    setLastSelectedTrain: (state, action) => {
+      state.lastSelectedTrain = action.payload || null;
+    },
+
     removeDepartureSeat: (state, action) => {
       const index = action.payload;
       if (index < 0 || index >= state.data.departure.seats.length) return;
@@ -179,6 +191,8 @@ const orderSlice = createSlice({
       state.selectedSeatNumbers = [];
       state.fpkOptions = [];
       state.trainSummary = null;
+      state.lastSelectedTrain = null;
+      state.lastRoutesSearch = "";
       state.success = false;
     },
   },
@@ -209,6 +223,8 @@ export const {
   setPaymentMethod,
   setFpkOptions,
   setOrderTrainSummary,
+  setLastRoutesSearch,
+  setLastSelectedTrain,
   removeDepartureSeat,
   addDepartureSeat,
   resetOrder,

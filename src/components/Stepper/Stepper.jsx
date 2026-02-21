@@ -12,7 +12,7 @@ const Stepper = () => {
     if (path.includes("/routes")) return 1; // Билеты
     if (path.includes("/passengers")) return 2; // Пассажиры
     if (path.includes("/payment")) return 3; // Оплата
-    if (path.includes("/verification") || path.includes("/check")) return 4; // Проверка
+    if (path.includes("/order") || path.includes("/verification") || path.includes("/check")) return 4; // Проверка
 
     return 1;
   }, [location.pathname]);

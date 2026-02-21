@@ -1,11 +1,59 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setPassengerInfo, setUserInfo, removeDepartureSeat, addDepartureSeat } from "../../../store/order/orderSlice";
+import { setPassengerInfo, removeDepartureSeat, addDepartureSeat } from "../../../store/order/orderSlice";
 import "./PassengersForm.css";
 
 // Номер свидетельства о рождении: римские цифры, 2 заглавные буквы (кириллица), 6 цифр. Пример: VIII-ЫП-123456
 const BIRTH_CERTIFICATE_REGEX = /^[IVXLCDM]+-[А-ЯЁ]{2}-\d{6}$/;
+
+/** Форматирует дату рождения DD.MM.YYYY, автоточки, макс 10 символов */
+const formatBirthday = (value) => {
+  const digits = (value || "").replace(/\D/g, "");
+  if (digits.length === 0) return "";
+  const d = digits.slice(0, 2);
+  const m = digits.slice(2, 4);
+  const y = digits.slice(4, 8);
+  const parts = [d, m, y].filter(Boolean);
+  return parts.join(".");
+};
+
+/** Только цифры, макс 4 — для серии паспорта */
+const formatPassportSeries = (value) => {
+  return (value || "").replace(/\D/g, "").slice(0, 4);
+};
+
+/** Только цифры, макс 6 — для номера паспорта */
+const formatPassportNumber = (value) => {
+  return (value || "").replace(/\D/g, "").slice(0, 6);
+};
+
+/** Форматирует свидетельство: VIII-ЫП-123456, авто проставление тире, блокировка при заполнении */
+const formatBirthCertificate = (value) => {
+  const raw = (value || "").replace(/\s/g, "").toUpperCase();
+  let roman = "";
+  let letters = "";
+  let digits = "";
+  const romanChars = "IVXLCDM";
+  const cyrillic = /[А-ЯЁ]/;
+  const digitChars = /\d/;
+  for (let i = 0; i < raw.length; i++) {
+    const c = raw[i];
+    if (romanChars.includes(c) && letters === "" && digits === "" && roman.length < 4) {
+      roman += c;
+    } else if (cyrillic.test(c) && digits === "" && letters.length < 2) {
+      letters += c;
+    } else if (digitChars.test(c) && digits.length < 6) {
+      digits += c;
+    } else break;
+  }
+  if (roman && letters && digits) {
+    return `${roman}-${letters}-${digits}`;
+  }
+  if (roman && letters) return `${roman}-${letters}`;
+  if (roman) return roman;
+  return letters + digits;
+};
 
 const PassengersForm = () => {
   const dispatch = useDispatch();
@@ -14,7 +62,6 @@ const PassengersForm = () => {
   const { data } = order;
   const { departure } = data;
   const passengers = departure.seats;
-  const [currentStep, setCurrentStep] = useState(0);
   const [expandedPassenger, setExpandedPassenger] = useState(0);
   const [certificateErrors, setCertificateErrors] = useState({});
   const [dismissedCertificateWarnings, setDismissedCertificateWarnings] = useState({});
@@ -61,10 +108,6 @@ const PassengersForm = () => {
     );
   };
 
-  const handleBuyerChange = (field, value) => {
-    dispatch(setUserInfo({ [field]: value }));
-  };
-
   const isPassengersValid = passengers.every((passenger) => {
     const info = passenger.person_info;
     if (
@@ -82,20 +125,8 @@ const PassengersForm = () => {
     return (info.document_data || "").trim().length > 0;
   });
 
-  const isBuyerValid =
-    data.user.first_name?.trim() &&
-    data.user.last_name?.trim() &&
-    data.user.phone?.trim() &&
-    data.user.email?.trim();
-
   const handleNextStep = () => {
-    if (currentStep === 0 && isPassengersValid) setCurrentStep(1);
-  };
-
-  const handlePrevStep = () => setCurrentStep(0);
-
-  const handleSubmit = () => {
-    if (isBuyerValid) navigate("/order");
+    if (isPassengersValid) navigate("/payment");
   };
 
   const toggleExpanded = (index) => {
@@ -129,8 +160,9 @@ const PassengersForm = () => {
   const CERT_MIN_LENGTH = 11;
 
   const handleCertificateNumberChange = (seatIndex, value) => {
-    handlePassengerChange(seatIndex, "document_data", value);
-    const trimmed = (value || "").trim();
+    const formatted = formatBirthCertificate(value);
+    handlePassengerChange(seatIndex, "document_data", formatted);
+    const trimmed = (formatted || "").trim();
     setDismissedCertificateWarnings((prev) => {
       const next = { ...prev };
       delete next[seatIndex];
@@ -156,10 +188,21 @@ const PassengersForm = () => {
     setDismissedCertificateWarnings((prev) => ({ ...prev, [seatIndex]: true }));
   };
 
+  const handleBirthdayChange = (seatIndex, value) => {
+    handlePassengerChange(seatIndex, "birthday", formatBirthday(value));
+  };
+
+  const handlePassportSeriesChange = (seatIndex, value) => {
+    handlePassengerChange(seatIndex, "document_series", formatPassportSeries(value));
+  };
+
+  const handlePassportNumberChange = (seatIndex, value) => {
+    handlePassengerChange(seatIndex, "document_data", formatPassportNumber(value));
+  };
+
   return (
     <div className="passengers-form">
-      {currentStep === 0 ? (
-        <div className="passengers-section">
+      <div className="passengers-section">
           {passengers.map((passenger, seatIndex) => {
             const isExpanded = expandedPassenger === seatIndex || passengers.length === 1;
             const isAdult = passenger.person_info?.is_adult !== false && !passenger.is_child;
@@ -365,13 +408,13 @@ const PassengersForm = () => {
                             type="text"
                             value={passenger.person_info.birthday || ""}
                             onChange={(e) =>
-                              handlePassengerChange(
+                              handleBirthdayChange(
                                 seatIndex,
-                                "birthday",
                                 e.target.value,
                               )
                             }
-                            placeholder="ДД/ММ/ГГ"
+                            placeholder="ДД.ММ.ГГГГ"
+                            maxLength={10}
                           />
                         </div>
                       </div>
@@ -528,7 +571,8 @@ const PassengersForm = () => {
                                   e.target.value,
                                 )
                               }
-                              placeholder="12 символов"
+                              placeholder="VIII-ЫП-123456"
+                              maxLength={14}
                               aria-invalid={!!certificateErrors[seatIndex]}
                             />
                           </div>
@@ -542,14 +586,14 @@ const PassengersForm = () => {
                                   passenger.person_info.document_series || ""
                                 }
                                 onChange={(e) =>
-                                  handlePassengerChange(
+                                  handlePassportSeriesChange(
                                     seatIndex,
-                                    "document_series",
                                     e.target.value,
                                   )
                                 }
                                 placeholder="_ _ _ _"
-                                maxLength={5}
+                                maxLength={4}
+                                inputMode="numeric"
                               />
                             </div>
                             <div className="passenger-field">
@@ -560,13 +604,14 @@ const PassengersForm = () => {
                                   passenger.person_info.document_data || ""
                                 }
                                 onChange={(e) =>
-                                  handlePassengerChange(
+                                  handlePassportNumberChange(
                                     seatIndex,
-                                    "document_data",
                                     e.target.value,
                                   )
                                 }
                                 placeholder="_ _ _ _ _ _"
+                                maxLength={6}
+                                inputMode="numeric"
                               />
                             </div>
                           </>
@@ -738,87 +783,6 @@ const PassengersForm = () => {
             </button>
           </div>
         </div>
-      ) : (
-        <div className="buyer-section">
-          <h2 className="passengers-section-title">Данные покупателя</h2>
-          <div className="passenger-card">
-            <div className="passenger-card-body">
-              <div className="passenger-field-row passenger-field-row-triple">
-                <div className="passenger-field">
-                  <label>Имя *</label>
-                  <input
-                    type="text"
-                    value={data.user.first_name || ""}
-                    onChange={(e) => handleBuyerChange("first_name", e.target.value)}
-                    placeholder="Иван"
-                  />
-                </div>
-                <div className="passenger-field">
-                  <label>Фамилия *</label>
-                  <input
-                    type="text"
-                    value={data.user.last_name || ""}
-                    onChange={(e) => handleBuyerChange("last_name", e.target.value)}
-                    placeholder="Иванов"
-                  />
-                </div>
-                <div className="passenger-field">
-                  <label>Отчество</label>
-                  <input
-                    type="text"
-                    value={data.user.patronymic || ""}
-                    onChange={(e) => handleBuyerChange("patronymic", e.target.value)}
-                    placeholder="Иванович"
-                  />
-                </div>
-              </div>
-              <div className="passenger-field-row passenger-field-row-doc">
-                <div className="passenger-field">
-                  <label>Телефон *</label>
-                  <input
-                    type="tel"
-                    value={data.user.phone || ""}
-                    onChange={(e) => handleBuyerChange("phone", e.target.value)}
-                    placeholder="+7 (900) 123-45-67"
-                  />
-                </div>
-                <div className="passenger-field">
-                  <label>Email *</label>
-                  <input
-                    type="email"
-                    value={data.user.email || ""}
-                    onChange={(e) => handleBuyerChange("email", e.target.value)}
-                    placeholder="example@mail.ru"
-                  />
-                </div>
-              </div>
-              <div className="passenger-field">
-                <label>Способ оплаты</label>
-                <select
-                  value={data.user.payment_method || "cash"}
-                  onChange={(e) => handleBuyerChange("payment_method", e.target.value)}
-                >
-                  <option value="cash">Наличные</option>
-                  <option value="online">Онлайн</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="form-actions">
-            <button type="button" className="btn-secondary" onClick={handlePrevStep}>
-              ← Назад
-            </button>
-            <button
-              type="button"
-              className="btn-primary"
-              onClick={handleSubmit}
-              disabled={!isBuyerValid}
-            >
-              Оформить заказ
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

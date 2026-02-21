@@ -280,7 +280,7 @@ const filteredRoutes = routes.filter((train) => {
       <div className="trains-list">
         {paginatedRoutes.length > 0
           ? paginatedRoutes.map((train, index) => (
-              <TrainCard key={index} train={train} />
+              <TrainCard key={index} train={train} searchParams={locationSearch} />
             ))
           : !loading && <div>Поездов не найдено</div>}
       </div>

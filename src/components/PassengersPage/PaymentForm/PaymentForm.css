@@ -1,0 +1,236 @@
+.payment-form {
+  width: 100%;
+  max-width: 960px;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Card container — Rectangle 9 */
+.payment-card {
+  box-sizing: border-box;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  margin-bottom: 32px;
+}
+
+/* Section header — Rectangle 11 / 11.1 */
+.payment-section-header {
+  display: flex;
+  align-items: center;
+  min-height: 107px;
+  padding: 0 35px;
+  background: #f9f9f9;
+}
+
+.payment-section-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 35px;
+  color: #292929;
+}
+
+/* Body */
+.payment-section-body {
+  padding: 24px 35px 32px;
+  position: relative;
+}
+
+.payment-section-payment {
+  padding-top: 20px;
+}
+
+/* Line 3.1, 3.2, 3.3 — dashed dividers */
+.payment-divider-dashed {
+  height: 0;
+  border-top: 1px dashed #928f94;
+  margin: 0 0 24px 0;
+}
+
+/* Field row — Фамилия, Имя, Отчество */
+.payment-field-row {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 35px;
+}
+
+.payment-field-row .payment-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.payment-field-row .payment-field:first-child {
+  flex: 0 0 280px;
+}
+
+.payment-field-row .payment-field:nth-child(2) {
+  flex: 0 0 280px;
+}
+
+.payment-field-row .payment-field:nth-child(3) {
+  flex: 0 0 280px;
+}
+
+/* Field */
+.payment-field {
+  margin-bottom: 35px;
+}
+
+.payment-field:last-child {
+  margin-bottom: 0;
+}
+
+.payment-field label {
+  display: block;
+  font-size: 16px;
+  line-height: 19px;
+  color: #292929;
+  margin-bottom: 8px;
+}
+
+.payment-field input[type="text"],
+.payment-field input[type="tel"],
+.payment-field input[type="email"] {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 360px;
+  height: 50px;
+  padding: 0 14px;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+  background: #ffffff;
+  border: 1px solid #928f94;
+  border-radius: 5px;
+}
+
+.payment-field input::placeholder {
+  color: #c4c4c4;
+}
+
+.payment-field input:focus {
+  outline: none;
+  border-color: #ffa800;
+}
+
+.payment-field-row .payment-field input {
+  max-width: 280px;
+}
+
+.payment-field-row .payment-field:nth-child(3) input {
+  max-width: 280px;
+}
+
+/* Payment methods */
+.payment-method-section {
+  margin-bottom: 24px;
+}
+
+.payment-method-section:last-child {
+  margin-bottom: 0;
+}
+
+.payment-divider-between {
+  margin: 24px 0;
+}
+
+.payment-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+  margin-bottom: 20px;
+}
+
+.payment-checkbox-row input {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  accent-color: #ffa800;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.payment-checkbox-row input:disabled {
+  cursor: not-allowed;
+}
+
+.payment-methods-info {
+  display: flex;
+  gap: 60px;
+  margin-left: 48px;
+  margin-bottom: 0;
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+  font-weight: 700;
+}
+
+.payment-method-info-item {
+  white-space: nowrap;
+}
+
+/* Button Купить билеты — same as passengers-btn-next */
+.payment-btn-buy {
+  width: 323px;
+  height: 60px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffa800;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s, filter 0.2s, background 0.2s;
+}
+
+.payment-btn-buy:hover:not(:disabled) {
+  background: #ffa800;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.payment-btn-buy:active:not(:disabled) {
+  border: 1px solid #ffa800;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.payment-btn-buy:disabled {
+  background: #928f94;
+  cursor: not-allowed;
+}
+
+.payment-actions {
+  width: 100%;
+  margin-top: 100px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+  .payment-field-row {
+    flex-direction: column;
+  }
+
+  .payment-field-row .payment-field,
+  .payment-field-row .payment-field input {
+    max-width: 100%;
+  }
+
+  .payment-methods-row {
+    flex-direction: column;
+  }
+}

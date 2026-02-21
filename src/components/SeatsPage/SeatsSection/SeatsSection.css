@@ -397,6 +397,36 @@
   margin-bottom: 16px;
 }
 
+/* Сумма выбора под схемой (Туда / Обратно) */
+.seats-block-sum {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  justify-content: flex-end;
+}
+
+.seats-block-sum-amount {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  color: #ffa800;
+}
+
+.seats-block-sum-currency {
+  font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  color: #928f94;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .seats-wagon-detail-row {
   display: flex;
   gap: 24px;
@@ -837,6 +867,53 @@
   flex-direction: row;
   gap: 12px;
   align-items: center;
+}
+
+.seats-service-btn-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.seats-service-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  min-width: 110px;
+  max-width: 130px;
+  background: #e5e5e5;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #292929;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.seats-service-tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #c4c4c4;
+}
+
+.seats-service-btn-wrap:hover .seats-service-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 .seats-service-btn {

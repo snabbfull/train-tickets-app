@@ -360,3 +360,23 @@
   cursor: not-allowed;
   filter: none;
 }
+
+/* Кнопка Изменить — outline вариант */
+.train-button-edit {
+  width: 233px;
+  background: transparent;
+  border: 1px solid #292929;
+  color: #292929;
+}
+
+.train-button-edit:hover {
+  background: transparent;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.train-button-edit:active {
+  background: #ffa800;
+  border-color: #ffa800;
+  color: #fff;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}

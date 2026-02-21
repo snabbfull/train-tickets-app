@@ -88,7 +88,7 @@ const AmenitiesIcons = ({ train }) => {
 };
 
 
-const TrainCard = ({ train }) => {
+const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать места", onButtonClick }) => {
   const departure = train.departure;
   const arrival = train.arrival;
 
@@ -96,7 +96,11 @@ const TrainCard = ({ train }) => {
 
   const handleSeatsChoice = (e, trainId) => {
     e.preventDefault();
-    navigate(`/routes/${trainId}/seats`, { state: { train } });
+    if (onButtonClick) {
+      onButtonClick(e);
+      return;
+    }
+    navigate(`/routes/${trainId}/seats`, { state: { train, searchParams } });
   };
 
   // Данные о местах из available_seats_info
@@ -244,12 +248,12 @@ const TrainCard = ({ train }) => {
           <AmenitiesIcons train={train} />
           {/* Кнопка */}
           <button
-            className="train-button"
+            className={onButtonClick ? "train-button train-button-edit" : "train-button"}
             type="button"
-            disabled={!hasAvailableSeats}
+            disabled={!onButtonClick && !hasAvailableSeats}
             onClick={(e) => handleSeatsChoice(e, departure._id)}
           >
-            Выбрать места
+            {buttonLabel}
           </button>
         </div>
       </div>

@@ -2,12 +2,13 @@ import conderWagonIcon from "../../../assets/conder-wagon.png";
 import wifiWagonIcon from "../../../assets/wifi-wagon.png";
 import underwearWagonIcon from "../../../assets/underwear-wagon.png";
 import foodWagonIcon from "../../../assets/food-wagon.png";
+import { mapClassTypeToWagonId } from "./seatsSectionUtils";
 
 const FPK_OPTIONS = [
-  { key: "conder", title: "Кондиционер", src: conderWagonIcon },
-  { key: "wifi", title: "Wi-Fi", src: wifiWagonIcon },
-  { key: "underwear", title: "Бельё", src: underwearWagonIcon },
-  { key: "food", title: "Питание", src: foodWagonIcon },
+  { key: "conder", title: "Кондиционер", tooltip: "кондиционер", src: conderWagonIcon },
+  { key: "wifi", title: "Wi-Fi", tooltip: "WI-FI", src: wifiWagonIcon },
+  { key: "underwear", title: "Бельё", tooltip: "бельё", src: underwearWagonIcon },
+  { key: "food", title: "Питание", tooltip: "питание", src: foodWagonIcon },
 ];
 
 export default function CarriageDetailRow({
@@ -42,6 +43,10 @@ export default function CarriageDetailRow({
   const carriageHasFood = !!carriageCoach?.have_express;
   const carriageSelectedSet = selectedSeatsByCoach[coachId] || new Set();
 
+  const classType = carriageCoach?.class_type || carriage?.class_type;
+  const wagonTypeId = mapClassTypeToWagonId(classType);
+  const isLuxOrSitting = wagonTypeId === "lux" || wagonTypeId === "sitting";
+
   const carriageSeatPairs = (() => {
     const sorted = [...carriageSeatNumbers].map(Number).sort((a, b) => a - b);
     const pairs = [];
@@ -70,42 +75,61 @@ export default function CarriageDetailRow({
                 <span className="seats-summary-title">Места</span>
                 <span className="seats-total-value">{carriageSeatNumbers.length}</span>
               </div>
-              <span className="seats-places-line">
-                Верхние <span className="seats-count">{carriageUpperSeats.length}</span>
-              </span>
-              <span className="seats-places-line">
-                Нижние <span className="seats-count">{carriageLowerSeats.length}</span>
-              </span>
+              {!isLuxOrSitting && (
+                <>
+                  <span className="seats-places-line">
+                    Верхние <span className="seats-count">{carriageUpperSeats.length}</span>
+                  </span>
+                  <span className="seats-places-line">
+                    Нижние <span className="seats-count">{carriageLowerSeats.length}</span>
+                  </span>
+                </>
+              )}
             </div>
             <div className="seats-summary-column seats-summary-column-cost">
               <span className="seats-summary-title">Стоимость</span>
               <div className="seats-cost-value-wrapper">
-                <span className="seats-cost-value">
-                  {carriageUpperSeats.length ? (
-                    <>
-                      {Math.round(carriageTopPrice).toLocaleString("ru-RU")}{" "}
-                      <span className="seats-cost-currency" aria-hidden="true">₽</span>
-                    </>
-                  ) : (
-                    "—"
-                  )}
-                </span>
-                <span className="seats-cost-value">
-                  {carriageLowerSeats.length ? (
-                    <>
-                      {Math.round(carriageBottomPrice).toLocaleString("ru-RU")}{" "}
-                      <span className="seats-cost-currency" aria-hidden="true">₽</span>
-                    </>
-                  ) : (
-                    "—"
-                  )}
-                </span>
+                {isLuxOrSitting ? (
+                  <span className="seats-cost-value">
+                    {carriageSeatNumbers.length ? (
+                      <>
+                        {Math.round(carriageCoach?.price ?? carriageTopPrice).toLocaleString("ru-RU")}{" "}
+                        <span className="seats-cost-currency" aria-hidden="true">₽</span>
+                      </>
+                    ) : (
+                      "—"
+                    )}
+                  </span>
+                ) : (
+                  <>
+                    <span className="seats-cost-value">
+                      {carriageUpperSeats.length ? (
+                        <>
+                          {Math.round(carriageTopPrice).toLocaleString("ru-RU")}{" "}
+                          <span className="seats-cost-currency" aria-hidden="true">₽</span>
+                        </>
+                      ) : (
+                        "—"
+                      )}
+                    </span>
+                    <span className="seats-cost-value">
+                      {carriageLowerSeats.length ? (
+                        <>
+                          {Math.round(carriageBottomPrice).toLocaleString("ru-RU")}{" "}
+                          <span className="seats-cost-currency" aria-hidden="true">₽</span>
+                        </>
+                      ) : (
+                        "—"
+                      )}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
             <div className="seats-summary-column seats-summary-right">
               <span className="seats-services-label">Обслуживание <span>ФПК</span></span>
               <div className="seats-services-icons">
-                {FPK_OPTIONS.map(({ key, title, src }) => {
+                {FPK_OPTIONS.map(({ key, title, tooltip, src }) => {
                   const included =
                     key === "conder"
                       ? carriageHasAirConditioning
@@ -121,18 +145,23 @@ export default function CarriageDetailRow({
                       ? "seats-service-btn--selected"
                       : "seats-service-btn--inactive";
                   return (
-                    <button
-                      key={key}
-                      type="button"
-                      className={`seats-service-btn seats-service-btn--${key} ${stateClass}`}
-                      onClick={() => !included && onFpkToggle(coachId, key)}
-                      title={title}
-                      aria-pressed={included ? undefined : selected}
-                    >
-                      <span className="seats-service-icon-inner">
-                        <img src={src} alt="" className="seats-service-icon-img" aria-hidden />
+                    <div key={key} className="seats-service-btn-wrap">
+                      <span className="seats-service-tooltip" role="tooltip">
+                        {tooltip}
                       </span>
-                    </button>
+                      <button
+                        type="button"
+                        className={`seats-service-btn seats-service-btn--${key} ${stateClass}`}
+                        onClick={() => !included && onFpkToggle(coachId, key)}
+                        title={title}
+                        aria-label={title}
+                        aria-pressed={included ? undefined : selected}
+                      >
+                        <span className="seats-service-icon-inner">
+                          <img src={src} alt="" className="seats-service-icon-img" aria-hidden />
+                        </span>
+                      </button>
+                    </div>
                   );
                 })}
               </div>

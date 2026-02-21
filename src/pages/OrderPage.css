@@ -1,16 +1,5 @@
-.order-page {
-  display: flex;
-  gap: 40px;
-  padding: 40px 120px;
-  background: rgb(247, 245, 249);
-}
-
-.order-left {
-  width: 320px;
-}
-
-.order-right {
-  flex: 1;
+.order-page-layout .trains-left {
+  width: 360px;
 }
 
 .order-summary {

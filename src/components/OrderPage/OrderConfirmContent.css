@@ -1,0 +1,296 @@
+.order-confirm-content {
+  width: 100%;
+  max-width: 961px;
+  font-family: "Roboto", sans-serif;
+}
+
+.order-train-fallback {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.order-train-fallback .order-train-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 197px;
+  padding-right: 24px;
+  border-right: 1px solid #eee;
+  background-color: #e4e0e9;
+  border-radius: 4px;
+}
+
+.order-train-fallback .order-train-image {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 15px;
+}
+
+.order-train-fallback .order-train-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.order-train-fallback .order-train-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.order-train-fallback .order-train-cities {
+  font-size: 14px;
+  color: #292929;
+  text-align: center;
+}
+
+.order-train-fallback .order-train-right {
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+}
+
+.order-confirm-card {
+  box-sizing: border-box;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  margin-bottom: 32px;
+  padding: 32px;
+}
+
+/* Карточка поезда */
+.order-confirm-train {
+  padding: 0;
+  overflow: visible;
+}
+
+.order-confirm-train .train-card {
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  width: 100%;
+  min-height: 250px;
+}
+
+.order-confirm-train .train-center-block {
+  min-width: 300px;
+}
+
+.order-confirm-train .train-right-block {
+  min-width: 305px;
+}
+
+/* Кнопка Изменить */
+.order-btn-edit {
+  box-sizing: border-box;
+  width: 233px;
+  height: 39px;
+  padding: 0;
+  border: 1px solid #292929;
+  border-radius: 5px;
+  background: transparent;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #292929;
+  cursor: pointer;
+  transition: filter 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.order-btn-edit:hover {
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.order-btn-edit:active {
+  background: #ffa800;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-color: #ffa800;
+}
+
+/* Блок Пассажиры */
+.order-confirm-title {
+  margin: 0 0 24px 0;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 35px;
+  color: #292929;
+}
+
+.order-confirm-divider {
+  height: 0;
+  border-top: 1px solid #928f94;
+}
+
+.order-passengers-body {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.order-passengers-left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+  padding: 20px 0;
+}
+
+.order-passenger-left-item {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.order-passenger-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-passenger-icon-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.order-passenger-icon {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+}
+
+.order-passenger-type-label {
+  font-size: 18px;
+  line-height: 21px;
+  color: #292929;
+  flex-shrink: 0;
+}
+
+.order-passengers-right {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+  border-left: 1px dashed #E5E5E5;
+  padding-left: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.order-passenger-name {
+  font-size: 18px;
+  line-height: 21px;
+  color: #292929;
+}
+
+.order-passenger-meta {
+  font-size: 18px;
+  line-height: 21px;
+  color: #928f94;
+}
+
+.order-passengers-total {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-total-label {
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 35px;
+  color: #292929;
+}
+
+.order-total-amount {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 35px;
+  color: #292929;
+}
+
+.order-total-currency {
+  font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 28px;
+  color: #928f94;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Блок Способ оплаты */
+.order-payment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 50px;
+}
+
+.order-payment-value {
+  font-size: 24px;
+  line-height: 28px;
+  color: #292929;
+}
+
+/* Кнопка Подтвердить */
+.order-confirm-actions {
+  margin-top: 100px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.order-btn-confirm {
+  width: 222px;
+  height: 60px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffa800;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s, filter 0.2s, background 0.2s;
+}
+
+.order-btn-confirm:hover:not(:disabled) {
+  background: #ffa800;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.order-btn-confirm:active:not(:disabled) {
+  border: 1px solid #ffa800;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.order-btn-confirm:disabled {
+  background: #928f94;
+  cursor: not-allowed;
+}
