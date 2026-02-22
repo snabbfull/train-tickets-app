@@ -170,7 +170,7 @@
 .order-passengers-body {
   display: flex;
   gap: 32px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .order-passengers-left {
@@ -220,11 +220,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: flex-end;
   gap: 24px;
   border-left: 1px dashed #E5E5E5;
   padding-left: 10px;
   padding-top: 20px;
   padding-bottom: 20px;
+  align-self: stretch;
 }
 
 .order-passenger-name {

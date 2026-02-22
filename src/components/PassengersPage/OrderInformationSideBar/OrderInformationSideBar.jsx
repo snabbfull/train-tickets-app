@@ -1,37 +1,12 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectFpkTotalPrice } from "../../../store/order/orderSlice";
+import { formatTime, formatDate, formatDuration } from "../../../utils/dateUtils";
 import fromToImg from "../../../assets/from-to.png";
 import toFromImg from "../../../assets/to-from.png";
 import passengerImg from "../../../assets/passenger.png";
 import rightArrowImg from "../../../assets/right-arrow.png";
 import "./OrderInformationSideBar.css";
-
-const formatTime = (ts) => {
-  if (ts == null) return "--:--";
-  const date = new Date(typeof ts === "number" ? ts * 1000 : ts);
-  return date.toLocaleTimeString("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
-const formatDate = (ts) => {
-  if (ts == null) return "";
-  const date = new Date(typeof ts === "number" ? ts * 1000 : ts);
-  return date.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
-
-const formatDuration = (seconds) => {
-  if (seconds == null) return "";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return `${h} ч ${m} мин`;
-};
 
 const OrderInformationSideBar = () => {
   const [legDepOpen, setLegDepOpen] = useState(true);

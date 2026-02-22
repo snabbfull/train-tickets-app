@@ -3,26 +3,7 @@ import amenitiesSprite from "../../../assets/wifi-express-food.png";
 import eatIcon from "../../../assets/eat.png";
 import trainIcon from "../../../assets/train-icon.png";
 import { useNavigate } from "react-router-dom";
-
-
-const formatTime = (timestamp) => {
-  const date = new Date(timestamp * 1000);
-  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-};
-
-const formatDate = (timestamp) => {
-  const date = new Date(timestamp * 1000);
-  return date.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-  });
-};
-
-const formatDuration = (seconds) => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  return `${hours} ч ${minutes} мин`;
-};
+import { formatTime, formatDate, formatDuration } from "../../../utils/dateUtils";
 
 const formatPriceValue = (price) =>
   Math.round(Number(price) || 0).toLocaleString("ru-RU");

@@ -38,9 +38,9 @@ const getTimeOfDay = (datetime) => {
   return 0;
 };
 
-// Вспомогательная функция для сортировки
+// Вспомогательная функция для сортировки (возвращает новый массив, не мутирует)
 const sortItems = (items, sortBy, sortDirection) => {
-  return items.sort((a, b) => {
+  return [...items].sort((a, b) => {
     switch (sortBy) {
       case "price": {
         const aPrice = a.min_price || 0;
@@ -70,16 +70,16 @@ const trainsListSlice = createSlice({
       state.sortBy = action.payload;
       state.currentPage = 1; // Сброс на первую страницу при изменении сортировки
       // Пересортировка
-      if (state.data.items) {
-        sortItems(state.data.items, state.sortBy, state.sortDirection);
+      if (state.data.items?.length) {
+        state.data.items = sortItems(state.data.items, state.sortBy, state.sortDirection);
       }
     },
     changeSortDirection(state, action) {
       state.sortDirection = action.payload;
       state.currentPage = 1; // Сброс на первую страницу при изменении направления
       // Пересортировка
-      if (state.data.items) {
-        sortItems(state.data.items, state.sortBy, state.sortDirection);
+      if (state.data.items?.length) {
+        state.data.items = sortItems(state.data.items, state.sortBy, state.sortDirection);
       }
     },
     setLimit(state, action) {
@@ -97,8 +97,8 @@ const trainsListSlice = createSlice({
         state.loading = false;
         state.data = action.payload;
         // Сортировка по параметру и направлению сортировки
-        if (state.data.items) {
-          sortItems(state.data.items, state.sortBy, state.sortDirection);
+        if (state.data.items?.length) {
+          state.data.items = sortItems(state.data.items, state.sortBy, state.sortDirection);
         }
       })
       .addCase(trainsListFailed, (state, action) => {

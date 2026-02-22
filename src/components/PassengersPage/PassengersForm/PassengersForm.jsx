@@ -34,7 +34,10 @@ const formatPassportNumber = (value) => {
 
 /** Форматирует свидетельство: VIII-ЫП-123456, авто проставление тире, блокировка при заполнении */
 const formatBirthCertificate = (value) => {
-  const raw = (value || "").replace(/\s/g, "").toUpperCase();
+  // Убираем пробелы и тире — парсим только значимые символы, иначе тире в середине обрывает разбор
+  const raw = (value || "")
+    .replace(/[\s-]/g, "")
+    .toUpperCase();
   let roman = "";
   let letters = "";
   let digits = "";

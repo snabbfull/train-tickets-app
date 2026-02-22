@@ -1,8 +1,12 @@
 const API_BASE_URL = "https://students.netoservices.ru/fe-diplom/";
 
-export const fetchCities = (query) =>
-  fetch(`${API_BASE_URL}routes/cities?name=${encodeURIComponent(query.toLowerCase())}`)
-    .then(res => res.json());
+export const fetchCities = async (query) => {
+  const res = await fetch(
+    `${API_BASE_URL}routes/cities?name=${encodeURIComponent(query.toLowerCase())}`
+  );
+  if (!res.ok) throw new Error("Ошибка загрузки городов");
+  return res.json();
+};
 
 export const fetchTrainsList = async (params) => {
   const query = new URLSearchParams(params).toString();
@@ -19,10 +23,13 @@ export const fetchTrainsList = async (params) => {
 };
 
 
-export const fetchSeats = (routeId, params = {}) => {
+export const fetchSeats = async (routeId, params = {}) => {
   const searchParams = new URLSearchParams(params);
-  return fetch(`${API_BASE_URL}routes/${routeId}/seats?${searchParams.toString()}`)
-    .then(res => res.json());
+  const res = await fetch(
+    `${API_BASE_URL}routes/${routeId}/seats?${searchParams.toString()}`
+  );
+  if (!res.ok) throw new Error("Ошибка загрузки мест");
+  return res.json();
 };
 
 export const fetchLastRoutes = async () => {
@@ -37,18 +44,22 @@ export const fetchLastRoutes = async () => {
   return response.json();
 };
 
-export const sendOrder = (orderData) => {
-  return fetch(`${API_BASE_URL}order`, {
+export const sendOrder = async (orderData) => {
+  const res = await fetch(`${API_BASE_URL}order`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(orderData),
-  }).then(res => res.json());
+  });
+  if (!res.ok) throw new Error("Ошибка оформления заказа");
+  return res.json();
 };
 
-export const sendSubscribe = (email) => {
-  return fetch(`${API_BASE_URL}subscribe?email=${email}`, {
+export const sendSubscribe = async (email) => {
+  const res = await fetch(`${API_BASE_URL}subscribe?email=${email}`, {
     method: "POST",
-  }).then((res) => res.json());
+  });
+  if (!res.ok) throw new Error("Ошибка подписки");
+  return res.json();
 };

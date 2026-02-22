@@ -17,18 +17,7 @@ export const FPK_LABELS = {
   food: "Питание",
 };
 
-export const formatTime = (ts) => {
-  if (ts == null) return "--:--";
-  const date = new Date(typeof ts === "number" ? ts * 1000 : ts);
-  return date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-};
-
-export const formatDuration = (seconds) => {
-  if (seconds == null) return "";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return `${h} ч ${m} мин`;
-};
+export { formatTime, formatDuration } from "../../../utils/dateUtils";
 
 export const mapClassTypeToWagonId = (classType) => {
   const ct = (classType || "").toLowerCase();

@@ -105,7 +105,7 @@ const OrderSuccessInfo = () => {
                 />
               </div>
               <p>
-                <span className="order-success-step-icon-text">предьявите</span>{" "}
+                <span className="order-success-step-icon-text">предъявите</span>{" "}
                 распечатанные билеты при посадке
               </p>
             </div>
@@ -117,9 +117,9 @@ const OrderSuccessInfo = () => {
             </h3>
             <p className="order-success-text">
               Ваш заказ успешно оформлен.{" "}
-              <p className="order-success-text-highlight">
+              <span className="order-success-text-highlight">
                 В ближайшее время с вами свяжется наш оператор для
-              </p>
+              </span>{" "}
               подтверждения.
             </p>
             <p className="order-success-thanks">
