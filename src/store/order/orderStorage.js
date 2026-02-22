@@ -8,7 +8,9 @@ export function saveOrderToStorage(orderState) {
   if (orderState.success) {
     try {
       localStorage.removeItem(ORDER_STORAGE_KEY);
-    } catch (_) {}
+    } catch {
+      // ignore
+    }
     return;
   }
   try {
@@ -45,7 +47,7 @@ export function loadOrderFromStorage() {
       error: null,
       success: false,
     };
-  } catch (_) {
+  } catch {
     return null;
   }
 }

@@ -54,7 +54,10 @@ export const getCoachId = (carriage, idx) => {
 
 export const getFpkPrice = (coach, optionKey) => {
   if (!coach) return 0;
-  if (optionKey === "underwear") return Number(coach.linens_price) || 0;
+  if (optionKey === "underwear") {
+    if (coach.is_linens_included) return 0;
+    return Number(coach.linens_price) || 0;
+  }
   if (optionKey === "conder") return Number(coach.air_conditioning_price) || 0;
   if (optionKey === "wifi") return Number(coach.wifi_price) || 0;
   if (optionKey === "food") return Number(coach.food_price ?? coach.express_price) || 0;

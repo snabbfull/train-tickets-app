@@ -33,7 +33,7 @@ const OrderSuccessInfo = () => {
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order);
   const { data } = order;
-  const orderNumber = useMemo(generateOrderNumber, []);
+  const orderNumber = useMemo(() => generateOrderNumber(), []);
   const fpkTotal = useSelector(selectFpkTotalPrice);
   const seatsDep = data?.departure?.seats || [];
   const seatsArr = data?.arrival?.seats || [];

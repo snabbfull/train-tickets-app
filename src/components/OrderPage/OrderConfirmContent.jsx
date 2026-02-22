@@ -8,19 +8,6 @@ import passengerOrderImg from "../../assets/passenger-order.png";
 import trainIcon from "../../assets/train-icon.png";
 import "./OrderConfirmContent.css";
 
-const formatTime = (ts) => {
-  if (ts == null) return "--:--";
-  const date = new Date(typeof ts === "number" ? ts * 1000 : ts);
-  return date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-};
-
-const formatDuration = (seconds) => {
-  if (seconds == null) return "";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return `${h} ч ${m} мин`;
-};
-
 const formatBirthday = (val) => {
   if (!val) return "";
   const str = String(val);
@@ -98,7 +85,6 @@ const OrderConfirmContent = () => {
   const dep = data?.departure;
   const arr = data?.arrival;
   const summaryDep = trainSummary?.departure;
-  const summaryArr = trainSummary?.arrival;
   const seatsDep = dep?.seats || [];
   const seatsArr = arr?.seats || [];
 
