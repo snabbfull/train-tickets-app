@@ -1031,8 +1031,12 @@
 }
 
 .seats-btn-next:active:not(:disabled) {
-  border: 1px solid #ffa800;
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  box-sizing: border-box;
+  border: 1px solid #FFA800;
+  border-radius: 5px;
+  background: inherit;
+  color: #FFA800;
+
 }
 
 .seats-btn-next:disabled {

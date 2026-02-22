@@ -88,6 +88,36 @@
   min-width: 305px;
 }
 
+/* Кнопка Изменить в TrainCard (тот же стиль, что order-btn-edit) */
+.order-confirm-train .train-button-edit {
+  box-sizing: border-box;
+  width: 233px;
+  height: 39px;
+  padding: 0;
+  border: 1px solid #292929;
+  border-radius: 5px;
+  background: transparent;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #292929;
+  transition: filter 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.order-confirm-train .train-button-edit:hover {
+  border: 1px solid #292929;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.order-confirm-train .train-button-edit:active {
+  background: #ffa800;
+  border-color: #ffa800;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+}
+
 /* Кнопка Изменить */
 .order-btn-edit {
   box-sizing: border-box;
@@ -109,13 +139,15 @@
 }
 
 .order-btn-edit:hover {
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  border: 1px solid #292929;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .order-btn-edit:active {
   background: #ffa800;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-color: #ffa800;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
 }
 
 /* Блок Пассажиры */
@@ -286,8 +318,11 @@
 }
 
 .order-btn-confirm:active:not(:disabled) {
-  border: 1px solid #ffa800;
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  box-sizing: border-box;
+  border: 1px solid #FFA800;
+  border-radius: 5px;
+  background: inherit;
+  color: #FFA800;
 }
 
 .order-btn-confirm:disabled {
