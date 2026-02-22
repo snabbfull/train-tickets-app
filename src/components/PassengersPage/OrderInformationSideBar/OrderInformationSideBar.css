@@ -1,10 +1,23 @@
 .order-information-sidebar {
   width: 360px;
+  max-width: 100%;
   min-height: 400px;
   background: #3e3c41;
   padding: 24px 28px 32px;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
+}
+
+@media (max-width: 768px) {
+  .order-information-sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 20px 16px 24px;
+  }
+
+  .order-info-main-title {
+    font-size: 24px;
+  }
 }
 
 .order-info-main-title {

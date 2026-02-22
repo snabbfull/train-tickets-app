@@ -1,3 +1,16 @@
 .passengers-page-layout .trains-left {
   width: 360px;
 }
+
+@media (max-width: 1024px) {
+  .passengers-page-layout .trains-left {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .passengers-page-layout .trains-left {
+    max-width: 100%;
+  }
+}

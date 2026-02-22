@@ -388,3 +388,87 @@
   border-radius: 5px;
   color: #292929;
 }
+
+@media (max-width: 768px) {
+  .train-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .train-left-block {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .train-center-block {
+    min-width: unset;
+    padding: 16px;
+  }
+
+  .route-row {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .route-middle {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .return-row .route-point {
+    min-width: 80px;
+  }
+
+  .train-right-block {
+    min-width: unset;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #eee;
+  }
+
+  .train-button,
+  .train-button-edit {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .seat-class {
+    grid-template-columns: 1fr 32px 24px minmax(60px, 1fr) 16px;
+  }
+
+  .seat-price {
+    font-size: 18px;
+  }
+
+  .seat-currency {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .route-time {
+    font-size: 18px;
+  }
+
+  .route-city,
+  .route-station {
+    font-size: 14px;
+  }
+
+  .seat-class {
+    grid-template-columns: 1fr 28px 20px minmax(50px, 1fr) 12px;
+    column-gap: 4px;
+  }
+
+  .seat-name,
+  .seat-seats,
+  .seat-from {
+    font-size: 14px;
+  }
+
+  .seat-price {
+    font-size: 16px;
+  }
+}

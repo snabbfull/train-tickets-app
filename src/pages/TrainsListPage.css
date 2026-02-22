@@ -11,6 +11,7 @@
 
 .trains-left {
   width: 320px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -18,4 +19,36 @@
 
 .trains-right {
   flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .trains-page {
+    padding: 30px 40px;
+  }
+
+  .trains-left {
+    width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .trains-page {
+    flex-direction: column;
+    padding: 20px 16px;
+    gap: 24px;
+  }
+
+  .trains-left {
+    width: 100%;
+    order: 2;
+  }
+
+  .trains-right {
+    order: 1;
+  }
+
+  .seats-page {
+    margin-left: 0;
+  }
 }

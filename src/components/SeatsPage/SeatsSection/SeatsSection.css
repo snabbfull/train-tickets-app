@@ -1047,6 +1047,33 @@
 @media (max-width: 768px) {
   .seats-page-content {
     padding: 16px;
+    margin-left: 0;
+  }
+
+  .seats-page-title {
+    font-size: 22px;
+    margin-left: 0;
+  }
+
+  .seats-route-block {
+    flex-direction: column;
+    padding: 12px 16px;
+  }
+
+  .seats-route-col {
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0;
+  }
+
+  .seats-route-col:last-child {
+    border-bottom: none;
+  }
+
+  .seats-route-col-train {
+    min-width: unset;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .seats-wagon-layout-row {
@@ -1059,5 +1086,38 @@
 
   .seats-tickets-row {
     flex-direction: column;
+  }
+
+  .seats-summary-card {
+    flex-wrap: wrap;
+  }
+
+  .seats-btn-next {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .seats-page-content {
+    padding: 12px;
+  }
+
+  .seats-page-title {
+    font-size: 18px;
+  }
+
+  .seats-back-label {
+    font-size: 16px;
+    padding: 0 16px;
+  }
+
+  .seats-back-arrow {
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
+  }
+
+  .seats-back-label {
+    height: 48px;
   }
 }

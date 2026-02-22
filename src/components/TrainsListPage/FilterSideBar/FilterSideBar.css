@@ -387,3 +387,26 @@
   border: 1px solid #ffa800;
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
 }
+
+@media (max-width: 768px) {
+  .filters-sidebar {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  .filter-block h3 {
+    font-size: 24px;
+  }
+
+  .filter-expand-title {
+    font-size: 24px;
+  }
+
+  .dual-range {
+    width: 100%;
+  }
+
+  .time-filter-item label {
+    font-size: 18px;
+  }
+}

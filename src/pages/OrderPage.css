@@ -311,28 +311,33 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .order-page {
+  .trains-page.order-page-layout {
     flex-direction: column;
     gap: 30px;
-    padding: 30px 60px;
+    padding: 30px 40px;
   }
 
-  .order-left {
+  .order-page-layout .trains-left {
     width: 100%;
+    max-width: 400px;
   }
 
   .order-summary {
     position: static;
   }
 
-  .order-detail {
+  .order-details {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .order-page {
-    padding: 20px;
+  .trains-page.order-page-layout {
+    padding: 20px 16px;
+  }
+
+  .order-page-layout .trains-left {
+    max-width: 100%;
   }
 
   .order-card {

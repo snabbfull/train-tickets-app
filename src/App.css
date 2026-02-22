@@ -29,7 +29,21 @@ body {
 }
 
 .container {
-  width: var(--content-max);
+  width: 100%;
+  max-width: var(--content-max);
   margin: 0 auto;
   background: rgb(247, 245, 249);
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --content-padding: 16px;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  :root {
+    --content-padding: 40px;
+  }
 }

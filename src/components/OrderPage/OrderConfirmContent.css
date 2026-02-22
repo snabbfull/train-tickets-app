@@ -334,3 +334,77 @@
   background: #928f94;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .order-confirm-card {
+    padding: 20px 16px;
+  }
+
+  .order-confirm-train .train-center-block {
+    min-width: unset;
+  }
+
+  .order-confirm-train .train-right-block {
+    min-width: unset;
+  }
+
+  .order-train-fallback {
+    flex-direction: column;
+  }
+
+  .order-train-fallback .order-train-left {
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+  }
+
+  .order-passengers-body {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .order-passengers-right {
+    border-left: none;
+    border-top: 1px dashed #E5E5E5;
+    padding-left: 0;
+    padding-top: 20px;
+    align-items: flex-start;
+  }
+
+  .order-passenger-left-item {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .order-total-label,
+  .order-total-amount {
+    font-size: 24px;
+  }
+
+  .order-btn-confirm {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-confirm-card {
+    padding: 16px 12px;
+  }
+
+  .order-confirm-title {
+    font-size: 20px;
+  }
+
+  .order-passenger-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .order-passenger-type-label,
+  .order-passenger-name,
+  .order-passenger-meta {
+    font-size: 16px;
+  }
+}
