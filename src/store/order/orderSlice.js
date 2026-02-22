@@ -206,7 +206,8 @@ const orderSlice = createSlice({
       .addCase(sendOrderSuccessed, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.orderNumber = action.payload?.order_uid || action.payload?.id;
+        const data = action.payload?.data ?? action.payload;
+        state.orderNumber = data?.order_uid || data?.id || action.payload?.order_uid || action.payload?.id;
       })
       .addCase(sendOrderFailed, (state, action) => {
         state.loading = false;

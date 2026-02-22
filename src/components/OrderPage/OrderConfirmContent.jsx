@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { sendOrderRequested } from "../../store/actions";
@@ -36,6 +37,58 @@ const PAYMENT_LABELS = {
   cash: "Наличными",
 };
 
+/** Преобразует DD.MM.YYYY в YYYY-MM-DD */
+const birthdayToApi = (val) => {
+  if (!val) return "";
+  const m = String(val).match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+  if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+  return val;
+};
+
+/** Подготавливает payload для API order (order.md) */
+const prepareOrderPayload = (order) => {
+  const { data, fpkOptions } = order;
+  const mapSeat = (seat) => {
+    const info = seat.person_info || {};
+    let documentData = info.document_data || "";
+    if (info.document_type === "паспорт" && (info.document_series || info.document_data)) {
+      documentData = [info.document_series, info.document_data].filter(Boolean).join(" ").trim();
+    }
+    return {
+      coach_id: seat.coach_id,
+      person_info: {
+        is_adult: info.is_adult !== false,
+        first_name: info.first_name || "",
+        last_name: info.last_name || "",
+        patronymic: info.patronymic || "",
+        gender: info.gender !== false,
+        birthday: birthdayToApi(info.birthday),
+        document_type: info.document_type || "паспорт",
+        document_data: documentData,
+      },
+      seat_number: Number(seat.seat_number) || 0,
+      is_child: seat.is_child === true,
+      include_children_seat: seat.include_children_seat === true,
+    };
+  };
+  const paymentMethod = data.user?.payment_method === "cash" ? "cash" : "online";
+  const payload = {
+    user: { ...data.user, payment_method: paymentMethod },
+    departure: {
+      route_direction_id: data.departure.route_direction_id,
+      seats: (data.departure.seats || []).map(mapSeat),
+      ...(fpkOptions?.length && { optional_services: fpkOptions }),
+    },
+  };
+  if (data.arrival?.seats?.length) {
+    payload.arrival = {
+      route_direction_id: data.arrival.route_direction_id,
+      seats: data.arrival.seats.map(mapSeat),
+    };
+  }
+  return payload;
+};
+
 const OrderConfirmContent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -65,14 +118,7 @@ const OrderConfirmContent = () => {
   const total = seatsTotal + fpkTotal;
 
   const handleConfirm = () => {
-    const orderData = {
-      user: data.user,
-      departure: {
-        ...data.departure,
-        optional_services: order.fpkOptions?.length ? order.fpkOptions : undefined,
-      },
-      ...(data.arrival && { arrival: data.arrival }),
-    };
+    const orderData = prepareOrderPayload(order);
     dispatch(sendOrderRequested(orderData));
   };
 
@@ -82,6 +128,12 @@ const OrderConfirmContent = () => {
 
   const handleChangePassengers = () => navigate("/passengers");
   const handleChangePayment = () => navigate("/payment");
+
+  useEffect(() => {
+    if (order.success) {
+      navigate("/order-success", { replace: true });
+    }
+  }, [order.success, navigate]);
 
   if (!summaryDep && !lastSelectedTrain) return null;
 

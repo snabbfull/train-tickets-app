@@ -1,0 +1,28 @@
+.hero-order-section {
+  position: relative;
+  width: 100%;
+  height: 834px;
+  background: #ffa800;
+  background-image: url("../../../assets/hero-order-img.png");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  margin-top: 0;
+}
+
+.hero-order-section__content {
+  height: 117px;
+  display: flex;
+  align-items: center;
+}
+
+.hero-order-section__title {
+/* Благодарим Вас за заказ! */
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 700;
+font-size: 72px;
+color: #FFFFFF;
+margin-top: 700px;
+margin-left: 250px;
+}

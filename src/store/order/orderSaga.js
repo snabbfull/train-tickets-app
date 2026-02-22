@@ -5,7 +5,7 @@ import { sendOrderRequested, sendOrderSuccessed, sendOrderFailed } from '../acti
 function* handleSendOrder(action) {
   try {
     const response = yield call(sendOrder, action.payload);
-    if (response.success) {
+    if (response.success || response.status === true) {
       yield put(sendOrderSuccessed(response));
     } else {
       yield put(sendOrderFailed(response.error || 'Unknown error'));
