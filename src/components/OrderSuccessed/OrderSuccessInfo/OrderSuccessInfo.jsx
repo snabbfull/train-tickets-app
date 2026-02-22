@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { resetOrder, selectFpkTotalPrice } from "../../../store/order/orderSlice";
 import "./OrderSuccessInfo.css";
 import emailTicketsIcon from "../../../assets/email-tickets.png";
@@ -31,7 +31,6 @@ const StarIcon = () => (
 
 const OrderSuccessInfo = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const order = useSelector((state) => state.order);
   const { data } = order;
   const orderNumber = useMemo(generateOrderNumber, []);
@@ -47,9 +46,8 @@ const OrderSuccessInfo = () => {
     .filter(Boolean)
     .join(" ");
 
-  const handleBackHome = () => {
-    dispatch(resetOrder());
-    navigate("/");
+  const handleBackHomeClick = () => {
+    setTimeout(() => dispatch(resetOrder()), 100);
   };
 
   return (
@@ -139,13 +137,14 @@ const OrderSuccessInfo = () => {
               <StarIcon />
             </div>
           </div>
-          <button
-            type="button"
+          <Link
+            to="/"
+            replace
             className="order-success-btn-home"
-            onClick={handleBackHome}
+            onClick={handleBackHomeClick}
           >
             вернуться на главную
-          </button>
+          </Link>
         </div>
       </div>
     </div>
