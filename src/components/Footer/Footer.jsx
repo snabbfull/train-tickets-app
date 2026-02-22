@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { sendSubscribeRequested } from "../../store/actions";
+import { resetSubscribe } from "../../store/subscribe/subscribeSlice";
 import "./Footer.css";
 import call from "../../assets/call.png"
 import mail from "../../assets/mail.png"
@@ -10,16 +13,29 @@ import gplus from "../../assets/gplus.png";
 import facebook from "../../assets/facebook.png";
 import twitter from "../../assets/twitter.png";
 import scrolltop from "../../assets/scroll-top.png";
+import exclamationIcon from "../../assets/exclamation.png";
 import { Link } from "react-router-dom";
 
+const SUCCESS_MESSAGE =
+  "Таким образом консультация с широким активом в значительной степени обуславливает создание модели развития. Повседневная практика показывает, что сложившаяся структура организации играет важную роль в формировании существенных финансовых и административных";
+const ERROR_MESSAGE = SUCCESS_MESSAGE;
+
 const Footer = () => {
+  const dispatch = useDispatch();
+  const { loading, success, error } = useSelector((state) => state.subscribe);
   const [email, setEmail] = useState("");
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    console.log("Подписка на рассылку:", email);
+    if (!email.trim() || loading) return;
+    dispatch(sendSubscribeRequested(email.trim()));
     setEmail("");
-    alert("Спасибо за подписку!");
+  };
+
+  const modal = success ? "success" : error ? "error" : null;
+
+  const handleCloseModal = () => {
+    dispatch(resetSubscribe());
   };
 
   const scrollToTop = () => {
@@ -80,8 +96,12 @@ const Footer = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <button type="submit" className="footer__subscribe-button">
-                ОТПРАВИТЬ
+              <button
+                type="submit"
+                className="footer__subscribe-button"
+                disabled={loading}
+              >
+                {loading ? "..." : "отправить"}
               </button>
             </form>
           </div>
@@ -128,6 +148,41 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      {modal && (
+        <div
+          className="footer__subscribe-modal-overlay"
+          onClick={handleCloseModal}
+          role="presentation"
+        >
+          <div
+            className={`footer__subscribe-modal footer__subscribe-modal--${modal}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="footer__subscribe-modal-header">
+              <div
+                className="footer__subscribe-modal-header-icon"
+                style={modal === "error" ? { backgroundImage: `url(${exclamationIcon})` } : undefined}
+              />
+            </div>
+            <hr className="footer__subscribe-modal-divider" />
+            <div className="footer__subscribe-modal-body">
+              <p className="footer__subscribe-modal-text">
+                {modal === "success" ? SUCCESS_MESSAGE : ERROR_MESSAGE}
+              </p>
+            </div>
+            <div className="footer__subscribe-modal-footer">
+              <hr className="footer__subscribe-modal-footer-divider" />
+              <button
+                type="button"
+                className="footer__subscribe-modal-btn"
+                onClick={handleCloseModal}
+              >
+                Понятно
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 };

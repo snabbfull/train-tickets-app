@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./HowItWorks.css";
 import FeatureCard from "./FeatureCard";
+import InfoModal from "../../InfoModal/InfoModal";
 import comp from '../../../assets/comp.png'
 import building from "../../../assets/building.png";
 import planet from "../../../assets/planet.png";
 
 const HowItWorks = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   const features = [
     {
       icon: comp,
@@ -26,7 +28,13 @@ const HowItWorks = () => {
       <div className="how-it-works__container">
         <div className="how-it-works__header">
           <h2 className="how-it-works__title">КАК ЭТО РАБОТАЕТ</h2>
-          <button className="how-it-works__learn-more">Узнать больше</button>
+          <button
+            type="button"
+            className="how-it-works__learn-more"
+            onClick={() => setModalOpen(true)}
+          >
+            Узнать больше
+          </button>
         </div>
 
         <div className="features">
@@ -39,6 +47,7 @@ const HowItWorks = () => {
           ))}
         </div>
       </div>
+      <InfoModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </section>
   );
 };

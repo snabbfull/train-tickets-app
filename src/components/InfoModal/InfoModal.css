@@ -1,0 +1,101 @@
+.info-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+}
+
+.info-modal {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 666px;
+  background: #fbfbfb;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  overflow: hidden;
+  color: #000000;
+}
+
+.info-modal-header {
+  height: 107px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  gap: 16px;
+  background: rgba(255, 245, 0, 0.36);
+}
+
+.info-modal-header-icon {
+  width: 32px;
+  height: 32px;
+  background-image: url("../../assets/exclamation.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.info-modal-divider {
+  border: none;
+  border-top: 1px dashed #928f94;
+  margin: 0;
+}
+
+.info-modal-body {
+  padding: 24px 40px;
+}
+
+.info-modal-text {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #000000;
+  margin: 0 0 24px 0;
+}
+
+.info-modal-footer {
+  padding: 0 40px 32px;
+}
+
+.info-modal-footer-divider {
+  border: none;
+  border-top: 1px dashed #928f94;
+  margin: 0 0 24px 0;
+}
+
+.info-modal-btn {
+  box-sizing: border-box;
+  width: 233px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #292929;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #292929;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.info-modal-btn:hover {
+  background: #ffa800;
+  border-color: #ffa800;
+  color: #ffffff;
+}

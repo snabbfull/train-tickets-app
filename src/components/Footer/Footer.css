@@ -86,7 +86,17 @@
   align-items: center;
   justify-content: center;
   border-radius: 2px;
-  transition: background-color 0.3s;
+}
+
+.footer__social-link img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.footer__social-link:active img {
+  filter: brightness(0) saturate(100%) invert(84%) sepia(27%) saturate(1500%) hue-rotate(359deg) brightness(101%) contrast(101%);
 }
 
 .footer__subscribe-text {
@@ -124,20 +134,34 @@
 }
 
 .footer__subscribe-button {
-  background: #333;
-  color: white;
-  border: 1px solid white;
-  padding: 0.75rem;
+  box-sizing: border-box;
+  width: 169px;
+  height: 60px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #ffffff;
   border-radius: 3px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
   font-weight: 400;
-  cursor: pointer;
   font-size: 24px;
+  line-height: 28px;
   text-transform: uppercase;
-  transition: background-color 0.3s;
+  color: #e5e5e5;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .footer__subscribe-button:hover {
-  background: #666666;
+  background: #ffca62;
+  border-color: #ffca62;
+  color: #2d2b2f;
+}
+
+.footer__subscribe-button:active {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #2d2b2f;
 }
 
 .footer__bottom {
@@ -227,4 +251,124 @@
 .footer__contact-link {
   color: white;
   text-decoration: none;
+}
+
+/* Subscribe modal overlay */
+.footer__subscribe-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+}
+
+.footer__subscribe-modal {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 666px;
+  background: #fbfbfb;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  overflow: hidden;
+  color: #000000;
+}
+
+.footer__subscribe-modal--success .footer__subscribe-modal-header {
+  background: rgba(255, 245, 0, 0.36);
+}
+
+.footer__subscribe-modal--error .footer__subscribe-modal-header {
+  background: rgba(255, 61, 0, 0.38);
+}
+
+.footer__subscribe-modal-header {
+  height: 107px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  gap: 16px;
+}
+
+.footer__subscribe-modal-header-icon {
+  width: 32px;
+  height: 32px;
+  background-image: url("../../../src/assets/exclamation.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.footer__subscribe-modal--error .footer__subscribe-modal-header-icon {
+  background-color: #ffffff;
+}
+
+.footer__subscribe-modal-divider {
+  border: none;
+  border-top: 1px dashed #928f94;
+  margin: 0;
+}
+
+.footer__subscribe-modal-body {
+  padding: 24px 40px;
+}
+
+.footer__subscribe-modal-text {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #000000;
+  margin: 0 0 24px 0;
+}
+
+.footer__subscribe-modal-footer {
+  padding: 0 40px 32px;
+}
+
+.footer__subscribe-modal-footer-divider {
+  border: none;
+  border-top: 1px dashed #928f94;
+  margin: 0 0 24px 0;
+}
+
+.footer__subscribe-modal--error .footer__subscribe-modal-text {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+}
+
+.footer__subscribe-modal-btn {
+  box-sizing: border-box;
+  width: 233px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #292929;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #292929;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.footer__subscribe-modal-btn:hover {
+  background: #ffa800;
+  border-color: #ffa800;
+  color: #ffffff;
 }

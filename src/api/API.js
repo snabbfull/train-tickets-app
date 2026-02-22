@@ -48,11 +48,7 @@ export const sendOrder = (orderData) => {
 };
 
 export const sendSubscribe = (email) => {
-  return fetch(`${API_BASE_URL}subscribe?email=${encodeURIComponent(email)}`, {
+  return fetch(`${API_BASE_URL}subscribe?email=${email}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email }),
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };

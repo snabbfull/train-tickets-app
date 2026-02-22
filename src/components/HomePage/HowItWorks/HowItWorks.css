@@ -28,21 +28,34 @@
 }
 
 .how-it-works__learn-more {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  border: 1px solid white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 5px;
-  height: 60px;
+  box-sizing: border-box;
   width: 325px;
+  height: 60px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
   font-weight: 700;
-  cursor: pointer;
   font-size: 24px;
-  transition: background-color 0.3s;
+  line-height: 28px;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .how-it-works__learn-more:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #ffca62;
+  border-color: #ffca62;
+  color: #2d2b2f;
+}
+
+.how-it-works__learn-more:active {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #2d2b2f;
 }
 
 .features {

@@ -5,7 +5,7 @@ import { sendSubscribeRequested, sendSubscribeSuccessed, sendSubscribeFailed } f
 function* handleSendSubscribe(action) {
   try {
     const response = yield call(sendSubscribe, action.payload);
-    if (response.success) {
+    if (response.success || response.status === true) {
       yield put(sendSubscribeSuccessed(response));
     } else {
       yield put(sendSubscribeFailed(response.error || "Unknown error"));
