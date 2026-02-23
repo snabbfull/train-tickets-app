@@ -38,6 +38,7 @@
   color: #292929;
   font-size: 18px;
   line-height: 21px;
+  cursor: pointer;
 }
 
 .filter-block .react-datepicker-wrapper {

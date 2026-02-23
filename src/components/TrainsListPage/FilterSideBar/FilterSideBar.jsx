@@ -152,6 +152,7 @@ const FilterSideBar = () => {
           <DatePicker
             selected={parseIsoDate(filters.date_start)}
             onChange={(date) => handleDateChange("date_start", date)}
+            minDate={new Date()}
             className="filter-date-input"
             placeholderText="ДД/ММ/ГГ"
             dateFormat="dd/MM/yy"
@@ -183,6 +184,7 @@ const FilterSideBar = () => {
           <DatePicker
             selected={parseIsoDate(filters.date_start_arrival)}
             onChange={(date) => handleDateChange("date_start_arrival", date)}
+            minDate={parseIsoDate(filters.date_start) || new Date()}
             className="filter-date-input"
             placeholderText="ДД/ММ/ГГ"
             dateFormat="dd/MM/yy"

@@ -232,6 +232,7 @@ const SearchForm2 = () => {
                     dateStart: formatIsoDate(date),
                   }))
                 }
+                minDate={new Date()}
                 className="search-form__input-2 search-form__input--date-2"
                 placeholderText="ДД/ММ/ГГ"
                 dateFormat="dd/MM/yy"
@@ -267,6 +268,7 @@ const SearchForm2 = () => {
                     dateEnd: formatIsoDate(date),
                   }))
                 }
+                minDate={parseIsoDate(formData.dateStart) || new Date()}
                 className="search-form__input-2 search-form__input--date-2"
                 placeholderText="ДД/ММ/ГГ"
                 dateFormat="dd/MM/yy"
