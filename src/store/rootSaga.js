@@ -17,4 +17,3 @@ export function* rootSaga() {
   ]);
 }
 
-//Объединяем все саги в rootSaga для передачи в store

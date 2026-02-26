@@ -6,7 +6,6 @@ import express from "../../../assets/express.png";
 import eat from "../../../assets/eat.png";
 import "./LastTickets.css";
 
-// Компонент для иконок опций
 const AmenitiesIcons = ({ train }) => {
   const amenities = [];
 
@@ -27,7 +26,6 @@ const AmenitiesIcons = ({ train }) => {
     );
   }
 
-  // Показываем иконку питания всегда (или добавьте проверку have_food при необходимости)
   amenities.push(
     <img key="eat" src={eat} className="amenity-icon amenity-icon-food" alt="Food" />,
   );
@@ -55,7 +53,6 @@ const LastTickets = () => {
 
       {lastRoutes.map((route, index) => (
         <div key={index} className="last-ticket-card">
-          {/* Верхняя часть: города и вокзалы */}
           <div className="ticket-route-info">
             <div className="ticket-departure">
               <div className="ticket-city">
@@ -74,7 +71,6 @@ const LastTickets = () => {
             </div>
           </div>
 
-          {/* Нижняя часть: иконки и цена */}
           <div className="ticket-footer">
             <div className="ticket-footer-wrapper">
               <AmenitiesIcons train={route} />

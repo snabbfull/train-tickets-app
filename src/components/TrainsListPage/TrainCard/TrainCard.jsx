@@ -8,7 +8,6 @@ import { formatTime, formatDate, formatDuration } from "../../../utils/dateUtils
 const formatPriceValue = (price) =>
   Math.round(Number(price) || 0).toLocaleString("ru-RU");
 
-// Компонент для отображения места (класс вагона)
 const SeatClass = ({ name, seats, price }) => {
   if (!seats || seats <= 0) return null;
 
@@ -23,7 +22,6 @@ const SeatClass = ({ name, seats, price }) => {
   );
 };
 
-// Компонент для иконок опций
 const AmenitiesIcons = ({ train }) => {
   const amenities = [];
 
@@ -84,7 +82,6 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
     navigate(`/routes/${trainId}/seats`, { state: { train, searchParams } });
   };
 
-  // Данные о местах из available_seats_info
   const seatsInfo = departure.available_seats_info || {};
   const totalAvailableSeats = Object.values(seatsInfo).reduce(
     (sum, count) => sum + (Number(count) || 0),
@@ -94,7 +91,6 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
 
   return (
     <div className="train-card">
-      {/* 🟦 ЛЕВЫЙ БЛОК: Инфо о поезде */}
       <div className="train-left-block">
         <div className="train-image">
           <img src={trainIcon} />
@@ -107,10 +103,8 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
         </div>
       </div>
 
-      {/* 🟨 ЦЕНТРАЛЬНЫЙ БЛОК: Время и маршрут */}
       <div className="train-center-block">
         <div className="route-row">
-          {/* Отправление */}
           <div className="route-point route-point-depart">
             <div className="route-time">
               {formatTime(departure.from.datetime)}
@@ -124,7 +118,6 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
             </div>
           </div>
 
-          {/* Стрелка и длительность */}
           <div className="route-middle">
             <div className="route-arrow-block">
               <div className="route-duration">
@@ -134,7 +127,6 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
             </div>
           </div>
 
-          {/* Прибытие */}
           <div className="route-point route-point-arrive">
             <div className="route-time">
               {formatTime(departure.to.datetime)}
@@ -178,10 +170,8 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
         )}
       </div>
 
-      {/* 🟩 ПРАВЫЙ БЛОК: Места и кнопка */}
       <div className="train-right-block">
         <div className="seats-container">
-          {/* Люкс */}
           {departure.have_first_class && (
             <SeatClass
               name="Люкс"
@@ -192,7 +182,6 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
             />
           )}
 
-          {/* Купе */}
           {departure.have_second_class && (
             <SeatClass
               name="Купе"
@@ -203,7 +192,6 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
             />
           )}
 
-          {/* Плацкарт */}
           {departure.have_third_class && (
             <SeatClass
               name="Плацкарт"
@@ -214,7 +202,6 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
             />
           )}
 
-          {/* Сидячий */}
           {departure.have_fourth_class && (
             <SeatClass
               name="Сидячий"
@@ -225,9 +212,7 @@ const TrainCard = ({ train, searchParams, buttonLabel = "Выбрать мест
         </div>
 
         <div className="trains-right-block-container">
-          {/* Иконки опций */}
           <AmenitiesIcons train={train} />
-          {/* Кнопка */}
           <button
             className={onButtonClick ? "train-button train-button-edit" : "train-button"}
             type="button"

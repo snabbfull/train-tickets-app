@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendSubscribeRequested } from "../../store/actions";
 import { resetSubscribe } from "../../store/subscribe/subscribeSlice";
 import "./Footer.css";
-import call from "../../assets/call.png"
-import mail from "../../assets/mail.png"
-import skype from "../../assets/skype.png"
-import geolocation from "../../assets/geolocation.png"
-import youtube from "../../assets/youtube.png"
+import call from "../../assets/call.png";
+import mail from "../../assets/mail.png";
+import skype from "../../assets/skype.png";
+import geolocation from "../../assets/geolocation.png";
+import youtube from "../../assets/youtube.png";
 import linkedin from "../../assets/in.png";
 import gplus from "../../assets/gplus.png";
 import facebook from "../../assets/facebook.png";
@@ -16,9 +16,9 @@ import scrolltop from "../../assets/scroll-top.png";
 import exclamationIcon from "../../assets/exclamation.png";
 import { Link } from "react-router-dom";
 
-const SUCCESS_MESSAGE =
-  "Таким образом консультация с широким активом в значительной степени обуславливает создание модели развития. Повседневная практика показывает, что сложившаяся структура организации играет важную роль в формировании существенных финансовых и административных";
-const ERROR_MESSAGE = SUCCESS_MESSAGE;
+const SUCCESS_MESSAGE = "Вы успешно подписались на рассылку. Спасибо, что остаетесь с нами.";
+const ERROR_MESSAGE =
+  "Не удалось оформить подписку. Проверьте email и попробуйте еще раз.";
 
 const Footer = () => {
   const dispatch = useDispatch();

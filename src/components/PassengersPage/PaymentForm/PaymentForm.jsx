@@ -9,13 +9,8 @@ const ONLINE_METHODS_LABELS = [
   "Visa QIWI Wallet",
 ];
 
-/** Валидный формат: +7 + 10 цифр */
 const PHONE_REGEX = /^\+7\d{10}$/;
-
-/** Простая проверка email по стандартному паттерну */
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/** Форматирует телефон: только цифры, 8/7 заменяем на +7, далее макс 10 цифр */
 const formatPhone = (value) => {
   const digits = (value || "").replace(/\D/g, "");
   if (digits.length === 0) return "";
@@ -36,6 +31,8 @@ const PaymentForm = () => {
 
   const isPhoneValid = PHONE_REGEX.test((user.phone || "").trim());
   const isEmailValid = EMAIL_REGEX.test((user.email || "").trim());
+  const emailHasValue = (user.email || "").trim().length > 0;
+  const showEmailError = emailHasValue && !isEmailValid;
   const isBuyerValid =
     user.last_name?.trim() &&
     user.first_name?.trim() &&
@@ -50,15 +47,7 @@ const PaymentForm = () => {
     dispatch(setUserInfo({ phone: formatPhone(value) }));
   };
 
-  const isOnline = ["card", "paypal", "qiwi"].includes(user.payment_method || "card");
-
-  const handleOnlineCheck = (checked) => {
-    dispatch(setPaymentMethod(checked ? "card" : "cash"));
-  };
-
-  const handleCashCheck = (checked) => {
-    dispatch(setPaymentMethod(checked ? "cash" : "card"));
-  };
+  const selectedPaymentMethod = (user.payment_method || "card") === "cash" ? "cash" : "online";
 
   const handleSubmit = () => {
     if (!isBuyerValid) return;
@@ -123,7 +112,15 @@ const PaymentForm = () => {
               placeholder="inbox@gmail.ru"
               autoComplete="email"
               pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+              className={showEmailError ? "payment-input-error" : undefined}
+              aria-invalid={showEmailError}
+              aria-describedby={showEmailError ? "payment-email-error" : undefined}
             />
+            {showEmailError && (
+              <p id="payment-email-error" className="payment-error-text">
+                Введите корректный e-mail
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -138,8 +135,9 @@ const PaymentForm = () => {
             <label className="payment-checkbox-row">
               <input
                 type="checkbox"
-                checked={isOnline}
-                onChange={(e) => handleOnlineCheck(e.target.checked)}
+                name="payment_method"
+                checked={selectedPaymentMethod === "online"}
+                onChange={() => dispatch(setPaymentMethod("card"))}
               />
               <span className="payment-checkbox-label">Онлайн</span>
             </label>
@@ -154,8 +152,9 @@ const PaymentForm = () => {
             <label className="payment-checkbox-row">
               <input
                 type="checkbox"
-                checked={(user.payment_method || "card") === "cash"}
-                onChange={(e) => handleCashCheck(e.target.checked)}
+                name="payment_method"
+                checked={selectedPaymentMethod === "cash"}
+                onChange={() => dispatch(setPaymentMethod("cash"))}
               />
               <span className="payment-checkbox-label">Наличными</span>
             </label>

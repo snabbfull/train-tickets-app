@@ -210,7 +210,6 @@ const FilterSideBar = () => {
         </div>
       </div>
 
-      {/* ТИПЫ ВАГОНОВ */}
       <div className="filter-block">
         <h3>Тип вагона</h3>
 
@@ -267,7 +266,6 @@ const FilterSideBar = () => {
         </div>
       </div>
 
-      {/* ДОП. ОПЦИИ */}
       <div className="filter-block">
         <h3>Дополнительно</h3>
 
@@ -306,7 +304,6 @@ const FilterSideBar = () => {
         </div>
       </div>
 
-      {/* ЦЕНА */}
       <div className="filter-block">
         <h3>Стоимость</h3>
         <div className="range-block">
@@ -585,7 +582,6 @@ const FilterSideBar = () => {
         )}
       </div>
 
-      {/* КНОПКА СБРОСА */}
       <div className="filter-block">
         <button className="reset-button" onClick={handleReset}>
           Сбросить фильтры

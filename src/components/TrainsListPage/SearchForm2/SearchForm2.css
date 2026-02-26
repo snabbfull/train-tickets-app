@@ -10,25 +10,25 @@
   box-sizing: border-box;
 }
 
-/* Главный ряд: делит экран на 2 равные части (Направление и Дата) */
+
 .search-form__main-row {
   display: flex;
   flex-direction: row;
   width: 100%;
-  gap: 40px; /* Расстояние между блоком городов и блоком дат */
+  gap: 40px; 
   align-items: flex-start;
 }
 
-/* Секции (колонки) */
+
 .search-form__section-2 {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex: 1; /* Каждая секция занимает 50% ширины */
-  min-width: 0; /* Важно для работы flex с инпутами */
+  flex: 1; 
+  min-width: 0; 
 }
 
-/* Надписи */
+
 .search-form__section-label-2 {
   font-size: 30px;
   color: white;
@@ -39,7 +39,7 @@
   white-space: nowrap;
 }
 
-/* Ряд внутри секции (сами инпуты) */
+
 .search-form__inputs-row {
   position: relative;
   display: flex;
@@ -49,16 +49,16 @@
   width: 100%;
 }
 
-/* Обертка инпута */
+
 .search-form__input-wrapper-2 {
   position: relative;
-  flex: 1; /* Все инпуты внутри строки равной ширины */
+  flex: 1; 
   min-width: 0;
   display: flex;
   flex-direction: column;
 }
 
-/* Сами поля ввода */
+
 .search-form__input-2 {
   width: 100%;
   height: 60px;
@@ -84,7 +84,7 @@
   color: #999;
 }
 
-/* Стили для даты */
+
 .search-form__input--date-2 {
   text-transform: uppercase;
   cursor: pointer;
@@ -147,7 +147,7 @@
   color: #292929;
 }
 
-/* Иконки внутри инпутов */
+
 .search-form__icon-2 {
   position: absolute;
   right: 15px;
@@ -169,7 +169,7 @@
   filter: grayscale(100%) brightness(0.9);
 }
 
-/* Кнопка смены мест */
+
 .search-form__swap-2 {
   position: absolute;
   margin-left: 314px;
@@ -194,7 +194,7 @@
 .search-form__swap-2 img {
   width: 24px;
   height: 24px;
-  filter: brightness(0) invert(1); /* Делаем иконку белой */
+  filter: brightness(0) invert(1); 
   opacity: 0.7;
 }
 .clear-input-btn {
@@ -228,7 +228,7 @@
   background: rgba(255, 107, 0, 0.1);
   transform: translateY(-50%) scale(1.1);
 }
-/* Выпадающий список */
+
 .search-form__suggestions-2 {
   position: absolute;
   top: 100%;
@@ -264,11 +264,19 @@
   background: #ece9f0;
 }
 
-/* Кнопка действия */
 .search-form__actions-2 {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
   justify-content: flex-end;
   width: 100%;
+}
+
+.search-form__error-2 {
+  margin: 0;
+  color: #ff6b6b;
+  font-size: 14px;
 }
 
 .search-form__button-2 {
@@ -304,7 +312,7 @@
   border: 1px solid var(--color-accent);
 }
 
-/* Адаптивность */
+
 @media (max-width: 1024px) {
   .search-form__main-row {
     gap: 20px;
@@ -322,12 +330,12 @@
   }
 
   .search-form__main-row {
-    flex-direction: column; /* Колонка на мобильных */
+    flex-direction: column; 
     gap: 25px;
   }
 
   .search-form__inputs-row {
-    /* На мобильных поля направления друг под другом */
+    
     flex-direction: column;
     gap: 15px;
   }
@@ -335,7 +343,7 @@
   .search-form__swap-2 {
     align-self: center;
     margin: 0;
-    transform: rotate(90deg); /* Поворот стрелки */
+    transform: rotate(90deg); 
   }
 
   .search-form__section-label-2 {

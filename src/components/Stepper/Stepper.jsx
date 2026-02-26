@@ -5,14 +5,13 @@ import "./Stepper.css";
 const Stepper = () => {
   const location = useLocation();
 
-  // Определяем текущий шаг на основе URL
   const currentStep = useMemo(() => {
     const path = location.pathname;
 
-    if (path.includes("/routes")) return 1; // Билеты
-    if (path.includes("/passengers")) return 2; // Пассажиры
-    if (path.includes("/payment")) return 3; // Оплата
-    if (path.includes("/order") || path.includes("/verification") || path.includes("/check")) return 4; // Проверка
+    if (path.includes("/routes")) return 1;
+    if (path.includes("/passengers")) return 2;
+    if (path.includes("/payment")) return 3;
+    if (path.includes("/order") || path.includes("/verification") || path.includes("/check")) return 4;
 
     return 1;
   }, [location.pathname]);

@@ -20,8 +20,12 @@ const store = configureStore({
     }).concat(sagaMiddleware),
 });
 
+let persistTimeoutId = null;
 store.subscribe(() => {
-  saveOrderToStorage(store.getState().order);
+  if (persistTimeoutId) clearTimeout(persistTimeoutId);
+  persistTimeoutId = setTimeout(() => {
+    saveOrderToStorage(store.getState().order);
+  }, 250);
 });
 
 sagaMiddleware.run(rootSaga);

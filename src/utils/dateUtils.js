@@ -1,6 +1,3 @@
-/**
- * Общие утилиты форматирования даты и времени
- */
 
 export const formatTime = (ts) => {
   if (ts == null) return "--:--";

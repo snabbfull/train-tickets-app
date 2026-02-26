@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./SearchForm2.css";
 import reverse from "../../../assets/reverse.png";
 import geolocation from "../../../assets/geolocation.png";
@@ -19,6 +19,8 @@ const SearchForm2 = () => {
   const navigate = useNavigate();
   const cities = useSelector((state) => state.cities.items);
   const [activeField, setActiveField] = useState(null);
+  const [formError, setFormError] = useState("");
+  const debounceRef = useRef(null);
 
   const [formData, setFormData] = useState({
     from: "",
@@ -28,6 +30,12 @@ const SearchForm2 = () => {
     dateStart: "",
     dateEnd: "",
   });
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   const parseIsoDate = (value) => {
     if (!value) return null;
@@ -48,11 +56,14 @@ const SearchForm2 = () => {
     date.getDay() === 0 ? "search-form-day-sunday" : undefined;
 
   const handleCitiesFetch = (query) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     if (!query || query.length < 2) {
       dispatch(clearCities());
       return;
     }
-    dispatch(fetchCitiesRequested(query));
+    debounceRef.current = setTimeout(() => {
+      dispatch(fetchCitiesRequested(query));
+    }, 300);
   };
 
   const handleInputChange = (e) => {
@@ -66,6 +77,7 @@ const SearchForm2 = () => {
     if (name === "from" || name === "to") {
       handleCitiesFetch(value);
     }
+    if (formError) setFormError("");
   };
 
   const handleCitySelect = (field, city) => {
@@ -76,6 +88,7 @@ const SearchForm2 = () => {
     }));
     setActiveField(null);
     dispatch(clearCities());
+    if (formError) setFormError("");
   };
 
   const clearDateField = (field) => {
@@ -88,7 +101,7 @@ const SearchForm2 = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.fromId || !formData.toId) {
-      alert("⚠️ Выберите города из списка подсказок");
+      setFormError("Выберите города из списка подсказок");
       return;
     }
     const params = {
@@ -98,7 +111,6 @@ const SearchForm2 = () => {
       date_start_arrival: formData.dateEnd,
     };
 
-    // Гарантируем запрос даже если URL не изменился (повторный поиск).
     dispatch(trainsListRequested(params));
 
     navigate(
@@ -127,9 +139,7 @@ const SearchForm2 = () => {
 
   return (
     <form className="search-form-2" onSubmit={handleSubmit}>
-      {/* Общий контейнер для двух колонок: Направление и Дата */}
       <div className="search-form__main-row">
-        {/* Секция 1: Направление */}
         <div className="search-form__section-2">
           <label className="search-form__section-label-2">Направление</label>
           <div className="search-form__inputs-row">
@@ -219,7 +229,6 @@ const SearchForm2 = () => {
           </div>
         </div>
 
-        {/* Секция 2: Дата */}
         <div className="search-form__section-2">
           <label className="search-form__section-label-2">Дата</label>
           <div className="search-form__inputs-row">
@@ -297,8 +306,8 @@ const SearchForm2 = () => {
         </div>
       </div>
 
-      {/* Кнопка поиска */}
       <div className="search-form__actions-2">
+        {formError && <p className="search-form__error-2">{formError}</p>}
         <button type="submit" className="search-form__button-2">
           НАЙТИ БИЛЕТЫ
         </button>

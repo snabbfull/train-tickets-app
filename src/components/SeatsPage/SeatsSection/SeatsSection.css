@@ -1,4 +1,4 @@
-/* Контейнер правой колонки страницы выбора мест */
+
 .seats-page-content {
   background: #fff;
   padding: 24px 32px 32px;
@@ -6,7 +6,7 @@
   margin-left: 15px;
 }
 
-/* Шапка: заголовок + кнопка назад */
+
 .seats-page-header {
   display: flex;
   flex-direction: column;
@@ -41,7 +41,7 @@
   text-decoration: none;
 }
 
-/* Кнопка «назад»: 76×60, #FFA800, стрелка 30×20 белая (по макету Subtract / Rectangle / Vector) */
+
 .seats-back-arrow {
   box-sizing: border-box;
   width: 76px;
@@ -77,7 +77,7 @@
   color: #292929;
 }
 
-/* Блок информации о маршруте */
+
 .seats-route-block {
   display: flex;
   align-items: stretch;
@@ -110,7 +110,7 @@
   gap: 50px;
 }
 
-/* Круг 30×30, бордер #FFA800 — по макету Group 9.1 / Ellipse 2 */
+
 .seats-route-train-icon-wrap {
   box-sizing: border-box;
   width: 30px;
@@ -123,7 +123,7 @@
   flex-shrink: 0;
 }
 
-/* Вектор по макету ~15.35×18.14px, заливка #FFA800 — если PNG не оранжевый, добавь filter или используй SVG */
+
 .seats-route-train-img {
   width: 15.35px;
   height: 18.14px;
@@ -206,7 +206,7 @@
   color: #000;
 }
 
-/* Блок "Количество билетов" */
+
 .seats-tickets-count-block {
   margin-bottom: 50px;
 }
@@ -270,7 +270,7 @@
   max-width: 260px;
 }
 
-/* Тип вагона: иконки */
+
 .seats-wagon-type-block {
   margin-bottom: 24px;
 }
@@ -327,7 +327,7 @@
   filter: grayscale(100%);
 }
 
-/* При активации окрашиваем иконку в #FFA800 */
+
 .seats-wagon-type-btn.active .seats-wagon-type-icon img {
   filter: brightness(0) saturate(100%) invert(65%) sepia(60%) saturate(800%)
     hue-rotate(360deg) brightness(92%) contrast(95%);
@@ -341,7 +341,7 @@
   white-space: nowrap;
 }
 
-/* Вагоны: номера + схема + итог */
+
 .seats-wagon-main {
   margin-bottom: 24px;
 }
@@ -397,7 +397,7 @@
   margin-bottom: 16px;
 }
 
-/* Сумма выбора под схемой (Туда / Обратно) */
+
 .seats-block-sum {
   display: flex;
   align-items: center;
@@ -471,7 +471,7 @@
   flex-wrap: wrap;
 }
 
-/* Нижний повторный блок */
+
 .seats-arrival-section {
   margin-top: 40px;
   padding-top: 32px;
@@ -575,7 +575,7 @@
   border-color: #e59400;
 }
 
-/* Схема вагона: вид сверху, два ряда мест по обе стороны прохода */
+
 .carriage-scheme {
   padding: 16px;
   background: #f5f5f5;
@@ -719,7 +719,7 @@
   cursor: not-allowed;
 }
 
-/* Блок справа: итог по местам и услуги */
+
 .seats-layout-right {
   width: 260px;
   flex-shrink: 0;
@@ -760,7 +760,7 @@
   min-width: 150px;
 }
 
-/* Заголовки «Места» и «Стоимость»: 18px, #928F94 */
+
 .seats-summary-title {
   font-family: "Roboto", sans-serif;
   font-style: normal;
@@ -792,7 +792,7 @@
   color: #2d2d2d;
 }
 
-/* Строки «Верхние N» / «Нижние N»: 24px, 28px, #000, с иконкой 14×17 */
+
 .seats-places-line {
   display: flex;
   align-items: center;
@@ -820,7 +820,7 @@
   font-weight: 400;
 }
 
-/* Цены верх/низ: 24px, 700, #000 */
+
 
 .seats-cost-value-wrapper {
   display: flex;
@@ -836,7 +836,7 @@
   color: #000000;
 }
 
-/* Знак рубля — как в TrainCard/LastTickets, font-size не меняем */
+
 .seats-cost-currency {
   font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
   font-style: normal;
@@ -950,7 +950,7 @@
   object-fit: contain;
 }
 
-/* Не выбрано: только рамка, иконка #292929 */
+
 .seats-service-btn--inactive {
   border: 1px solid #292929;
   background: transparent;
@@ -963,19 +963,19 @@
   color: #292929;
 }
 
-/* Выбрано пользователем: фон #FDB935, иконка #F4F2F6 */
+
 .seats-service-btn--selected {
   background: #fdb935;
   border: none;
   color: #f4f2f6;
 }
 
-/* Один вариант из макета — питание с полупрозрачным оранжевым */
+
 .seats-service-btn--selected.seats-service-btn--food {
   background: rgba(255, 168, 0, 0.79);
 }
 
-/* Включено в вагоне по умолчанию: фон #FCDC9D, иконка #928F94 */
+
 .seats-service-btn--included {
   background: #fcdc9d;
   border: none;
@@ -995,7 +995,7 @@
   line-height: 1.4;
 }
 
-/* Кнопка ДАЛЕЕ */
+
 .seats-page-actions {
   display: flex;
   justify-content: flex-end;

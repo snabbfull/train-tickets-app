@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { trainSeatsRequested, trainSeatsSuccessed, trainSeatsFailed } from "../actions";
 
 const initialState = {
-  /** Данные по местам по routeId: { [routeId]: coaches } — для туда и обратно */
-  dataByRoute: {},
+    dataByRoute: {},
   loading: false,
   error: null,
 };

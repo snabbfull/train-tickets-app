@@ -13,20 +13,15 @@ const initialState = {
     },
     departure: {
       route_direction_id: "",
-      seats: [], // [{ coach_id, person_info, seat_number, is_child, include_children_seat }]
+      seats: [],
     },
     arrival: null,
   },
-  // Временные данные для навигации
   selectedSeats: [],
   selectedSeatNumbers: [],
-  // Доп. опции ФПК, выбранные клиентом: [{ coach_id, option_key, price, label? }]
   fpkOptions: [],
-  // Сводка поезда для сайдбара (Туда / Обратно): { departure, arrival? }
   trainSummary: null,
-  // Полный объект поезда для карточки на OrderPage
   lastSelectedTrain: null,
-  // Поисковый запрос для возврата на TrainsListPage
   lastRoutesSearch: "",
   orderNumber: null,
   loading: false,
@@ -38,7 +33,6 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    // Сохранить выбранные места (туда и опционально обратно)
     setSelectedSeats: (state, action) => {
       const {
         seatNumbers,
@@ -103,7 +97,6 @@ const orderSlice = createSlice({
       }
     },
 
-    // Обновить данные пассажира (при смене is_adult синхронизируется is_child у места)
     setPassengerInfo: (state, action) => {
       const { seatIndex, personInfo, include_children_seat } = action.payload;
       const seat = state.data.departure.seats[seatIndex];
@@ -114,22 +107,18 @@ const orderSlice = createSlice({
       }
     },
 
-    // Обновить данные пользователя (покупателя)
     setUserInfo: (state, action) => {
       state.data.user = { ...state.data.user, ...action.payload };
     },
 
-    // Обновить метод оплаты
     setPaymentMethod: (state, action) => {
       state.data.user.payment_method = action.payload;
     },
 
-    // Сохранить выбранные доп. опции ФПК (с ценами)
     setFpkOptions: (state, action) => {
       state.fpkOptions = Array.isArray(action.payload) ? action.payload : [];
     },
 
-    // Сводка поезда для сайдбара: { departure: { from, to, trainName, trainNumber, ... }, arrival? }
     setOrderTrainSummary: (state, action) => {
       state.trainSummary = action.payload;
     },
@@ -231,7 +220,6 @@ export const {
   resetOrder,
 } = orderSlice.actions;
 
-/** Сумма за выбранные доп. опции ФПК */
 export const selectFpkTotalPrice = (state) =>
   (state.order.fpkOptions || []).reduce((sum, item) => sum + (Number(item.price) || 0), 0);
 export default orderSlice.reducer;

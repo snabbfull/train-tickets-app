@@ -108,7 +108,7 @@
   text-transform: capitalize;
 }
 
-/* TOGGLE STYLES */
+
 .toggle-item {
   display: flex;
   justify-content: space-between;
@@ -170,7 +170,7 @@
   background: #ffa800;
 }
 
-/* RANGE STYLES */
+
 .range-block {
   display: flex;
   flex-direction: column;
@@ -313,7 +313,7 @@
   font-weight: 700;
 }
 
-/* Иконка раскрытия: 20×20, рамка #fff, внутри знаки + и − */
+
 .filter-expand-icon {
   box-sizing: border-box;
   width: 20px;
@@ -357,7 +357,7 @@
   text-align: right;
 }
 
-/* RESET BUTTON */
+
 .reset-button {
   width: 100%;
   height: 60px;

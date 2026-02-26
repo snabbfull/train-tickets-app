@@ -49,7 +49,7 @@
   margin-bottom: 60px;
 }
 
-/* Кнопка раскрытия: как в FilterSideBar (− и +) */
+
 .order-info-expand-icon {
   box-sizing: border-box;
   width: 20px;
@@ -79,7 +79,7 @@
   transform: translateY(-1px);
 }
 
-/* Блок Туда / Обратно */
+
 .order-info-leg-header-btn {
   width: 100%;
   display: flex;
@@ -271,7 +271,7 @@
   text-align: right;
 }
 
-/* Блок Пассажиры */
+
 .order-info-passengers-header-btn {
   width: 100%;
   display: flex;
@@ -350,7 +350,7 @@
   color: #ffffff;
 }
 
-/* Знак рубля — как в TrainCard/SeatsSection */
+
 .order-info-currency {
   font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
   font-style: normal;
@@ -362,7 +362,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Блок Итог */
+
 .order-info-total {
   display: flex;
   justify-content: space-between;

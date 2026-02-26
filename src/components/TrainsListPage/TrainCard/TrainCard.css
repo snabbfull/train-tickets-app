@@ -10,9 +10,9 @@
   gap: 0;
 }
 
-/* =================================== */
-/* 🟦 ЛЕВЫЙ БЛОК */
-/* =================================== */
+
+
+
 .train-left-block {
   width: 197px;
   display: flex;
@@ -69,9 +69,9 @@
   font-weight: 700;
 }
 
-/* =================================== */
-/* 🟨 ЦЕНТРАЛЬНЫЙ БЛОК */
-/* =================================== */
+
+
+
 .train-center-block {
   flex: 1;
   display: flex;
@@ -175,7 +175,7 @@
   clip-path: polygon(0 40%, 65% 40%, 65% 20%, 100% 50%, 65% 80%, 65% 60%, 0 60%);
 }
 
-/* Обратный рейс */
+
 .return-route {
   margin-top: 20px;
   padding-top: 20px;
@@ -202,9 +202,9 @@
   font-size: 11px;
 }
 
-/* =================================== */
-/* 🟩 ПРАВЫЙ БЛОК */
-/* =================================== */
+
+
+
 .train-right-block {
   display: flex;
   flex-direction: column;
@@ -290,7 +290,7 @@
   text-align: right;
 }
 
-/* Иконки опций */
+
 .amenities-train-card {
   display: flex;
   align-items: center;
@@ -320,10 +320,10 @@
   filter: #E5E5E5;
 }
 
-/* Кнопка */
+
 .train-button {
   display: flex;
-  justify-content: center; /* Центр по горизонтали */
+  justify-content: center; 
   align-items: center;
   width: 228px;
   height: 39px;
@@ -365,7 +365,7 @@
   filter: none;
 }
 
-/* Кнопка Изменить — outline вариант */
+
 .train-button-edit {
   width: 233px;
   background: transparent;

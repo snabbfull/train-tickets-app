@@ -24,7 +24,6 @@ const PAYMENT_LABELS = {
   cash: "Наличными",
 };
 
-/** Преобразует DD.MM.YYYY в YYYY-MM-DD */
 const birthdayToApi = (val) => {
   if (!val) return "";
   const m = String(val).match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
@@ -32,7 +31,6 @@ const birthdayToApi = (val) => {
   return val;
 };
 
-/** Подготавливает payload для API order (order.md) */
 const prepareOrderPayload = (order) => {
   const { data, fpkOptions } = order;
   const mapSeat = (seat) => {

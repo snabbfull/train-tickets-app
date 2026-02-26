@@ -1,15 +1,12 @@
 const ORDER_STORAGE_KEY = "train-tickets-order";
 
-/**
- * Сохранить данные заказа в localStorage (форма пассажиров, покупателя, сводка поезда).
- */
 export function saveOrderToStorage(orderState) {
   if (!orderState) return;
   if (orderState.success) {
     try {
       localStorage.removeItem(ORDER_STORAGE_KEY);
     } catch {
-      // ignore
+      return;
     }
     return;
   }
@@ -27,9 +24,6 @@ export function saveOrderToStorage(orderState) {
   }
 }
 
-/**
- * Загрузить сохранённый заказ из localStorage (для восстановления после обрыва связи).
- */
 export function loadOrderFromStorage() {
   try {
     const raw = localStorage.getItem(ORDER_STORAGE_KEY);

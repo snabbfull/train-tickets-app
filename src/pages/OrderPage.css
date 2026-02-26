@@ -101,7 +101,7 @@
   color: #999;
 }
 
-/* Order Card */
+
 .order-card {
   width: 100%;
   background: white;
@@ -148,7 +148,7 @@
   font-weight: 600;
 }
 
-/* Terms */
+
 .terms-check {
   margin-bottom: 24px;
   padding: 16px;
@@ -175,7 +175,7 @@
   flex-shrink: 0;
 }
 
-/* Actions */
+
 .order-actions {
   display: flex;
   justify-content: space-between;
@@ -233,7 +233,7 @@
   margin: 0;
 }
 
-/* Success Page */
+
 .order-success-page {
   min-height: 60vh;
   display: flex;
@@ -309,7 +309,7 @@
   box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
 }
 
-/* Responsive */
+
 @media (max-width: 1024px) {
   .trains-page.order-page-layout {
     flex-direction: column;

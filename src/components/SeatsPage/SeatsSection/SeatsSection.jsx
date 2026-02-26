@@ -59,13 +59,9 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
   const [children, setChildren] = useState(0);
   const [childrenNoSeat, setChildrenNoSeat] = useState(0);
   const [wagonTypeFilter, setWagonTypeFilter] = useState(null);
-  // выбор мест по нескольким вагонам: { [coach_id]: Set(seat_number) }
   const [selectedSeatsByCoach, setSelectedSeatsByCoach] = useState({});
-  // выбранные пользователем вагоны в блоке "Вагоны"
   const [userSelectedCoachIds, setUserSelectedCoachIds] = useState([]);
-  // выбранные опции ФПК по вагону: { [coach_id]: { conder, wifi, underwear, food } }
   const [fpkSelectedByCoach, setFpkSelectedByCoach] = useState({});
-  // Обратный маршрут: те же состояния
   const [wagonTypeFilterArrival, setWagonTypeFilterArrival] = useState(null);
   const [selectedSeatsByCoachArrival, setSelectedSeatsByCoachArrival] =
     useState({});
@@ -75,7 +71,6 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     {},
   );
 
-  // Какие типы вагонов реально есть в ответе сервера
   const availableWagonTypes = useMemo(() => {
     const present = new Set();
     carriages.forEach((c) => {
@@ -88,7 +83,6 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
 
   const activeWagonType = wagonTypeFilter || availableWagonTypes[0]?.id || null;
 
-  // Фильтрация вагонов по выбранному типу
   const filteredCarriages = useMemo(() => {
     if (!activeWagonType) return carriages;
     const filtered = carriages.filter((c) => {
@@ -174,7 +168,6 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     if (nextSet.has(seatNum)) {
       nextSet.delete(seatNum);
     } else {
-      // глобальное ограничение по количеству билетов
       if (globalSelectedCount >= totalTicketsNeeded) return;
       nextSet.add(seatNum);
     }
@@ -196,7 +189,6 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
             : [];
 
       if (current.includes(coachId)) {
-        // оставляем хотя бы один выбранный вагон
         if (current.length === 1) return current;
         return current.filter((id) => id !== coachId);
       }
@@ -214,7 +206,6 @@ const SeatsSection = ({ routeId, fetchedRef }) => {
     });
   };
 
-  // Обратный маршрут: типы вагонов, фильтр, вагоны, места
   const availableWagonTypesArrival = useMemo(() => {
     const present = new Set();
     carriagesArrival.forEach((c) => {

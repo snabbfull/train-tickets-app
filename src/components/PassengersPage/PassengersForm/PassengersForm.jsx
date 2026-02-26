@@ -8,10 +8,9 @@ import {
 } from "../../../store/order/orderSlice";
 import "./PassengersForm.css";
 
-// Номер свидетельства о рождении: римские цифры, 2 заглавные буквы (кириллица), 6 цифр. Пример: VIII-ЫП-123456
 const BIRTH_CERTIFICATE_REGEX = /^[IVXLCDM]+-[А-ЯЁ]{2}-\d{6}$/;
+const BIRTHDAY_REGEX = /^\d{2}\.\d{2}\.\d{4}$/;
 
-/** Форматирует дату рождения DD.MM.YYYY, автоточки, макс 10 символов */
 const formatBirthday = (value) => {
   const digits = (value || "").replace(/\D/g, "");
   if (digits.length === 0) return "";
@@ -22,19 +21,15 @@ const formatBirthday = (value) => {
   return parts.join(".");
 };
 
-/** Только цифры, макс 4 — для серии паспорта */
 const formatPassportSeries = (value) => {
   return (value || "").replace(/\D/g, "").slice(0, 4);
 };
 
-/** Только цифры, макс 6 — для номера паспорта */
 const formatPassportNumber = (value) => {
   return (value || "").replace(/\D/g, "").slice(0, 6);
 };
 
-/** Форматирует свидетельство: VIII-ЫП-123456, авто проставление тире, блокировка при заполнении */
 const formatBirthCertificate = (value) => {
-  // Убираем пробелы и тире — парсим только значимые символы, иначе тире в середине обрывает разбор
   const raw = (value || "")
     .replace(/[\s-]/g, "")
     .toUpperCase();
@@ -78,7 +73,7 @@ const PassengersForm = () => {
   const [certificateErrors, setCertificateErrors] = useState({});
   const [dismissedCertificateWarnings, setDismissedCertificateWarnings] =
     useState({});
-  const [openSelectDropdown, setOpenSelectDropdown] = useState(null); // 'seatIndex-type' или null
+  const [openSelectDropdown, setOpenSelectDropdown] = useState(null);
 
   useEffect(() => {
     if (!openSelectDropdown) return;
@@ -128,19 +123,28 @@ const PassengersForm = () => {
 
   const isPassengersValid = passengers.every((passenger) => {
     const info = passenger.person_info;
+    const firstName = (info.first_name || "").trim();
+    const lastName = (info.last_name || "").trim();
+    const birthdayValue = (info.birthday || "").trim();
     if (
-      !info.first_name?.trim() ||
-      !info.last_name?.trim() ||
-      !info.birthday ||
+      !firstName ||
+      !lastName ||
+      !birthdayValue ||
+      !BIRTHDAY_REGEX.test(birthdayValue) ||
       (info.gender !== true && info.gender !== false) ||
       !info.document_type
-    )
+    ) {
       return false;
+    }
+
     if (info.document_type === "свидетельство") {
       const num = (info.document_data || "").trim();
       return num.length > 0 && BIRTH_CERTIFICATE_REGEX.test(num);
     }
-    return (info.document_data || "").trim().length > 0;
+
+    const seriesDigits = (info.document_series || "").replace(/\D/g, "");
+    const numberDigits = (info.document_data || "").replace(/\D/g, "");
+    return seriesDigits.length === 4 && numberDigits.length === 6;
   });
 
   const handleNextStep = () => {
@@ -174,7 +178,6 @@ const PassengersForm = () => {
     });
   };
 
-  // Минимальная длина полного номера (I-АБ-123456 = 11 символов)
   const CERT_MIN_LENGTH = 11;
 
   const handleCertificateNumberChange = (seatIndex, value) => {
@@ -237,6 +240,27 @@ const PassengersForm = () => {
             expandedPassenger === seatIndex || passengers.length === 1;
           const isAdult =
             passenger.person_info?.is_adult !== false && !passenger.is_child;
+          const info = passenger.person_info || {};
+          const birthdayValue = (info.birthday || "").trim();
+          const birthdayInvalid =
+            birthdayValue.length > 0 && !BIRTHDAY_REGEX.test(birthdayValue);
+          const isCert = info.document_type === "свидетельство";
+          const passportSeriesDigits = (info.document_series || "").replace(
+            /\D/g,
+            "",
+          );
+          const passportNumberDigits = (info.document_data || "").replace(
+            /\D/g,
+            "",
+          );
+          const passportSeriesInvalid =
+            !isCert &&
+            passportSeriesDigits.length > 0 &&
+            passportSeriesDigits.length !== 4;
+          const passportNumberInvalid =
+            !isCert &&
+            passportNumberDigits.length > 0 &&
+            passportNumberDigits.length !== 6;
 
           return (
             <div key={seatIndex} className="passenger-card">
@@ -291,7 +315,6 @@ const PassengersForm = () => {
 
               {isExpanded && (
                 <div className="passenger-card-body">
-                  {/* Тип пассажира: Взрослый / Детский */}
                   <div className="passenger-type-row">
                     <label
                       className="passenger-type-label"
@@ -438,7 +461,16 @@ const PassengersForm = () => {
                           }
                           placeholder="ДД.ММ.ГГГГ"
                           maxLength={10}
+                          className={
+                            birthdayInvalid ? "passenger-input-error" : undefined
+                          }
+                          aria-invalid={birthdayInvalid}
                         />
+                        {birthdayInvalid && (
+                          <p className="passenger-error-text">
+                            Введите дату рождения в формате ДД.ММ.ГГГГ
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -616,7 +648,18 @@ const PassengersForm = () => {
                               placeholder="_ _ _ _"
                               maxLength={4}
                               inputMode="numeric"
+                              className={
+                                passportSeriesInvalid
+                                  ? "passenger-input-error"
+                                  : undefined
+                              }
+                              aria-invalid={passportSeriesInvalid}
                             />
+                            {passportSeriesInvalid && (
+                              <p className="passenger-error-text">
+                                Серия паспорта должна содержать 4 цифры
+                              </p>
+                            )}
                           </div>
                           <div className="passenger-field">
                             <label>Номер</label>
@@ -632,7 +675,18 @@ const PassengersForm = () => {
                               placeholder="_ _ _ _ _ _"
                               maxLength={6}
                               inputMode="numeric"
+                              className={
+                                passportNumberInvalid
+                                  ? "passenger-input-error"
+                                  : undefined
+                              }
+                              aria-invalid={passportNumberInvalid}
                             />
+                            {passportNumberInvalid && (
+                              <p className="passenger-error-text">
+                                Номер паспорта должен содержать 6 цифр
+                              </p>
+                            )}
                           </div>
                         </>
                       )}

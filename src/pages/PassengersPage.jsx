@@ -18,7 +18,6 @@ const PassengersPage = () => {
       ? "Сначала выберите места"
       : null;
 
-  // Redirect if no seats selected (проверяем data.departure.seats — там хранятся выбранные места)
   useEffect(() => {
     if (!data.departure.seats || data.departure.seats.length === 0) {
       navigate("/routes");

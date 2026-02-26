@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TrainCard from "../TrainCard/TrainCard";
 import Pagination from "../Pagination/Pagination";
@@ -7,27 +7,25 @@ import {
   changePage,
   changeSort,
   changeSortDirection,
-  setLimit
+  setLimit,
 } from "../../../store/trainsList/trainsListSlice";
-import "./TrainsSection.css"
+import "./TrainsSection.css";
 
 const TrainsSection = ({ locationSearch, fetchedRef }) => {
   const dispatch = useDispatch();
-  const { data, loading, currentPage, sortBy, sortDirection, limit } = useSelector(
-    (state) => state.trainsList,
-  );
+  const { data, loading, currentPage, sortBy, sortDirection, limit } =
+    useSelector((state) => state.trainsList);
   const filters = useSelector((state) => state.filters);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const sortDropdownRef = useRef(null);
 
-  const routes = data?.items || [];
+  const routes = useMemo(() => data?.items ?? [], [data?.items]);
 
   const dateToTimestamp = (dateStr) => {
     if (!dateStr) return null;
     const [year, month, day] = dateStr.split("-").map(Number);
-    // Создаём дату в UTC (месяцы в JS с 0!)
-    const date = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
-    return Math.floor(date.getTime() / 1000); // в секундах
+    const date = new Date(year, month - 1, day, 0, 0, 0);
+    return Math.floor(date.getTime() / 1000);
   };
 
   const timestampToHourValue = (ts) => {
@@ -36,92 +34,69 @@ const TrainsSection = ({ locationSearch, fetchedRef }) => {
     return d.getHours() + d.getMinutes() / 60;
   };
 
-  // Apply filters to routes
-const filteredRoutes = routes.filter((train) => {
-  // 🔒 Защита: пропускаем поезда без обязательных данных
-  if (
-    !train ||
-    !train.departure ||
-    !train.departure.from ||
-    !train.departure.to
-  ) {
-    return false;
-  }
+  const filteredRoutes = useMemo(
+    () =>
+      routes.filter((train) => {
+        if (!train || !train.departure || !train.departure.from || !train.departure.to) {
+          return false;
+        }
 
-  const departureFromTs = train.departure.from.datetime;
+        const departureFromTs = train.departure.from.datetime;
+        const arrivalFromTs = train.arrival?.from?.datetime;
 
-  // date_end — дата отбытия обратно (у поездов с обратным рейсом)
-  const arrivalFromTs = train.arrival?.from?.datetime;
+        if (filters.date_start && departureFromTs) {
+          const startOfDay = dateToTimestamp(filters.date_start);
+          if (departureFromTs < startOfDay) return false;
+        }
 
-  // 📅 Фильтр по дате отправления (date_start)
-  if (filters.date_start && departureFromTs) {
-    const startOfDay = dateToTimestamp(filters.date_start);
-    if (departureFromTs < startOfDay) return false;
-  }
+        if (filters.date_start_arrival) {
+          if (!train.arrival || arrivalFromTs == null) return false;
+          const startOfDay = dateToTimestamp(filters.date_start_arrival);
+          const endOfDay = startOfDay + 24 * 60 * 60;
+          if (arrivalFromTs < startOfDay || arrivalFromTs >= endOfDay) return false;
+        }
 
-  // 📅 Фильтр по дате возвращения (date_end): только поезда с обратным рейсом,
-  // у которых дата отбытия обратно попадает в выбранный день (клиентская фильтрация)
-  if (filters.date_start_arrival) {
-    if (!train.arrival || arrivalFromTs == null) return false; // без обратного маршрута — не подходит
-    const startOfDay = dateToTimestamp(filters.date_start_arrival);
-    const endOfDay = startOfDay + 24 * 60 * 60;
-    if (arrivalFromTs < startOfDay || arrivalFromTs >= endOfDay) return false;
-  }
+        if (filters.have_first_class && !train.departure?.have_first_class) return false;
+        if (filters.have_second_class && !train.departure?.have_second_class) return false;
+        if (filters.have_third_class && !train.departure?.have_third_class) return false;
+        if (filters.have_fourth_class && !train.departure?.have_fourth_class) return false;
 
-  // 🚃 Filter by train class (с защитой)
-  if (filters.have_first_class && !train.departure?.have_first_class)
-    return false;
-  if (filters.have_second_class && !train.departure?.have_second_class)
-    return false;
-  if (filters.have_third_class && !train.departure?.have_third_class)
-    return false;
-  if (filters.have_fourth_class && !train.departure?.have_fourth_class)
-    return false;
+        if (filters.have_wifi && !train.departure?.have_wifi) return false;
+        if (filters.have_express && !train.departure?.is_express) return false;
 
-  // 📡 Filter by additional options
-  if (filters.have_wifi && !train.departure?.have_wifi) return false;
-  if (filters.have_express && !train.departure?.is_express) return false;
+        if (filters.price_from && train.min_price < filters.price_from) return false;
+        if (filters.price_to && train.min_price > filters.price_to) return false;
 
-  // 💰 Filter by price
-  if (filters.price_from && train.min_price < filters.price_from) return false;
-  if (filters.price_to && train.min_price > filters.price_to) return false;
+        const depDepartureHour = timestampToHourValue(train.departure?.from?.datetime);
+        const depArrivalHour = timestampToHourValue(train.departure?.to?.datetime);
+        if (
+          depDepartureHour < filters.forward_departure_from ||
+          depDepartureHour > filters.forward_departure_to
+        ) {
+          return false;
+        }
+        if (depArrivalHour < filters.forward_arrival_from || depArrivalHour > filters.forward_arrival_to) {
+          return false;
+        }
 
-  // 🕒 Время "Туда"
-  const depDepartureHour = timestampToHourValue(train.departure?.from?.datetime);
-  const depArrivalHour = timestampToHourValue(train.departure?.to?.datetime);
-  if (
-    depDepartureHour < filters.forward_departure_from ||
-    depDepartureHour > filters.forward_departure_to
-  ) {
-    return false;
-  }
-  if (
-    depArrivalHour < filters.forward_arrival_from ||
-    depArrivalHour > filters.forward_arrival_to
-  ) {
-    return false;
-  }
+        if (train.arrival) {
+          const backDepartureHour = timestampToHourValue(train.arrival?.from?.datetime);
+          const backArrivalHour = timestampToHourValue(train.arrival?.to?.datetime);
+          if (
+            backDepartureHour < filters.back_departure_from ||
+            backDepartureHour > filters.back_departure_to
+          ) {
+            return false;
+          }
+          if (backArrivalHour < filters.back_arrival_from || backArrivalHour > filters.back_arrival_to) {
+            return false;
+          }
+        }
 
-  // 🕒 Время "Обратно" (применяем, только если есть обратный сегмент)
-  if (train.arrival) {
-    const backDepartureHour = timestampToHourValue(train.arrival?.from?.datetime);
-    const backArrivalHour = timestampToHourValue(train.arrival?.to?.datetime);
-    if (
-      backDepartureHour < filters.back_departure_from ||
-      backDepartureHour > filters.back_departure_to
-    ) {
-      return false;
-    }
-    if (
-      backArrivalHour < filters.back_arrival_from ||
-      backArrivalHour > filters.back_arrival_to
-    ) {
-      return false;
-    }
-  }
-
-  return true;
-});
+        return true;
+      }),
+    [routes, filters],
+  );
 
   const totalCount = filteredRoutes.length;
 
@@ -132,11 +107,10 @@ const filteredRoutes = routes.filter((train) => {
 
   const fetchedLocationsRef = fetchedRef;
 
-  // fetch только при изменении location.search
   useEffect(() => {
     const params = Object.fromEntries(new URLSearchParams(locationSearch));
     if (!params.from_city_id || !params.to_city_id) return;
-    if (loading) return; // не диспатчить если уже loading
+    if (loading) return;
     if (fetchedLocationsRef.current.has(locationSearch)) return;
 
     fetchedLocationsRef.current.add(locationSearch);
@@ -146,22 +120,19 @@ const filteredRoutes = routes.filter((train) => {
         ...params,
       }),
     );
-  }, [locationSearch, loading]);
+  }, [dispatch, fetchedLocationsRef, locationSearch, loading]);
 
-  // Reset page when filters change
   useEffect(() => {
     if (currentPage !== 1) {
       dispatch(changePage(1));
     }
-  }, [filters]);
+  }, [currentPage, dispatch, filters]);
 
   const handleSortChange = (newSortBy) => {
     if (newSortBy === sortBy) {
-      // Toggle direction
       const newDirection = sortDirection === "desc" ? "asc" : "desc";
       dispatch(changeSortDirection(newDirection));
     } else {
-      // Change sortBy, reset to desc
       dispatch(changeSort(newSortBy));
     }
     setIsSortDropdownOpen(false);
@@ -280,7 +251,11 @@ const filteredRoutes = routes.filter((train) => {
       <div className="trains-list">
         {paginatedRoutes.length > 0
           ? paginatedRoutes.map((train, index) => (
-              <TrainCard key={index} train={train} searchParams={locationSearch} />
+              <TrainCard
+                key={train.departure?._id || train.arrival?._id || `${train.departure?.from?.datetime}-${index}`}
+                train={train}
+                searchParams={locationSearch}
+              />
             ))
           : !loading && <div>Поездов не найдено</div>}
       </div>
@@ -293,6 +268,6 @@ const filteredRoutes = routes.filter((train) => {
       />
     </div>
   );
-};;
+};
 
 export default TrainsSection;

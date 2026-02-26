@@ -3,27 +3,22 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   date_start: null,
   date_start_arrival: null,
-  // Типы вагонов
-  have_first_class: false,      // Люкс
-  have_second_class: false,     // Купе
-  have_third_class: false,      // Плацкарт
-  have_fourth_class: false,     // Сидячий
+  have_first_class: false,
+  have_second_class: false,
+  have_third_class: false,
+  have_fourth_class: false,
 
-  // Доп. опции
   have_wifi: false,
   have_express: false,
 
-  // Цена
   price_from: null,
   price_to: null,
 
-  // Время "Туда"
   forward_departure_from: 0,
   forward_departure_to: 24,
   forward_arrival_from: 0,
   forward_arrival_to: 24,
 
-  // Время "Обратно"
   back_departure_from: 0,
   back_departure_to: 24,
   back_arrival_from: 0,

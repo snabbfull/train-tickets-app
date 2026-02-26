@@ -18,7 +18,7 @@
   align-items: center;
   transition: all 0.3s ease;
   
-  /* Острая стрелка с шириной 30px */
+  
   clip-path: polygon(
     0% 0%, 
     calc(100% - 30px) 0%, 
@@ -28,7 +28,7 @@
     30px 50%
   );
   
-  /* Отрицательный margin для перекрытия */
+  
   margin-left: -29px;
 }
 
@@ -81,7 +81,7 @@
   border-left-color: #ffa800;
 }
 
-/* Первый шаг без левого выреза и без отступа */
+
 .chevron-step.first {
   clip-path: polygon(
     0% 0%, 
@@ -94,7 +94,7 @@
   padding-left: 0;
 }
 
-/* Последний шаг без правого острия */
+
 .chevron-step.last {
   clip-path: polygon(
     0% 0%, 
@@ -105,17 +105,17 @@
   );
 }
 
-/* Активный шаг */
+
 .chevron-step.active {
   background-color: #ffa800;
 }
 
-/* Пройденный шаг */
+
 .chevron-step.completed {
   background-color: #ffa800;
 }
 
-/* Контент шага */
+
 .chevron-content {
   display: flex;
   width: 100%;
@@ -127,7 +127,7 @@
   z-index: 2;
 }
 
-/* Номер шага */
+
 .chevron-number {
   width: 56px;
   height: 56px;
@@ -160,7 +160,7 @@
   color: white;
 }
 
-/* Название шага */
+
 .chevron-label {
   width: 231px;
   height: 43px;
@@ -184,7 +184,7 @@
   color: white;
 }
 
-/* Адаптивность для мобильных */
+
 @media (max-width: 768px) {
   .stepper-chevron {
     flex-direction: column;

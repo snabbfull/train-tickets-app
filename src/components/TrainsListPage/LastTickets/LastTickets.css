@@ -36,7 +36,7 @@
   margin-bottom: 0;
 }
 
-/* Верхняя часть: города и вокзалы */
+
 .ticket-route-info {
   display: flex;
   justify-content: space-between;
@@ -76,7 +76,7 @@
   color: #928f94;
 }
 
-/* Нижняя часть: иконки и цена */
+
 .ticket-footer {
   display: flex;
   align-items: center;

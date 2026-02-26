@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./SearchForm.css";
 import reverse from "../../../assets/reverse.png";
 import geolocation from "../../../assets/geolocation.png";
@@ -16,6 +16,14 @@ const SearchForm = () => {
   const navigate = useNavigate();
   const cities = useSelector((state) => state.cities.items);
   const [activeField, setActiveField] = useState(null);
+  const [formError, setFormError] = useState("");
+  const debounceRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
   const parseIsoDate = (value) => {
     if (!value) return null;
     const [year, month, day] = value.split("-").map(Number);
@@ -35,12 +43,14 @@ const SearchForm = () => {
     date.getDay() === 0 ? "search-form-day-sunday" : undefined;
 
   const handleCitiesFetch = (query) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     if (!query || query.length < 2) {
       dispatch(clearCities());
       return;
     }
-
-    dispatch(fetchCitiesRequested(query));
+    debounceRef.current = setTimeout(() => {
+      dispatch(fetchCitiesRequested(query));
+    }, 300);
   };
 
   const handleInputChange = (e) => {
@@ -54,6 +64,7 @@ const SearchForm = () => {
     if (name === "from" || name === "to") {
       handleCitiesFetch(value);
     }
+    if (formError) setFormError("");
   };
 
   const clearFromInput = () => {
@@ -83,6 +94,7 @@ const SearchForm = () => {
 
     setActiveField(null);
     dispatch(clearCities());
+    if (formError) setFormError("");
   };
 
   const clearDateField = (field) => {
@@ -105,8 +117,7 @@ const SearchForm = () => {
     e.preventDefault();
 
     if (!formData.fromId || !formData.toId) {
-      alert("⚠️ Выберите города из списка подсказок");
-      // Опционально: подсветить поля
+      setFormError("Выберите города из списка подсказок");
       return;
     }
 
@@ -293,6 +304,7 @@ const SearchForm = () => {
         </div>
       </div>
       <div className="search-form__actions">
+        {formError && <p className="search-form__error">{formError}</p>}
         <button type="submit" className="search-form__button">
           НАЙТИ БИЛЕТЫ
         </button>
